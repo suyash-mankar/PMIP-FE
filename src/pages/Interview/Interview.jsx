@@ -18,6 +18,7 @@ function Interview() {
   const [scoring, setScoring] = useState(false);
   const [interviewStarted, setInterviewStarted] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
+  const [loadingFirstQuestion, setLoadingFirstQuestion] = useState(false);
 
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -85,6 +86,9 @@ function Interview() {
       setQuestionId(questionIdFromResponse);
       setQuestion(interviewQuestion);
 
+      // Show loading indicator for first question
+      setLoadingFirstQuestion(true);
+
       // Add question after a brief delay for natural feel
       setTimeout(() => {
         setMessages((prev) => [
@@ -95,6 +99,7 @@ function Interview() {
             timestamp: new Date().toISOString(),
           },
         ]);
+        setLoadingFirstQuestion(false);
       }, 800);
     } catch (err) {
       console.error("Start interview error:", err);
@@ -105,6 +110,7 @@ function Interview() {
           "Failed to start interview. Please try again."
       );
       setInterviewStarted(false);
+      setLoadingFirstQuestion(false);
     } finally {
       setLoading(false);
     }
@@ -374,6 +380,18 @@ function Interview() {
                   />
                 ))}
                 {(submitting || scoring) && (
+                  <div className={styles.typingIndicatorWrapper}>
+                    <div className={styles.typingIndicator}>
+                      <span className={styles.aiAvatarSmall}>AI</span>
+                      <div className={styles.typingDots}>
+                        <div className={styles.typingDot}></div>
+                        <div className={styles.typingDot}></div>
+                        <div className={styles.typingDot}></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {loadingFirstQuestion && (
                   <div className={styles.typingIndicatorWrapper}>
                     <div className={styles.typingIndicator}>
                       <span className={styles.aiAvatarSmall}>AI</span>
