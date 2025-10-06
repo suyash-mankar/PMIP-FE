@@ -1,0 +1,162 @@
+@import "../../styles/variables";
+
+.sessionList {
+  width: 100%;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.table {
+  width: 100%;
+  background: $bg-primary;
+  border-collapse: collapse;
+
+  thead {
+    background: $bg-tertiary;
+
+    th {
+      padding: $spacing-md;
+      text-align: left;
+      font-weight: 600;
+      color: $text-primary;
+      font-size: $font-size-sm;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $border-color;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: $bg-secondary;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: $spacing-md;
+      color: $text-secondary;
+      font-size: $font-size-sm;
+
+      @media (max-width: $breakpoint-sm) {
+        padding: $spacing-sm;
+        font-size: $font-size-xs;
+      }
+    }
+  }
+}
+
+.date {
+  white-space: nowrap;
+  font-weight: 500;
+  color: $text-primary;
+}
+
+.question {
+  max-width: 300px;
+
+  @media (max-width: $breakpoint-md) {
+    max-width: 150px;
+  }
+}
+
+.difficulty {
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badgeEntry {
+  background-color: rgba($success-color, 0.1);
+  color: $success-color;
+}
+
+.badgeMid {
+  background-color: rgba($warning-color, 0.1);
+  color: $warning-color;
+}
+
+.badgeSenior {
+  background-color: rgba($error-color, 0.1);
+  color: $error-color;
+}
+
+.score {
+  display: inline-block;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-weight: 700;
+  font-size: $font-size-sm;
+}
+
+.scoreExcellent {
+  background-color: rgba($success-color, 0.1);
+  color: $success-color;
+}
+
+.scoreGood {
+  background-color: rgba($accent-color, 0.1);
+  color: $accent-color;
+}
+
+.scoreFair {
+  background-color: rgba($warning-color, 0.1);
+  color: $warning-color;
+}
+
+.scorePoor {
+  background-color: rgba($error-color, 0.1);
+  color: $error-color;
+}
+
+.viewBtn {
+  background: $primary-color;
+  color: white;
+  border: none;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: $primary-hover;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: $spacing-3xl $spacing-lg;
+  background: $bg-primary;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+
+  p {
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+    font-size: $font-size-lg;
+  }
+}

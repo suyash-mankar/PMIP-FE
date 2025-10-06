@@ -1,0 +1,62 @@
+@import "../../styles/variables";
+
+.loginPage {
+  min-height: calc(100vh - 70px - 100px); // viewport - header - footer
+  display: flex;
+  align-items: center;
+  padding: $spacing-xl $spacing-md;
+  background: $dark-bg-primary;
+}
+
+.loginContainer {
+  max-width: 450px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+  font-size: $font-size-3xl;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: $dark-text-primary;
+}
+
+.subtitle {
+  text-align: center;
+  color: $dark-text-secondary;
+  margin-bottom: $spacing-xl;
+}
+
+.errorBox {
+  background-color: rgba($error-color, 0.1);
+  color: $error-color;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-lg;
+  border-left: 4px solid $error-color;
+}
+
+.form {
+  margin-bottom: $spacing-lg;
+}
+
+.footer {
+  text-align: center;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $dark-border-light;
+
+  p {
+    color: $dark-text-secondary;
+  }
+}
+
+.link {
+  color: $primary-color;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

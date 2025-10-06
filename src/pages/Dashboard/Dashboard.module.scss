@@ -1,0 +1,142 @@
+@import "../../styles/variables";
+
+.dashboardPage {
+  padding: $spacing-xl $spacing-md;
+  min-height: calc(100vh - 70px);
+  background: $dark-bg-primary;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+}
+
+.pageTitle {
+  font-size: $font-size-3xl;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-2xl;
+  }
+}
+
+.subtitle {
+  color: $dark-text-secondary;
+  font-size: $font-size-lg;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $spacing-xl;
+}
+
+.card {
+  background: $dark-bg-secondary;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: $spacing-xl;
+  border: 1px solid $dark-border-light;
+}
+
+.cardTitle {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  margin-bottom: $spacing-lg;
+  color: $dark-text-primary;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $dark-border-light;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $dark-border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.label {
+  font-weight: 600;
+  color: $dark-text-secondary;
+}
+
+.value {
+  color: $dark-text-primary;
+}
+
+.planBadge {
+  background: $primary-color;
+  color: white;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.logoutBtn {
+  margin-top: $spacing-md;
+  border-top: 1px solid $dark-border-light;
+  padding-top: $spacing-lg;
+}
+
+.tipsList {
+  list-style: none;
+  padding: 0;
+
+  li {
+    padding: $spacing-sm 0;
+    color: $dark-text-secondary;
+    line-height: 1.6;
+    position: relative;
+    padding-left: $spacing-lg;
+
+    &:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: $primary-color;
+      font-weight: 700;
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+.helpText {
+  color: $dark-text-secondary;
+  margin-bottom: $spacing-lg;
+  line-height: 1.6;
+}
+
+.helpLinks {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.helpLink {
+  color: $primary-color;
+  text-decoration: none;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $dark-bg-tertiary;
+  }
+}

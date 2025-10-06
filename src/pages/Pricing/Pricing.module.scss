@@ -1,0 +1,193 @@
+@import "../../styles/variables";
+
+.pricingPage {
+  padding: 4rem $spacing-md 5rem;
+  min-height: calc(100vh - 70px);
+  background: $dark-bg-primary;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-3xl;
+}
+
+.pageTitle {
+  font-size: $font-size-5xl;
+  font-weight: 800;
+  margin-bottom: $spacing-lg;
+  color: $text-primary;
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-3xl;
+  }
+}
+
+.subtitle {
+  color: $text-secondary;
+  font-size: $font-size-xl;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.errorBox {
+  background-color: rgba($error-color, 0.1);
+  color: $error-color;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-lg;
+  border-left: 4px solid $error-color;
+  text-align: center;
+}
+
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto $spacing-3xl;
+}
+
+.planCard {
+  background: $bg-primary;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  padding: $spacing-2xl;
+  position: relative;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: $shadow-xl;
+  }
+}
+
+.planHighlighted {
+  border: 2px solid $primary-color;
+  box-shadow: 0 20px 40px rgba($primary-color, 0.2);
+  transform: scale(1.05);
+
+  &:hover {
+    transform: scale(1.05) translateY(-8px);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba($primary-color, 0.4);
+}
+
+.planHeader {
+  text-align: center;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-lg;
+}
+
+.planName {
+  font-size: $font-size-2xl;
+  font-weight: 700;
+  margin-bottom: $spacing-md;
+  color: $text-primary;
+}
+
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: $spacing-xs;
+}
+
+.priceAmount {
+  font-size: $font-size-4xl;
+  font-weight: 700;
+  color: $primary-color;
+}
+
+.priceInterval {
+  color: $text-secondary;
+  font-size: $font-size-base;
+}
+
+.featureList {
+  list-style: none;
+  margin-bottom: $spacing-xl;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-sm 0;
+  color: $text-secondary;
+}
+
+.checkmark {
+  color: $success-color;
+  font-weight: 700;
+  font-size: $font-size-lg;
+}
+
+.faq {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: $spacing-3xl;
+  border-top: 1px solid $dark-border-light;
+}
+
+.faqTitle {
+  text-align: center;
+  font-size: $font-size-3xl;
+  font-weight: 700;
+  margin-bottom: $spacing-2xl;
+  color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-2xl;
+  }
+}
+
+.faqGrid {
+  display: grid;
+  gap: $spacing-xl;
+}
+
+.faqItem {
+  background: $dark-bg-secondary;
+  padding: $spacing-xl;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid $dark-border-light;
+}
+
+.faqQuestion {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  margin-bottom: $spacing-sm;
+  color: $dark-text-primary;
+}
+
+.faqAnswer {
+  color: $dark-text-secondary;
+  line-height: 1.6;
+}

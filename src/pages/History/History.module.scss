@@ -1,0 +1,90 @@
+@import "../../styles/variables";
+
+.historyPage {
+  padding: $spacing-xl $spacing-md;
+  min-height: calc(100vh - 70px);
+  background: $dark-bg-primary;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+}
+
+.pageTitle {
+  font-size: $font-size-3xl;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-2xl;
+  }
+}
+
+.subtitle {
+  color: $dark-text-secondary;
+  font-size: $font-size-lg;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+  }
+}
+
+.errorBox {
+  background-color: rgba($error-color, 0.1);
+  color: $error-color;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-lg;
+  border-left: 4px solid $error-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.retryBtn {
+  background: $error-color;
+  color: white;
+  border: none;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.statCard {
+  background: $dark-bg-secondary;
+  padding: $spacing-xl;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  border: 1px solid $dark-border-light;
+}
+
+.statValue {
+  font-size: $font-size-4xl;
+  font-weight: 700;
+  color: $primary-color;
+  margin-bottom: $spacing-sm;
+}
+
+.statLabel {
+  color: $dark-text-secondary;
+  font-size: $font-size-sm;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

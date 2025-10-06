@@ -1,0 +1,89 @@
+@import "../../styles/variables";
+
+.bubble {
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-lg;
+  max-width: 70%;
+  animation: slideIn 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: $breakpoint-sm) {
+    max-width: 85%;
+  }
+}
+
+.bubbleAI {
+  background: $dark-bg-secondary;
+  align-self: flex-start;
+  margin-right: auto;
+  border: 1px solid $dark-border-light;
+  border-left: 2px solid $primary-color;
+  color: $dark-text-primary;
+}
+
+.bubbleUser {
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+  box-shadow: 0 4px 12px rgba($primary-color, 0.4);
+
+  .sender,
+  .timestamp {
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.bubbleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+  font-size: $font-size-xs;
+}
+
+.sender {
+  font-weight: 600;
+  color: $dark-text-secondary;
+  font-size: $font-size-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.aiAvatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.timestamp {
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
+}
+
+.bubbleContent {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  font-size: $font-size-base;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

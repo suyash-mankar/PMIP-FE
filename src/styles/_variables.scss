@@ -1,0 +1,82 @@
+// Colors - Modern & Professional
+$primary-color: #6366f1; // Indigo
+$primary-hover: #4f46e5;
+$primary-dark: #4338ca;
+$secondary-color: #64748b;
+$accent-color: #8b5cf6; // Purple accent
+$accent-light: #a78bfa;
+
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+
+// Dark Theme Colors (ChatGPT-style)
+$dark-bg-primary: #343541; // Main dark background
+$dark-bg-secondary: #40414f; // Slightly lighter for cards
+$dark-bg-tertiary: #202123; // Darker shade
+$dark-bg-input: #40414f; // Input background
+$dark-border: #565869; // Border color
+$dark-border-light: #4d4d5c; // Lighter border
+
+$dark-text-primary: #ececf1; // Primary text (white-ish)
+$dark-text-secondary: #c5c5d2; // Secondary text
+$dark-text-muted: #8e8ea0; // Muted text
+
+// Light theme (keep for other pages)
+$text-primary: #0f172a;
+$text-secondary: #64748b;
+$text-light: #94a3b8;
+$text-muted: #cbd5e1;
+
+$bg-primary: #ffffff;
+$bg-secondary: #f8fafc;
+$bg-tertiary: #f1f5f9;
+$bg-dark: #0f172a;
+$border-color: #e2e8f0;
+$border-light: #f1f5f9;
+
+// Typography
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+$font-mono: "Menlo", "Monaco", "Courier New", monospace;
+
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-base: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.5rem; // 40px
+$font-size-5xl: 3rem; // 48px
+$font-size-6xl: 3.75rem; // 60px
+
+// Spacing
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-md: 1rem; // 16px
+$spacing-lg: 1.5rem; // 24px
+$spacing-xl: 2rem; // 32px
+$spacing-2xl: 3rem; // 48px
+$spacing-3xl: 4rem; // 64px
+
+// Border radius
+$radius-sm: 0.25rem;
+$radius-md: 0.5rem;
+$radius-lg: 0.75rem;
+$radius-xl: 1rem;
+
+// Shadows
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

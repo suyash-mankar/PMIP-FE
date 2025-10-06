@@ -1,0 +1,398 @@
+@import "../../styles/variables";
+
+.landing {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+// Hero Section
+.hero {
+  background: $dark-bg-primary;
+  color: white;
+  padding: 5rem $spacing-md 6rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at 30% 50%,
+      rgba(99, 102, 241, 0.15) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 3rem $spacing-md 4rem;
+  }
+}
+
+.heroContent {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.badge {
+  display: inline-block;
+  margin-bottom: $spacing-lg;
+  animation: fadeInUp 0.6s ease;
+}
+
+.badgeText {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.heroTitle {
+  font-size: $font-size-6xl;
+  font-weight: 800;
+  margin-bottom: $spacing-lg;
+  line-height: 1.1;
+  animation: fadeInUp 0.6s ease 0.1s backwards;
+
+  @media (max-width: $breakpoint-md) {
+    font-size: $font-size-5xl;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-4xl;
+  }
+}
+
+.heroTitleGradient {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+  font-size: $font-size-xl;
+  margin-bottom: $spacing-2xl;
+  line-height: 1.7;
+  opacity: 0.95;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInUp 0.6s ease 0.2s backwards;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.heroCTA {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  animation: fadeInUp 0.6s ease 0.3s backwards;
+}
+
+.noCreditCard {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+// How It Works
+.howItWorks {
+  padding: 5rem $spacing-md;
+  background: $dark-bg-secondary;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: $font-size-4xl;
+  font-weight: 800;
+  margin-bottom: $spacing-md;
+  color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-3xl;
+  }
+}
+
+.sectionSubtitle {
+  text-align: center;
+  font-size: $font-size-xl;
+  color: $dark-text-secondary;
+  margin-bottom: $spacing-3xl;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-2xl;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.step {
+  position: relative;
+  padding: $spacing-xl;
+  text-align: center;
+}
+
+.stepNumber {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-2xl;
+  font-weight: 700;
+  margin: 0 auto $spacing-lg;
+  box-shadow: 0 8px 24px rgba($primary-color, 0.3);
+}
+
+.stepContent {
+}
+
+.stepTitle {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: $dark-text-primary;
+}
+
+.stepDescription {
+  color: $dark-text-secondary;
+  line-height: 1.7;
+  font-size: $font-size-base;
+}
+
+// Comparison Table
+.features {
+  padding: 5rem $spacing-md;
+  background: $dark-bg-primary;
+}
+
+.comparisonTable {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-xl;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: $spacing-2xl;
+}
+
+.comparisonColumn {
+  background: $dark-bg-secondary;
+  padding: $spacing-2xl;
+  border-radius: $radius-xl;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid $dark-border-light;
+
+  &:last-child {
+    border: 2px solid $primary-color;
+  }
+}
+
+.comparisonTitle {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  margin-bottom: $spacing-lg;
+  color: $dark-text-primary;
+}
+
+.comparisonList {
+  list-style: none;
+
+  li {
+    padding: $spacing-sm 0;
+    color: $dark-text-secondary;
+    font-size: $font-size-base;
+    line-height: 1.8;
+  }
+}
+
+// Key Features
+.keyFeatures {
+  padding: 5rem $spacing-md;
+  background: $dark-bg-secondary;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: $spacing-xl;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature {
+  background: $dark-bg-primary;
+  padding: $spacing-xl;
+  border-radius: $radius-xl;
+  border: 1px solid $dark-border-light;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    border-color: $primary-color;
+  }
+}
+
+.featureIcon {
+  font-size: 3rem;
+  margin-bottom: $spacing-lg;
+}
+
+.featureTitle {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  margin-bottom: $spacing-md;
+  color: $dark-text-primary;
+}
+
+.featureDescription {
+  color: $dark-text-secondary;
+  line-height: 1.7;
+}
+
+// Social Proof
+.socialProof {
+  padding: 5rem $spacing-md;
+  background: $dark-bg-primary;
+}
+
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: $spacing-2xl;
+}
+
+.testimonial {
+  background: $dark-bg-secondary;
+  padding: $spacing-2xl;
+  border-radius: $radius-xl;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid $dark-border-light;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.testimonialText {
+  font-size: $font-size-base;
+  line-height: 1.8;
+  color: $dark-text-primary;
+  margin-bottom: $spacing-lg;
+  font-style: italic;
+}
+
+.testimonialAuthor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  strong {
+    color: $dark-text-primary;
+    font-weight: 600;
+  }
+
+  span {
+    color: $dark-text-secondary;
+    font-size: $font-size-sm;
+  }
+}
+
+// Final CTA
+.finalCTA {
+  padding: 5rem $spacing-md;
+  background: $dark-bg-secondary;
+  color: white;
+  text-align: center;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(99, 102, 241, 0.2) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+}
+
+.ctaContent {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-size: $font-size-4xl;
+  font-weight: 800;
+  margin-bottom: $spacing-lg;
+  line-height: 1.2;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-3xl;
+  }
+}
+
+.ctaSubtitle {
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-2xl;
+  opacity: 0.95;
+  line-height: 1.7;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
