@@ -5,8 +5,6 @@ import {
   scoreAnswer,
   askClarification,
 } from "../../api/client";
-import ChatBubble from "../../components/ChatBubble/ChatBubble";
-import ScoreCard from "../../components/ScoreCard/ScoreCard";
 import styles from "./Interview.module.scss";
 
 function Interview() {
@@ -22,14 +20,14 @@ function Interview() {
   const [submitting, setSubmitting] = useState(false);
   const [scoring, setScoring] = useState(false);
   const [interviewStarted, setInterviewStarted] = useState(false);
-  const [showScoreModal, setShowScoreModal] = useState(false);
   const [loadingFirstQuestion, setLoadingFirstQuestion] = useState(false);
   const [conversationMode, setConversationMode] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [askingClarification, setAskingClarification] = useState(false);
+  const [questionHistory, setQuestionHistory] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const messagesEndRef = useRef(null);
-  const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -73,7 +71,6 @@ function Interview() {
       const response = await startInterview(difficulty);
       console.log("Start interview response:", response.data);
 
-      // Handle different possible response formats
       const questionIdFromResponse =
         response.data.id || response.data.questionId;
       const interviewQuestion =
@@ -109,6 +106,18 @@ function Interview() {
         ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
+
+        // Add to question history
+        setQuestionHistory((prev) => [
+          ...prev,
+          {
+            id: questionIdFromResponse,
+            question: interviewQuestion,
+            difficulty,
+            timestamp: new Date().toISOString(),
+            status: "in_progress",
+          },
+        ]);
       }, 800);
     } catch (err) {
       console.error("Start interview error:", err);
@@ -127,7 +136,7 @@ function Interview() {
 
   const handleAskClarification = async () => {
     if (!answer.trim()) {
-      return; // Don't show error, just don't send
+      return;
     }
 
     setAskingClarification(true);
@@ -142,24 +151,22 @@ function Interview() {
     setMessages((prev) => [...prev, userMessage]);
 
     const currentMessage = answer;
-    setAnswer(""); // Clear input immediately
+    setAnswer("");
 
     try {
       // Get conversation history (excluding welcome message)
       const conversationHistory = messages
-        .slice(1) // Skip welcome message
+        .slice(1)
         .map((msg) => ({
           role: msg.sender === "ai" ? "assistant" : "user",
           content: msg.message,
         }));
 
-      // Add current user message to history
       conversationHistory.push({
         role: "user",
         content: currentMessage,
       });
 
-      // Ask for clarification
       const response = await askClarification(
         questionId,
         currentMessage,
@@ -208,12 +215,12 @@ function Interview() {
 
   const handleSubmitAnswer = async () => {
     if (!answer.trim()) {
-      return; // Don't show error, just don't submit
+      return;
     }
 
     setSubmitting(true);
     setError("");
-    setConversationMode(false); // Exit conversation mode
+    setConversationMode(false);
 
     // Add user message to chat
     const userMessage = {
@@ -224,14 +231,13 @@ function Interview() {
     setMessages((prev) => [...prev, userMessage]);
 
     const currentAnswer = answer;
-    setAnswer(""); // Clear input immediately
+    setAnswer("");
 
     try {
       // Submit answer
       const submitResponse = await submitAnswer(questionId, currentAnswer);
       console.log("Submit answer response:", submitResponse.data);
 
-      // Get sessionId from submit response
       const sessionIdFromSubmit =
         submitResponse.data.sessionId || submitResponse.data.id;
       if (sessionIdFromSubmit) {
@@ -258,64 +264,89 @@ function Interview() {
         console.log("Score response:", scoreResponse.data);
         const scoreData = scoreResponse.data;
 
-        // Backend returns { message, score: {...} }
         const scoresPayload = scoreData.score || scoreData.scores || scoreData;
 
         console.log("Scores payload:", scoresPayload);
         setScores(scoresPayload);
 
-        // Add feedback summary message
-        const totalScore =
-          scoresPayload.totalScore ||
-          Math.round(
-            (scoresPayload.structure +
-              scoresPayload.metrics +
-              scoresPayload.prioritization +
-              scoresPayload.userEmpathy +
-              scoresPayload.communication) /
-              5
-          );
+        // Format feedback message with scores inline
+        const feedbackMessage = formatScoreFeedback(scoresPayload);
 
         setMessages((prev) => [
           ...prev,
           {
             sender: "ai",
-            message: `Great! I've evaluated your answer. You scored **${totalScore}/10** overall. Click "View Detailed Feedback" below to see your complete score breakdown and improvement suggestions.`,
+            message: feedbackMessage,
             timestamp: new Date().toISOString(),
+            isScore: true,
+            scoreData: scoresPayload,
           },
         ]);
 
-        // Show score modal
-        setShowScoreModal(true);
-      } catch (scoreErr) {
-        console.error("Scoring error:", scoreErr);
-
-        // Retry logic for JSON parse errors
-        if (
-          scoreErr.response?.status === 500 ||
-          scoreErr.message?.includes("JSON")
-        ) {
-          setError("Scoring failed. Please try submitting again.");
-        } else {
-          setError("Failed to score your answer. Please try again.");
-        }
+        // Update question history
+        setQuestionHistory((prev) =>
+          prev.map((q) =>
+            q.id === questionId
+              ? {
+                  ...q,
+                  status: "completed",
+                  score: scoresPayload.totalScore || 0,
+                }
+              : q
+          )
+        );
+      } catch (scoreError) {
+        console.error("Scoring error:", scoreError);
+        setError(
+          scoreError.response?.data?.message ||
+            scoreError.message ||
+            "Failed to score answer. Please try again."
+        );
+      } finally {
+        setScoring(false);
       }
     } catch (err) {
       console.error("Submit answer error:", err);
       setError(
         err.response?.data?.message ||
+          err.message ||
           "Failed to submit answer. Please try again."
       );
-      // Remove the user message if submission failed
-      setMessages((prev) => prev.slice(0, -1));
-      setAnswer(currentAnswer); // Restore answer
     } finally {
       setSubmitting(false);
       setScoring(false);
     }
   };
 
-  // Handle Enter key to submit
+  const formatScoreFeedback = (scores) => {
+    const totalScore =
+      scores.totalScore ||
+      Math.round(
+        (scores.structure +
+          scores.metrics +
+          scores.prioritization +
+          scores.userEmpathy +
+          scores.communication) /
+          5
+      );
+
+    let feedback = `## Your Score: ${totalScore}/10\n\n`;
+    feedback += `### Dimension Scores:\n`;
+    feedback += `- **Structure:** ${scores.structure}/10\n`;
+    feedback += `- **Metrics:** ${scores.metrics}/10`;
+    feedback += `- **Prioritization:** ${scores.prioritization}/10\n`;
+    feedback += `- **User Empathy:** ${scores.userEmpathy}/10\n`;
+    feedback += `- **Communication:** ${scores.communication}/10\n\n`;
+
+    feedback += `### Feedback:\n${scores.feedback}\n\n`;
+
+    if (scores.sampleAnswer) {
+      feedback += `### Model Answer:\n${scores.sampleAnswer}`;
+    }
+
+    return feedback;
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -327,17 +358,13 @@ function Interview() {
     }
   };
 
-  // Handle Next Question
   const handleNextQuestion = async () => {
     setLoading(true);
     setError("");
-    setQuestionId(null);
-    setSessionId(null);
-    setAnswer("");
     setScores(null);
-    setShowScoreModal(false);
+    setAnswer("");
+    setConversationMode(false);
 
-    // Add transition message
     setMessages((prev) => [
       ...prev,
       {
@@ -371,7 +398,6 @@ function Interview() {
       setQuestionId(questionIdFromResponse);
       setQuestion(interviewQuestion);
 
-      // Add new question after delay
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
@@ -379,6 +405,19 @@ function Interview() {
             sender: "ai",
             message: interviewQuestion,
             timestamp: new Date().toISOString(),
+          },
+        ]);
+        setConversationMode(true);
+
+        // Add to question history
+        setQuestionHistory((prev) => [
+          ...prev,
+          {
+            id: questionIdFromResponse,
+            question: interviewQuestion,
+            difficulty,
+            timestamp: new Date().toISOString(),
+            status: "in_progress",
           },
         ]);
       }, 600);
@@ -396,30 +435,60 @@ function Interview() {
 
   return (
     <div className={styles.interviewPage}>
-      {/* Chat Interface */}
-      <div className={styles.chatInterface}>
-        {/* Top Bar - Only show if interview hasn't started */}
-        {!interviewStarted && (
-          <div className={styles.topBar}>
-            <h1 className={styles.appTitle}>PM Interview Coach</h1>
-          </div>
-        )}
+      {/* Left Sidebar */}
+      <div className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ""}`}>
+        <div className={styles.sidebarHeader}>
+          <h3>Questions Solved</h3>
+          <button
+            className={styles.sidebarToggle}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            {sidebarOpen ? "←" : "→"}
+          </button>
+        </div>
 
-        {/* Messages Container */}
-        <div className={styles.messagesContainer} ref={chatContainerRef}>
-          <div className={styles.messagesInner}>
-            {!interviewStarted ? (
-              /* Welcome Screen */
-              <div className={styles.welcomeScreen}>
-                <div className={styles.welcomeIcon}>🎯</div>
-                <h2 className={styles.welcomeTitle}>
-                  Welcome to PM Interview Practice
-                </h2>
-                <p className={styles.welcomeSubtitle}>
-                  Practice product management interview questions with
-                  AI-powered feedback. Choose your difficulty level to begin.
-                </p>
+        <div className={styles.questionList}>
+          {questionHistory.length === 0 ? (
+            <p className={styles.emptyState}>No questions yet. Start an interview!</p>
+          ) : (
+            questionHistory.map((q, index) => (
+              <div
+                key={q.id}
+                className={`${styles.questionItem} ${
+                  q.id === questionId ? styles.questionItemActive : ""
+                }`}
+              >
+                <div className={styles.questionNumber}>Q{index + 1}</div>
+                <div className={styles.questionDetails}>
+                  <p className={styles.questionText}>
+                    {q.question.substring(0, 60)}...
+                  </p>
+                  <div className={styles.questionMeta}>
+                    <span className={styles.questionDifficulty}>{q.difficulty}</span>
+                    {q.score !== undefined && (
+                      <span className={styles.questionScore}>{q.score}/10</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
 
+      {/* Main Chat Area */}
+      <div className={styles.chatArea}>
+        {!interviewStarted ? (
+          /* Welcome Screen */
+          <div className={styles.welcomeScreen}>
+            <div className={styles.welcomeContent}>
+              <h1 className={styles.welcomeTitle}>PM Interview Practice</h1>
+              <p className={styles.welcomeSubtitle}>
+                Practice PM interviews with AI. Get harsh, honest feedback instantly.
+              </p>
+
+              <div className={styles.difficultySelector}>
+                <p className={styles.selectorLabel}>Select Difficulty:</p>
                 <div className={styles.difficultyCards}>
                   <button
                     className={`${styles.difficultyCard} ${
@@ -438,9 +507,9 @@ function Interview() {
                     }`}
                     onClick={() => setDifficulty("mid")}
                   >
-                    <div className={styles.cardIcon}>⚡</div>
+                    <div className={styles.cardIcon}>💼</div>
                     <h3>Mid Level</h3>
-                    <p>For PMs with 2-5 years experience</p>
+                    <p>For PMs with 2-5 years of experience</p>
                   </button>
 
                   <button
@@ -463,210 +532,151 @@ function Interview() {
                   {loading ? "Starting..." : "Start Interview"}
                 </button>
               </div>
-            ) : (
-              /* Chat Messages */
-              <div className={styles.chatMessages}>
+            </div>
+          </div>
+        ) : (
+          /* Chat Messages - ChatGPT Style */
+          <>
+            <div className={styles.messagesContainer}>
+              <div className={styles.messagesInner}>
                 {messages.map((msg, index) => (
-                  <ChatBubble
+                  <div
                     key={index}
-                    message={msg.message}
-                    sender={msg.sender}
-                    timestamp={msg.timestamp}
-                  />
+                    className={`${styles.message} ${
+                      msg.sender === "user" ? styles.messageUser : styles.messageAI
+                    }`}
+                  >
+                    <div className={styles.messageContent}>
+                      {msg.sender === "ai" && (
+                        <div className={styles.messageAvatar}>AI</div>
+                      )}
+                      {msg.sender === "user" && (
+                        <div className={styles.messageAvatarUser}>You</div>
+                      )}
+                      <div className={styles.messageText}>
+                        {msg.isScore ? (
+                          <div className={styles.scoreDisplay}>
+                            {renderScoreMarkdown(msg.message, msg.scoreData)}
+                          </div>
+                        ) : (
+                          msg.message
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 ))}
-                {(submitting || scoring || askingClarification) && (
-                  <div className={styles.typingIndicatorWrapper}>
-                    <div className={styles.typingIndicator}>
-                      <span className={styles.aiAvatarSmall}>AI</span>
-                      <div className={styles.typingDots}>
-                        <div className={styles.typingDot}></div>
-                        <div className={styles.typingDot}></div>
-                        <div className={styles.typingDot}></div>
+
+                {(submitting || scoring || askingClarification || loadingFirstQuestion) && (
+                  <div className={`${styles.message} ${styles.messageAI}`}>
+                    <div className={styles.messageContent}>
+                      <div className={styles.messageAvatar}>AI</div>
+                      <div className={styles.typingIndicator}>
+                        <span></span>
+                        <span></span>
+                        <span></span>
                       </div>
                     </div>
                   </div>
                 )}
-                {loadingFirstQuestion && (
-                  <div className={styles.typingIndicatorWrapper}>
-                    <div className={styles.typingIndicator}>
-                      <span className={styles.aiAvatarSmall}>AI</span>
-                      <div className={styles.typingDots}>
-                        <div className={styles.typingDot}></div>
-                        <div className={styles.typingDot}></div>
-                        <div className={styles.typingDot}></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+
                 <div ref={messagesEndRef} />
               </div>
-            )}
-          </div>
-        </div>
-
-        {/* Input Area - Only show when interview is started */}
-        {interviewStarted && (
-          <div className={styles.inputContainer}>
-            {error && <div className={styles.errorBanner}>{error}</div>}
-
-            {scores && (
-              <div className={styles.feedbackPrompt}>
-                <button
-                  className={styles.viewFeedbackBtn}
-                  onClick={() => setShowScoreModal(true)}
-                >
-                  📊 View Detailed Feedback
-                </button>
-                <button
-                  className={styles.nextQuestionBtn}
-                  onClick={handleNextQuestion}
-                  disabled={loading}
-                >
-                  {loading ? "Loading..." : "➡️ Next Question"}
-                </button>
-              </div>
-            )}
-
-            <div className={styles.inputWrapper}>
-              <textarea
-                ref={inputRef}
-                className={styles.chatInput}
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder={
-                  conversationMode
-                    ? "Ask clarifying questions or type your answer... (Shift+Enter for new line)"
-                    : "Type your answer here... (Shift+Enter for new line)"
-                }
-                disabled={submitting || scoring || askingClarification}
-                rows={1}
-                style={{
-                  minHeight: "24px",
-                  maxHeight: "200px",
-                  height: "auto",
-                }}
-                onInput={(e) => {
-                  e.target.style.height = "auto";
-                  e.target.style.height = e.target.scrollHeight + "px";
-                }}
-              />
-              <button
-                className={styles.sendButton}
-                onClick={
-                  conversationMode ? handleAskClarification : handleSubmitAnswer
-                }
-                disabled={
-                  submitting || scoring || askingClarification || !answer.trim()
-                }
-                aria-label="Send message"
-              >
-                {submitting || scoring || askingClarification ? (
-                  <div
-                    className="spinner"
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderWidth: "2px",
-                    }}
-                  ></div>
-                ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                  </svg>
-                )}
-              </button>
-              {conversationMode && !scores && (
-                <button
-                  className={styles.submitFinalAnswerBtn}
-                  onClick={handleSubmitFinalAnswerClick}
-                  disabled={
-                    submitting ||
-                    scoring ||
-                    askingClarification ||
-                    !answer.trim()
-                  }
-                  title="Submit your final answer for evaluation"
-                >
-                  ✓ Submit Final Answer
-                </button>
-              )}
             </div>
-            <p className={styles.inputHint}>
-              {conversationMode
-                ? "💡 Ask clarifying questions first, then submit your final answer for evaluation"
-                : "Press Enter to send, Shift+Enter for new line"}
-            </p>
-          </div>
+
+            {/* Input Area */}
+            <div className={styles.inputArea}>
+              {error && <div className={styles.errorBanner}>{error}</div>}
+
+              {scores && (
+                <div className={styles.actionButtons}>
+                  <button
+                    className={styles.nextQuestionBtn}
+                    onClick={handleNextQuestion}
+                    disabled={loading}
+                  >
+                    {loading ? "Loading..." : "➡️ Next Question"}
+                  </button>
+                </div>
+              )}
+
+              <div className={styles.inputContainer}>
+                <textarea
+                  ref={inputRef}
+                  className={styles.input}
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder={
+                    conversationMode
+                      ? "Ask clarifying questions or type your answer..."
+                      : "Type your answer here..."
+                  }
+                  disabled={submitting || scoring || askingClarification}
+                  rows={1}
+                  onInput={(e) => {
+                    e.target.style.height = "auto";
+                    e.target.style.height = Math.min(e.target.scrollHeight, 200) + "px";
+                  }}
+                />
+                <div className={styles.inputActions}>
+                  {conversationMode && !scores && (
+                    <button
+                      className={styles.submitFinalBtn}
+                      onClick={handleSubmitFinalAnswerClick}
+                      disabled={
+                        submitting ||
+                        scoring ||
+                        askingClarification ||
+                        !answer.trim()
+                      }
+                    >
+                      Submit Final Answer
+                    </button>
+                  )}
+                  <button
+                    className={styles.sendBtn}
+                    onClick={
+                      conversationMode ? handleAskClarification : handleSubmitAnswer
+                    }
+                    disabled={
+                      submitting ||
+                      scoring ||
+                      askingClarification ||
+                      !answer.trim()
+                    }
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M7 11L12 6L17 11M12 18V7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
 
-      {/* Score Modal */}
-      {showScoreModal && scores && (
-        <div
-          className={styles.modalOverlay}
-          onClick={() => setShowScoreModal(false)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className={styles.modalClose}
-              onClick={() => setShowScoreModal(false)}
-            >
-              ✕
-            </button>
-            <ScoreCard scores={scores} />
-            <div className={styles.modalActions}>
-              <button
-                className="btn btn-primary"
-                onClick={() => setShowScoreModal(false)}
-                style={{ flex: 1 }}
-              >
-                Close
-              </button>
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => {
-                  setShowScoreModal(false);
-                  handleNextQuestion();
-                }}
-                disabled={loading}
-                style={{ flex: 1 }}
-              >
-                {loading ? "Loading..." : "Next Question →"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Confirmation Modal for Final Answer Submission */}
+      {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className={styles.modalOverlay} onClick={handleCancelSubmit}>
           <div
             className={styles.confirmModal}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className={styles.confirmTitle}>Submit Final Answer?</h3>
-            <p className={styles.confirmMessage}>
+            <h3>Submit Final Answer?</h3>
+            <p>
               Are you ready to submit this as your final answer? Once submitted,
               it will be evaluated and you won't be able to ask more clarifying
               questions for this question.
             </p>
             <div className={styles.confirmActions}>
-              <button
-                className="btn btn-outline-dark"
-                onClick={handleCancelSubmit}
-              >
+              <button className="btn btn-outline-dark" onClick={handleCancelSubmit}>
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={handleConfirmSubmit}>
@@ -678,6 +688,23 @@ function Interview() {
       )}
     </div>
   );
+}
+
+function renderScoreMarkdown(text, scoreData) {
+  // Parse and render the markdown-style feedback
+  const lines = text.split("\n");
+  return lines.map((line, i) => {
+    if (line.startsWith("## ")) {
+      return <h2 key={i} className="score-heading">{line.substring(3)}</h2>;
+    } else if (line.startsWith("### ")) {
+      return <h3 key={i} className="score-subheading">{line.substring(4)}</h3>;
+    } else if (line.startsWith("- **")) {
+      return <p key={i} className="score-bullet">{line}</p>;
+    } else if (line.trim()) {
+      return <p key={i}>{line}</p>;
+    }
+    return <br key={i} />;
+  });
 }
 
 export default Interview;
