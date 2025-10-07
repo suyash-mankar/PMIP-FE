@@ -48,7 +48,7 @@ function Interview() {
         const response = await getCategories();
         setAvailableCategories(response.data.categories);
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error("Failed to fetch categories:", error);
       }
     };
     fetchCategories();
@@ -576,7 +576,9 @@ function Interview() {
 
                 {/* Category Selector */}
                 <div className={styles.categorySelector}>
-                  <p className={styles.selectorLabel}>Select Category (Optional):</p>
+                  <p className={styles.selectorLabel}>
+                    Select Category (Optional):
+                  </p>
                   <div className={styles.categoryGrid}>
                     <button
                       className={`${styles.categoryCard} ${
@@ -597,12 +599,12 @@ function Interview() {
                         onClick={() => setCategory(cat.value)}
                       >
                         <div className={styles.categoryIcon}>
-                          {cat.value === 'root_cause_analysis' && '🔍'}
-                          {cat.value === 'product_improvement' && '⚡'}
-                          {cat.value === 'product_design' && '🎨'}
-                          {cat.value === 'metrics' && '📊'}
-                          {cat.value === 'product_strategy' && '🎯'}
-                          {cat.value === 'guesstimates' && '🧮'}
+                          {cat.value === "root_cause_analysis" && "🔍"}
+                          {cat.value === "product_improvement" && "⚡"}
+                          {cat.value === "product_design" && "🎨"}
+                          {cat.value === "metrics" && "📊"}
+                          {cat.value === "product_strategy" && "🎯"}
+                          {cat.value === "guesstimates" && "🧮"}
                         </div>
                         <h4>{cat.label}</h4>
                         <p>{cat.count} questions</p>
