@@ -9,7 +9,9 @@ Complete UI overhaul to match ChatGPT's interface exactly - removed chat bubbles
 ## 🚀 **Key Changes**
 
 ### 1. **Removed Chat Bubbles**
+
 **Before**: Chat bubbles with borders and backgrounds
+
 ```
 ┌─────────────────────────────┐
 │ AI: Here's your question... │
@@ -21,13 +23,14 @@ Complete UI overhaul to match ChatGPT's interface exactly - removed chat bubbles
 ```
 
 **After**: ChatGPT-style flat messages
+
 ```
 AI  Here's your question...
 
 You My answer is...
 
 AI  Your Score: 8/10
-    
+
     ### Dimension Scores:
     - Structure: 8/10
     - Metrics: 7/10
@@ -35,6 +38,7 @@ AI  Your Score: 8/10
 ```
 
 ### 2. **Added Left Sidebar**
+
 - **Question History**: Shows all questions solved
 - **Question Number**: Q1, Q2, Q3, etc.
 - **Question Preview**: First 60 characters
@@ -44,7 +48,9 @@ AI  Your Score: 8/10
 - **Toggleable**: Can hide/show on mobile
 
 ### 3. **Inline Score Display**
+
 **Before**: Score modal popup
+
 ```
 ┌──────────────────────────────┐
 │   📊 Your Scores             │
@@ -58,6 +64,7 @@ AI  Your Score: 8/10
 ```
 
 **After**: Scores inline in chat
+
 ```
 AI  Your Score: 8/10
 
@@ -67,21 +74,23 @@ AI  Your Score: 8/10
     - Prioritization: 9/10
     - User Empathy: 7/10
     - Communication: 8/10
-    
+
     ### Feedback:
     1. You jumped into solutions...
     2. Your approach lacks measurable KPIs...
-    
+
     ### Model Answer:
     First, identify which user segment...
 ```
 
 ### 4. **Inter Font**
+
 - **Font Family**: Inter (Google Fonts)
 - **Weights**: 400, 500, 600, 700
 - **Same as ChatGPT**: Exact font match
 
 ### 5. **ChatGPT Color Scheme**
+
 - **Primary BG**: `#343541`
 - **Secondary BG**: `#444654` (AI messages)
 - **Sidebar BG**: `#202123`
@@ -94,6 +103,7 @@ AI  Your Score: 8/10
 ## 🎨 **UI Components**
 
 ### **Left Sidebar**
+
 ```scss
 .sidebar {
   width: 260px;
@@ -103,6 +113,7 @@ AI  Your Score: 8/10
 ```
 
 **Features**:
+
 - Question history list
 - Scroll for many questions
 - Toggleable on mobile
@@ -111,18 +122,18 @@ AI  Your Score: 8/10
 - Shows difficulty badges
 
 ### **Message Layout**
+
 ```jsx
 <div className="message messageAI">
   <div className="messageContent">
     <div className="messageAvatar">AI</div>
-    <div className="messageText">
-      {message.content}
-    </div>
+    <div className="messageText">{message.content}</div>
   </div>
 </div>
 ```
 
 **Styling**:
+
 - No borders
 - No rounded corners on messages
 - Alternating backgrounds (user vs AI)
@@ -131,15 +142,19 @@ AI  Your Score: 8/10
 - Clean, minimal design
 
 ### **Score Display**
+
 ```jsx
-{msg.isScore && (
-  <div className="scoreDisplay">
-    {renderScoreMarkdown(msg.message, msg.scoreData)}
-  </div>
-)}
+{
+  msg.isScore && (
+    <div className="scoreDisplay">
+      {renderScoreMarkdown(msg.message, msg.scoreData)}
+    </div>
+  );
+}
 ```
 
 **Rendering**:
+
 - Markdown-style headings (`##`, `###`)
 - Bullet points for scores
 - Numbered feedback points
@@ -147,6 +162,7 @@ AI  Your Score: 8/10
 - Clean typography
 
 ### **Input Area**
+
 ```scss
 .input {
   background: rgba(255, 255, 255, 0.05);
@@ -157,6 +173,7 @@ AI  Your Score: 8/10
 ```
 
 **Features**:
+
 - Auto-expanding textarea
 - Max height 200px
 - Submit Final Answer button inline
@@ -168,6 +185,7 @@ AI  Your Score: 8/10
 ## 📦 **Component Structure**
 
 ### **Before** (Bubble-based)
+
 ```
 Interview.jsx
   ├── ChatBubble (AI message)
@@ -177,6 +195,7 @@ Interview.jsx
 ```
 
 ### **After** (ChatGPT-style)
+
 ```
 Interview.jsx
   ├── Sidebar
@@ -201,11 +220,13 @@ Interview.jsx
 ## 💻 **Code Changes**
 
 ### **Removed Components**
+
 - ❌ `ChatBubble.jsx` - No longer used
 - ❌ `ChatBubble.module.scss` - No longer used
 - ❌ Score modal JSX - Replaced with inline display
 
 ### **New Features**
+
 - ✅ `questionHistory` state - Track all questions
 - ✅ `sidebarOpen` state - Toggle sidebar
 - ✅ `isScore` message flag - Mark score messages
@@ -215,6 +236,7 @@ Interview.jsx
 - ✅ ChatGPT-style message rendering
 
 ### **Message Structure**
+
 ```javascript
 {
   sender: "ai" | "user",
@@ -226,6 +248,7 @@ Interview.jsx
 ```
 
 ### **Question History Structure**
+
 ```javascript
 {
   id: "question-id",
@@ -242,6 +265,7 @@ Interview.jsx
 ## 🎯 **Features**
 
 ### **Sidebar Features**
+
 ✅ **Question Tracking**: Shows all questions attempted  
 ✅ **Score Display**: Shows score badge for completed questions  
 ✅ **Difficulty Badge**: Color-coded difficulty level  
@@ -249,31 +273,34 @@ Interview.jsx
 ✅ **Question Preview**: First 60 chars with ellipsis  
 ✅ **Scrollable**: Handle many questions elegantly  
 ✅ **Mobile Toggle**: Hide/show with arrow button  
-✅ **Empty State**: Friendly message when no questions  
+✅ **Empty State**: Friendly message when no questions
 
 ### **Message Features**
+
 ✅ **No Bubbles**: Clean, flat design like ChatGPT  
 ✅ **Alternating BG**: AI messages have subtle background  
 ✅ **Avatar Icons**: "AI" and "You" avatars  
 ✅ **Full Width**: Messages span full container width  
 ✅ **Markdown Support**: Scores rendered with headings & bullets  
 ✅ **Typing Indicator**: ChatGPT-style bouncing dots  
-✅ **Clean Typography**: Inter font, proper line-height  
+✅ **Clean Typography**: Inter font, proper line-height
 
 ### **Score Display Features**
+
 ✅ **Inline in Chat**: No modal popup  
 ✅ **Markdown Formatting**: Clean hierarchy with headings  
 ✅ **Dimension Breakdown**: All 5-6 scores shown  
 ✅ **Numbered Feedback**: Critiques numbered 1, 2, 3  
 ✅ **Model Answer**: Shown inline below feedback  
 ✅ **Total Score Prominent**: Large heading at top  
-✅ **Scrollable**: Long feedback scrolls naturally  
+✅ **Scrollable**: Long feedback scrolls naturally
 
 ---
 
 ## 🎨 **Design System**
 
 ### **Colors (ChatGPT-inspired)**
+
 ```scss
 // Backgrounds
 $dark-bg-primary: #343541; // Main background
@@ -296,6 +323,7 @@ $success-color: #10b981; // Green (for scores)
 ```
 
 ### **Typography**
+
 ```scss
 // Font Family
 font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -315,6 +343,7 @@ headings: 1.2
 ```
 
 ### **Spacing**
+
 ```scss
 $spacing-xs: 4px;
 $spacing-sm: 8px;
@@ -325,6 +354,7 @@ $spacing-2xl: 48px;
 ```
 
 ### **Border Radius**
+
 ```scss
 $radius-sm: 4px;
 $radius-md: 8px;
@@ -336,12 +366,14 @@ $radius-lg: 12px;
 ## 📱 **Responsive Design**
 
 ### **Desktop (> 768px)**
+
 - Sidebar: 260px width, always visible
 - Messages: Max-width 800px, centered
 - Input: Max-width 800px, centered
 - Submit Final Answer button: Visible
 
 ### **Mobile (<= 768px)**
+
 - Sidebar: Off-canvas, toggle with button
 - Messages: Full width with padding
 - Input: Full width, font-size 16px (prevents iOS zoom)
@@ -352,6 +384,7 @@ $radius-lg: 12px;
 ## 🧪 **Testing**
 
 ### **Sidebar**
+
 - [ ] Question history populates correctly
 - [ ] Active question highlighted
 - [ ] Scores display after completion
@@ -361,6 +394,7 @@ $radius-lg: 12px;
 - [ ] Empty state shows when no questions
 
 ### **Messages**
+
 - [ ] AI messages have subtle background
 - [ ] User messages have primary background
 - [ ] Avatars display correctly
@@ -369,6 +403,7 @@ $radius-lg: 12px;
 - [ ] No bubbles or borders
 
 ### **Score Display**
+
 - [ ] Scores render inline in chat
 - [ ] Markdown formatting works
 - [ ] All dimensions shown
@@ -377,6 +412,7 @@ $radius-lg: 12px;
 - [ ] Scrolls naturally with chat
 
 ### **Input Area**
+
 - [ ] Auto-expands with typing
 - [ ] Max height enforced (200px)
 - [ ] Submit Final Answer button works
@@ -389,6 +425,7 @@ $radius-lg: 12px;
 ## 🆚 **Before & After Comparison**
 
 ### **Before (Bubble Interface)**
+
 ```
 ┌─────────────────────────────────────┐
 │ ┌────── Header ─────┐               │
@@ -412,6 +449,7 @@ $radius-lg: 12px;
 ```
 
 ### **After (ChatGPT Interface)**
+
 ```
 ┌──────┬──────────────────────────────┐
 │      │                              │
@@ -438,38 +476,44 @@ $radius-lg: 12px;
 ## 📊 **Benefits**
 
 ### **User Experience**
+
 ✅ **Familiar Interface**: Looks exactly like ChatGPT  
 ✅ **Question Tracking**: Easy to see progress  
 ✅ **Inline Feedback**: No modal interruption  
 ✅ **Clean Design**: No visual clutter  
-✅ **Professional**: Credible and polished  
+✅ **Professional**: Credible and polished
 
 ### **Technical**
+
 ✅ **Simpler Code**: Removed ChatBubble component  
 ✅ **Better Performance**: Less DOM nesting  
 ✅ **Maintainable**: Standard ChatGPT patterns  
 ✅ **Scalable**: Sidebar handles unlimited questions  
-✅ **Responsive**: Mobile-first design  
+✅ **Responsive**: Mobile-first design
 
 ### **Business**
+
 ✅ **Higher Perceived Value**: Premium look  
 ✅ **Better Engagement**: Familiar UX reduces friction  
 ✅ **Competitive Advantage**: Professional interface  
 ✅ **Credibility**: Looks like real ChatGPT  
-✅ **User Retention**: Better UX = more usage  
+✅ **User Retention**: Better UX = more usage
 
 ---
 
 ## 🚀 **Future Enhancements**
 
 ### **Phase 2**
+
 1. **Sidebar Actions**
+
    - Click question to jump to that part of chat
    - Delete question from history
    - Filter by difficulty
    - Sort by score
 
 2. **Message Improvements**
+
    - Copy message button
    - Regenerate response
    - Edit message
@@ -482,13 +526,16 @@ $radius-lg: 12px;
    - Share score
 
 ### **Phase 3**
+
 1. **Advanced Sidebar**
+
    - Search questions
    - Tags/categories
    - Favorites
    - Export history
 
 2. **Themes**
+
    - Light mode
    - Custom themes
    - ChatGPT dark/light toggle
@@ -503,6 +550,7 @@ $radius-lg: 12px;
 ## 🎉 **Summary**
 
 ### **What Changed**
+
 ✅ **Removed chat bubbles** - Flat ChatGPT-style messages  
 ✅ **Added left sidebar** - Question history tracking  
 ✅ **Inline score display** - No more modal popup  
@@ -510,9 +558,10 @@ $radius-lg: 12px;
 ✅ **ChatGPT colors** - Dark theme with subtle accents  
 ✅ **Avatar icons** - "AI" and "You" badges  
 ✅ **Clean design** - Minimal, professional aesthetic  
-✅ **Responsive sidebar** - Toggleable on mobile  
+✅ **Responsive sidebar** - Toggleable on mobile
 
 ### **Impact**
+
 - **More familiar** - Users know how to use it
 - **More professional** - Looks premium
 - **Better UX** - Less clicking, smoother flow
@@ -524,8 +573,8 @@ $radius-lg: 12px;
 **The interface now looks and feels exactly like ChatGPT!** 🎯✨
 
 **Deployed**:
+
 - Frontend: https://github.com/suyash-mankar/PMIP-FE (commit `3dee08e`)
 
 **Last Updated**: October 6, 2025  
 **Status**: ✅ Completed & Deployed
-
