@@ -131,7 +131,7 @@
   transition: opacity 0.2s ease;
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-track {
@@ -139,11 +139,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.12);
     }
   }
 }
@@ -358,7 +358,7 @@
   overflow-x: hidden;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   &::-webkit-scrollbar-track {
@@ -366,11 +366,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
     }
   }
 }
@@ -639,25 +639,24 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 0 $spacing-xl;
-  display: flex;
-  align-items: flex-end;
-  gap: $spacing-sm;
+  position: relative;
 }
 
 .input {
-  flex: 1;
+  width: 100%;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: $radius-lg;
-  padding: $spacing-md $spacing-lg;
+  border-radius: 12px;
+  padding: 12px 48px 12px 16px; // Right padding for button space
   color: $dark-text-primary;
   font-size: $font-size-base;
   font-family: inherit;
   line-height: 1.5;
   resize: none;
-  min-height: 52px;
+  min-height: 48px;
   max-height: 200px;
   transition: all 0.2s;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -673,13 +672,6 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
-}
-
-.inputActions {
-  display: flex;
-  gap: $spacing-xs;
-  align-items: center;
-  padding-bottom: 8px; // Align with input padding
 }
 
 // Submit Final Answer Button - Prominent placement
@@ -733,26 +725,29 @@
 }
 
 .sendBtn {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  min-height: 36px;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  border-radius: 6px;
   color: $dark-text-primary;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  flex-shrink: 0;
   padding: 0;
 
   &:hover:not(:disabled) {
-    background: rgba(99, 102, 241, 0.2);
-    border-color: rgba(99, 102, 241, 0.3);
-    color: $primary-color;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: $dark-text-primary;
   }
 
   &:disabled {
@@ -761,8 +756,8 @@
   }
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
   }
 }
@@ -849,6 +844,19 @@
 
   .inputContainer {
     padding: 0 $spacing-md;
+  }
+
+  .sendBtn {
+    right: 6px;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
   }
 
   .conversationBanner {
