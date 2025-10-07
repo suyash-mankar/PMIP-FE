@@ -739,8 +739,8 @@
 .sendBtn,
 button[class*="sendBtn"] {
   position: absolute !important;
-  right: 6px !important;
-  top: 50% !important;
+  right: 45px !important;
+  top: 45% !important;
   transform: translateY(-50%) !important;
   width: 30px !important;
   height: 30px !important;
@@ -888,7 +888,8 @@ button[class*="sendBtn"] {
   }
 
   .sendBtn {
-    right: 5px !important;
+    right: 40px !important;
+    top: 45% !important;
     width: 28px !important;
     height: 28px !important;
     min-width: 28px !important;
