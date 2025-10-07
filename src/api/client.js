@@ -64,6 +64,14 @@ export const scoreAnswer = (sessionId) => {
   });
 };
 
+export const askClarification = (questionId, userMessage, conversationHistory) => {
+  return apiClient.post("/api/clarify", {
+    questionId,
+    userMessage,
+    conversationHistory,
+  });
+};
+
 // Session APIs
 export const getSessions = () => {
   return apiClient.get("/api/sessions");

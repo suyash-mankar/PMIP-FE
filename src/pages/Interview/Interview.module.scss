@@ -496,6 +496,77 @@
   }
 }
 
+// Submit Final Answer Button
+.submitFinalAnswerBtn {
+  margin-left: $spacing-sm;
+  padding: $spacing-sm $spacing-lg;
+  background: linear-gradient(135deg, $success-color 0%, darken($success-color, 10%) 100%);
+  color: white;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba($success-color, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-left: 0;
+    margin-top: $spacing-sm;
+    width: 100%;
+  }
+}
+
+// Confirmation Modal
+.confirmModal {
+  background: $dark-bg-secondary;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+  border: 1px solid $dark-border;
+}
+
+.confirmTitle {
+  color: $dark-text-primary;
+  font-size: $font-size-2xl;
+  font-weight: 700;
+  margin: 0 0 $spacing-md 0;
+}
+
+.confirmMessage {
+  color: $dark-text-secondary;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  margin: 0 0 $spacing-xl 0;
+}
+
+.confirmActions {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: flex-end;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

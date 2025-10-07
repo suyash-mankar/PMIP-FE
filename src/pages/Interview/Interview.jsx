@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { startInterview, submitAnswer, scoreAnswer } from "../../api/client";
+import { startInterview, submitAnswer, scoreAnswer, askClarification } from "../../api/client";
 import ChatBubble from "../../components/ChatBubble/ChatBubble";
 import ScoreCard from "../../components/ScoreCard/ScoreCard";
 import styles from "./Interview.module.scss";
@@ -19,6 +19,9 @@ function Interview() {
   const [interviewStarted, setInterviewStarted] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [loadingFirstQuestion, setLoadingFirstQuestion] = useState(false);
+  const [conversationMode, setConversationMode] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [askingClarification, setAskingClarification] = useState(false);
 
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -100,6 +103,7 @@ function Interview() {
           },
         ]);
         setLoadingFirstQuestion(false);
+        setConversationMode(true); // Enable conversation mode
       }, 800);
     } catch (err) {
       console.error("Start interview error:", err);
@@ -116,6 +120,87 @@ function Interview() {
     }
   };
 
+  const handleAskClarification = async () => {
+    if (!answer.trim()) {
+      return; // Don't show error, just don't send
+    }
+
+    setAskingClarification(true);
+    setError("");
+
+    // Add user message to chat
+    const userMessage = {
+      sender: "user",
+      message: answer,
+      timestamp: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+
+    const currentMessage = answer;
+    setAnswer(""); // Clear input immediately
+
+    try {
+      // Get conversation history (excluding welcome message)
+      const conversationHistory = messages
+        .slice(1) // Skip welcome message
+        .map((msg) => ({
+          role: msg.sender === "ai" ? "assistant" : "user",
+          content: msg.message,
+        }));
+
+      // Add current user message to history
+      conversationHistory.push({
+        role: "user",
+        content: currentMessage,
+      });
+
+      // Ask for clarification
+      const response = await askClarification(
+        questionId,
+        currentMessage,
+        conversationHistory
+      );
+      console.log("Clarification response:", response.data);
+
+      const aiResponse = response.data.response || response.data.message;
+
+      // Add AI response to chat
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          message: aiResponse,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    } catch (err) {
+      console.error("Clarification error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to get clarification. Please try again."
+      );
+    } finally {
+      setAskingClarification(false);
+    }
+  };
+
+  const handleSubmitFinalAnswerClick = () => {
+    if (!answer.trim()) {
+      return;
+    }
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmSubmit = () => {
+    setShowConfirmModal(false);
+    handleSubmitAnswer();
+  };
+
+  const handleCancelSubmit = () => {
+    setShowConfirmModal(false);
+  };
+
   const handleSubmitAnswer = async () => {
     if (!answer.trim()) {
       return; // Don't show error, just don't submit
@@ -123,6 +208,7 @@ function Interview() {
 
     setSubmitting(true);
     setError("");
+    setConversationMode(false); // Exit conversation mode
 
     // Add user message to chat
     const userMessage = {
@@ -228,7 +314,11 @@ function Interview() {
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmitAnswer();
+      if (conversationMode) {
+        handleAskClarification();
+      } else {
+        handleSubmitAnswer();
+      }
     }
   };
 
@@ -379,7 +469,7 @@ function Interview() {
                     timestamp={msg.timestamp}
                   />
                 ))}
-                {(submitting || scoring) && (
+                {(submitting || scoring || askingClarification) && (
                   <div className={styles.typingIndicatorWrapper}>
                     <div className={styles.typingIndicator}>
                       <span className={styles.aiAvatarSmall}>AI</span>
@@ -439,8 +529,12 @@ function Interview() {
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type your answer here... (Shift+Enter for new line)"
-                disabled={submitting || scoring}
+                placeholder={
+                  conversationMode
+                    ? "Ask clarifying questions or type your answer... (Shift+Enter for new line)"
+                    : "Type your answer here... (Shift+Enter for new line)"
+                }
+                disabled={submitting || scoring || askingClarification}
                 rows={1}
                 style={{
                   minHeight: "24px",
@@ -454,11 +548,11 @@ function Interview() {
               />
               <button
                 className={styles.sendButton}
-                onClick={handleSubmitAnswer}
-                disabled={submitting || scoring || !answer.trim()}
+                onClick={conversationMode ? handleAskClarification : handleSubmitAnswer}
+                disabled={submitting || scoring || askingClarification || !answer.trim()}
                 aria-label="Send message"
               >
-                {submitting || scoring ? (
+                {submitting || scoring || askingClarification ? (
                   <div
                     className="spinner"
                     style={{
@@ -480,9 +574,21 @@ function Interview() {
                   </svg>
                 )}
               </button>
+              {conversationMode && !scores && (
+                <button
+                  className={styles.submitFinalAnswerBtn}
+                  onClick={handleSubmitFinalAnswerClick}
+                  disabled={submitting || scoring || askingClarification || !answer.trim()}
+                  title="Submit your final answer for evaluation"
+                >
+                  ✓ Submit Final Answer
+                </button>
+              )}
             </div>
             <p className={styles.inputHint}>
-              Press Enter to send, Shift+Enter for new line
+              {conversationMode
+                ? "💡 Ask clarifying questions first, then submit your final answer for evaluation"
+                : "Press Enter to send, Shift+Enter for new line"}
             </p>
           </div>
         )}
@@ -523,6 +629,38 @@ function Interview() {
                 style={{ flex: 1 }}
               >
                 {loading ? "Loading..." : "Next Question →"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal for Final Answer Submission */}
+      {showConfirmModal && (
+        <div
+          className={styles.modalOverlay}
+          onClick={handleCancelSubmit}
+        >
+          <div
+            className={styles.confirmModal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className={styles.confirmTitle}>Submit Final Answer?</h3>
+            <p className={styles.confirmMessage}>
+              Are you ready to submit this as your final answer? Once submitted, it will be evaluated and you won't be able to ask more clarifying questions for this question.
+            </p>
+            <div className={styles.confirmActions}>
+              <button
+                className="btn btn-outline-dark"
+                onClick={handleCancelSubmit}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={handleConfirmSubmit}
+              >
+                Yes, Submit
               </button>
             </div>
           </div>
