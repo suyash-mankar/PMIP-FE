@@ -155,12 +155,10 @@ function Interview() {
 
     try {
       // Get conversation history (excluding welcome message)
-      const conversationHistory = messages
-        .slice(1)
-        .map((msg) => ({
-          role: msg.sender === "ai" ? "assistant" : "user",
-          content: msg.message,
-        }));
+      const conversationHistory = messages.slice(1).map((msg) => ({
+        role: msg.sender === "ai" ? "assistant" : "user",
+        content: msg.message,
+      }));
 
       conversationHistory.push({
         role: "user",
@@ -435,46 +433,81 @@ function Interview() {
 
   return (
     <div className={styles.interviewPage}>
-      {/* Left Sidebar */}
-      <div className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ""}`}>
-        <div className={styles.sidebarHeader}>
-          <h3>Questions Solved</h3>
-          <button
-            className={styles.sidebarToggle}
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            {sidebarOpen ? "←" : "→"}
-          </button>
-        </div>
-
-        <div className={styles.questionList}>
-          {questionHistory.length === 0 ? (
-            <p className={styles.emptyState}>No questions yet. Start an interview!</p>
-          ) : (
-            questionHistory.map((q, index) => (
-              <div
-                key={q.id}
-                className={`${styles.questionItem} ${
-                  q.id === questionId ? styles.questionItemActive : ""
-                }`}
+      {/* Left Sidebar - Only show during interview */}
+      {interviewStarted && (
+        <div
+          className={`${styles.sidebar} ${
+            sidebarOpen ? styles.sidebarOpen : styles.sidebarCollapsed
+          }`}
+        >
+          <div className={styles.sidebarHeader}>
+            <div className={styles.sidebarHeaderContent}>
+              <h3>Questions Solved</h3>
+              <span className={styles.questionCount}>
+                {questionHistory.length}
+              </span>
+            </div>
+            <button
+              className={styles.sidebarToggle}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                style={{
+                  transform: sidebarOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.2s ease",
+                }}
               >
-                <div className={styles.questionNumber}>Q{index + 1}</div>
-                <div className={styles.questionDetails}>
-                  <p className={styles.questionText}>
-                    {q.question.substring(0, 60)}...
-                  </p>
-                  <div className={styles.questionMeta}>
-                    <span className={styles.questionDifficulty}>{q.difficulty}</span>
-                    {q.score !== undefined && (
-                      <span className={styles.questionScore}>{q.score}/10</span>
-                    )}
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div className={styles.questionList}>
+            {questionHistory.length === 0 ? (
+              <p className={styles.emptyState}>
+                No questions yet. Start an interview!
+              </p>
+            ) : (
+              questionHistory.map((q, index) => (
+                <div
+                  key={q.id}
+                  className={`${styles.questionItem} ${
+                    q.id === questionId ? styles.questionItemActive : ""
+                  }`}
+                >
+                  <div className={styles.questionNumber}>Q{index + 1}</div>
+                  <div className={styles.questionDetails}>
+                    <p className={styles.questionText}>
+                      {q.question.substring(0, 60)}...
+                    </p>
+                    <div className={styles.questionMeta}>
+                      <span className={styles.questionDifficulty}>
+                        {q.difficulty}
+                      </span>
+                      {q.score !== undefined && (
+                        <span className={styles.questionScore}>
+                          {q.score}/10
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main Chat Area */}
       <div className={styles.chatArea}>
@@ -484,7 +517,8 @@ function Interview() {
             <div className={styles.welcomeContent}>
               <h1 className={styles.welcomeTitle}>PM Interview Practice</h1>
               <p className={styles.welcomeSubtitle}>
-                Practice PM interviews with AI. Get harsh, honest feedback instantly.
+                Practice PM interviews with AI. Get harsh, honest feedback
+                instantly.
               </p>
 
               <div className={styles.difficultySelector}>
@@ -543,7 +577,9 @@ function Interview() {
                   <div
                     key={index}
                     className={`${styles.message} ${
-                      msg.sender === "user" ? styles.messageUser : styles.messageAI
+                      msg.sender === "user"
+                        ? styles.messageUser
+                        : styles.messageAI
                     }`}
                   >
                     <div className={styles.messageContent}>
@@ -566,7 +602,10 @@ function Interview() {
                   </div>
                 ))}
 
-                {(submitting || scoring || askingClarification || loadingFirstQuestion) && (
+                {(submitting ||
+                  scoring ||
+                  askingClarification ||
+                  loadingFirstQuestion) && (
                   <div className={`${styles.message} ${styles.messageAI}`}>
                     <div className={styles.messageContent}>
                       <div className={styles.messageAvatar}>AI</div>
@@ -586,6 +625,45 @@ function Interview() {
             {/* Input Area */}
             <div className={styles.inputArea}>
               {error && <div className={styles.errorBanner}>{error}</div>}
+
+              {/* Conversation Mode Banner */}
+              {conversationMode && !scores && (
+                <div className={styles.conversationBanner}>
+                  <div className={styles.conversationInfo}>
+                    <div className={styles.conversationIcon}>💬</div>
+                    <div className={styles.conversationText}>
+                      <h4>Discussion Mode</h4>
+                      <p>
+                        Ask clarifying questions. When ready, submit your final
+                        answer.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    className={styles.submitFinalAnswerBtn}
+                    onClick={handleSubmitFinalAnswerClick}
+                    disabled={
+                      submitting || scoring || askingClarification || !answer.trim()
+                    }
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M9 11L12 14L22 4M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Submit Final Answer
+                  </button>
+                </div>
+              )}
 
               {scores && (
                 <div className={styles.actionButtons}>
@@ -615,28 +693,17 @@ function Interview() {
                   rows={1}
                   onInput={(e) => {
                     e.target.style.height = "auto";
-                    e.target.style.height = Math.min(e.target.scrollHeight, 200) + "px";
+                    e.target.style.height =
+                      Math.min(e.target.scrollHeight, 200) + "px";
                   }}
                 />
                 <div className={styles.inputActions}>
-                  {conversationMode && !scores && (
-                    <button
-                      className={styles.submitFinalBtn}
-                      onClick={handleSubmitFinalAnswerClick}
-                      disabled={
-                        submitting ||
-                        scoring ||
-                        askingClarification ||
-                        !answer.trim()
-                      }
-                    >
-                      Submit Final Answer
-                    </button>
-                  )}
                   <button
                     className={styles.sendBtn}
                     onClick={
-                      conversationMode ? handleAskClarification : handleSubmitAnswer
+                      conversationMode
+                        ? handleAskClarification
+                        : handleSubmitAnswer
                     }
                     disabled={
                       submitting ||
@@ -676,7 +743,10 @@ function Interview() {
               questions for this question.
             </p>
             <div className={styles.confirmActions}>
-              <button className="btn btn-outline-dark" onClick={handleCancelSubmit}>
+              <button
+                className="btn btn-outline-dark"
+                onClick={handleCancelSubmit}
+              >
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={handleConfirmSubmit}>
@@ -695,11 +765,23 @@ function renderScoreMarkdown(text, scoreData) {
   const lines = text.split("\n");
   return lines.map((line, i) => {
     if (line.startsWith("## ")) {
-      return <h2 key={i} className="score-heading">{line.substring(3)}</h2>;
+      return (
+        <h2 key={i} className="score-heading">
+          {line.substring(3)}
+        </h2>
+      );
     } else if (line.startsWith("### ")) {
-      return <h3 key={i} className="score-subheading">{line.substring(4)}</h3>;
+      return (
+        <h3 key={i} className="score-subheading">
+          {line.substring(4)}
+        </h3>
+      );
     } else if (line.startsWith("- **")) {
-      return <p key={i} className="score-bullet">{line}</p>;
+      return (
+        <p key={i} className="score-bullet">
+          {line}
+        </p>
+      );
     } else if (line.trim()) {
       return <p key={i}>{line}</p>;
     }

@@ -10,17 +10,43 @@
   display: flex;
   background: $dark-bg-primary;
   overflow: hidden;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    sans-serif;
 }
 
-// Left Sidebar - Question History
+// Left Sidebar - Question History (ChatGPT Style)
 .sidebar {
   width: 260px;
   background: #202123;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &.sidebarCollapsed {
+    width: 60px;
+
+    .sidebarHeader {
+      justify-content: center;
+      padding: $spacing-lg $spacing-xs;
+    }
+
+    .sidebarHeaderContent {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .sidebarToggle {
+      margin: 0;
+    }
+
+    .questionList {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
 
   @media (max-width: $breakpoint-md) {
     position: absolute;
@@ -42,25 +68,59 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  min-height: 60px;
+}
+
+.sidebarHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  transition: opacity 0.2s ease;
 
   h3 {
     font-size: $font-size-sm;
     font-weight: 600;
     color: $dark-text-primary;
     margin: 0;
+    white-space: nowrap;
   }
 }
 
+.questionCount {
+  background: rgba(99, 102, 241, 0.2);
+  color: $primary-color;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
 .sidebarToggle {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-sm;
   color: $dark-text-secondary;
-  font-size: $font-size-lg;
   cursor: pointer;
   padding: $spacing-xs;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
 
   &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
     color: $dark-text-primary;
+  }
+
+  svg {
+    transition: transform 0.2s ease;
   }
 }
 
@@ -68,6 +128,24 @@
   flex: 1;
   overflow-y: auto;
   padding: $spacing-sm;
+  transition: opacity 0.2s ease;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
 }
 
 .emptyState {
@@ -75,24 +153,46 @@
   font-size: $font-size-sm;
   padding: $spacing-lg;
   text-align: center;
+  line-height: 1.5;
 }
 
 .questionItem {
   display: flex;
   gap: $spacing-sm;
-  padding: $spacing-sm;
-  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-lg;
   margin-bottom: $spacing-xs;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  position: relative;
 
   &:hover {
     background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(2px);
   }
 
   &.questionItemActive {
     background: rgba(99, 102, 241, 0.15);
-    border-left: 2px solid $primary-color;
+    border-color: rgba(99, 102, 241, 0.3);
+    border-left: 3px solid $primary-color;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(
+        180deg,
+        $primary-color 0%,
+        $accent-color 100%
+      );
+      border-radius: 0 2px 2px 0;
+    }
   }
 }
 
@@ -100,11 +200,18 @@
   font-size: $font-size-xs;
   font-weight: 700;
   color: $dark-text-muted;
-  min-width: 24px;
+  min-width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: $radius-sm;
+  height: 24px;
 }
 
 .questionDetails {
   flex: 1;
+  min-width: 0; // Prevents text overflow
 }
 
 .questionText {
@@ -112,12 +219,17 @@
   color: $dark-text-secondary;
   margin: 0 0 $spacing-xs 0;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .questionMeta {
   display: flex;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
   font-size: 10px;
+  flex-wrap: wrap;
 }
 
 .questionDifficulty {
@@ -127,6 +239,8 @@
   border-radius: 4px;
   text-transform: uppercase;
   font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.5px;
 }
 
 .questionScore {
@@ -135,6 +249,7 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 600;
+  font-size: 9px;
 }
 
 // Chat Area
@@ -359,7 +474,9 @@
     line-height: 1.6;
   }
 
-  h2, h3, h4 {
+  h2,
+  h3,
+  h4 {
     color: $dark-text-primary;
   }
 }
@@ -392,7 +509,9 @@
 }
 
 @keyframes typingBounce {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: translateY(0);
     opacity: 0.7;
   }
@@ -418,6 +537,65 @@
   border-radius: $radius-md;
   color: #fca5a5;
   font-size: $font-size-sm;
+}
+
+// Conversation Mode Banner
+.conversationBanner {
+  max-width: 800px;
+  margin: 0 auto $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-lg;
+  
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    gap: $spacing-md;
+    text-align: center;
+  }
+}
+
+.conversationInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+}
+
+.conversationIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.conversationText {
+  h4 {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $dark-text-primary;
+    margin: 0 0 2px 0;
+  }
+  
+  p {
+    font-size: $font-size-xs;
+    color: $dark-text-secondary;
+    margin: 0;
+  }
 }
 
 .actionButtons {
@@ -463,7 +641,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: $radius-lg;
   padding: $spacing-md $spacing-lg;
-  padding-right: 120px; // Space for buttons
+  padding-right: 60px; // Space for send button only
   color: $dark-text-primary;
   font-size: $font-size-base;
   font-family: inherit;
@@ -498,26 +676,49 @@
   align-items: center;
 }
 
-.submitFinalBtn {
-  padding: 6px 12px;
-  background: linear-gradient(135deg, $success-color 0%, darken($success-color, 10%) 100%);
+// Submit Final Answer Button - Prominent placement
+.submitFinalAnswerBtn {
+  padding: $spacing-sm $spacing-xl;
+  background: linear-gradient(
+    135deg,
+    $success-color 0%,
+    darken($success-color, 10%) 100%
+  );
   border: none;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   color: white;
-  font-size: 12px;
+  font-size: $font-size-sm;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  box-shadow: 0 2px 8px rgba($success-color, 0.3);
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
 
   &:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba($success-color, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba($success-color, 0.5);
+    background: linear-gradient(
+      135deg,
+      lighten($success-color, 5%) 0%,
+      darken($success-color, 5%) 100%
+    );
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -630,8 +831,14 @@
     padding-right: 60px;
   }
 
-  .submitFinalBtn {
-    display: none; // Hide on mobile, show only send button
+  .conversationBanner {
+    padding: $spacing-sm $spacing-md;
+  }
+
+  .submitFinalAnswerBtn {
+    width: 100%;
+    justify-content: center;
+    font-size: $font-size-xs;
+    padding: $spacing-sm $spacing-md;
   }
 }
-
