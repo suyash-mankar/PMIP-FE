@@ -4,11 +4,14 @@ import {
   submitAnswer,
   scoreAnswer,
   askClarification,
+  getCategories,
 } from "../../api/client";
 import styles from "./Interview.module.scss";
 
 function Interview() {
   const [difficulty, setDifficulty] = useState("mid");
+  const [category, setCategory] = useState(null);
+  const [availableCategories, setAvailableCategories] = useState([]);
   const [questionId, setQuestionId] = useState(null);
   const [sessionId, setSessionId] = useState(null);
   const [question, setQuestion] = useState("");
@@ -37,6 +40,19 @@ function Interview() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Fetch available categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getCategories();
+        setAvailableCategories(response.data.categories);
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // Focus input after AI responds
   useEffect(() => {
@@ -68,7 +84,7 @@ function Interview() {
     setMessages([welcomeMessage]);
 
     try {
-      const response = await startInterview(difficulty);
+      const response = await startInterview(difficulty, category);
       console.log("Start interview response:", response.data);
 
       const questionIdFromResponse =
@@ -556,6 +572,43 @@ function Interview() {
                     <h3>Senior Level</h3>
                     <p>For experienced PMs and leadership roles</p>
                   </button>
+                </div>
+
+                {/* Category Selector */}
+                <div className={styles.categorySelector}>
+                  <p className={styles.selectorLabel}>Select Category (Optional):</p>
+                  <div className={styles.categoryGrid}>
+                    <button
+                      className={`${styles.categoryCard} ${
+                        !category ? styles.selected : ""
+                      }`}
+                      onClick={() => setCategory(null)}
+                    >
+                      <div className={styles.categoryIcon}>🎯</div>
+                      <h4>Random Mix</h4>
+                      <p>All categories</p>
+                    </button>
+                    {availableCategories.map((cat) => (
+                      <button
+                        key={cat.value}
+                        className={`${styles.categoryCard} ${
+                          category === cat.value ? styles.selected : ""
+                        }`}
+                        onClick={() => setCategory(cat.value)}
+                      >
+                        <div className={styles.categoryIcon}>
+                          {cat.value === 'root_cause_analysis' && '🔍'}
+                          {cat.value === 'product_improvement' && '⚡'}
+                          {cat.value === 'product_design' && '🎨'}
+                          {cat.value === 'metrics' && '📊'}
+                          {cat.value === 'product_strategy' && '🎯'}
+                          {cat.value === 'guesstimates' && '🧮'}
+                        </div>
+                        <h4>{cat.label}</h4>
+                        <p>{cat.count} questions</p>
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <button

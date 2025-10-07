@@ -47,8 +47,12 @@ export const register = (email, password) => {
 };
 
 // Interview APIs
-export const startInterview = (level) => {
-  return apiClient.post("/api/start-interview", { level });
+export const startInterview = (level, category = null) => {
+  return apiClient.post("/api/start-interview", { level, category });
+};
+
+export const getCategories = () => {
+  return apiClient.get("/api/categories");
 };
 
 export const submitAnswer = (sessionId, answer) => {
