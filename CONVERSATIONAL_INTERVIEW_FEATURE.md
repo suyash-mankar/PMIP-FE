@@ -9,24 +9,28 @@ This feature transforms the PM interview experience from a simple Q&A format int
 ## 🚀 **Key Features**
 
 ### 1. **Conversation Mode**
+
 - After receiving a question, users enter "conversation mode"
 - Can send multiple messages to ask clarifying questions
 - AI interviewer responds helpfully without giving away the answer
 - Full conversation history is maintained for context
 
 ### 2. **Submit Final Answer Button**
+
 - Dedicated green button for submitting the final answer
 - Separate from the regular send button (which sends clarifications)
 - Only visible during conversation mode
 - Clear visual distinction from clarification messages
 
 ### 3. **Confirmation Modal**
+
 - Confirmation dialog before submitting final answer
 - Warns that once submitted, no more clarifications can be asked
 - Prevents accidental final submissions
 - Professional dark-themed modal design
 
 ### 4. **Smart Input Handling**
+
 - **Enter key**: Sends clarification (during conversation mode)
 - **Shift+Enter**: Adds new line
 - **Send button**: Sends clarification
@@ -40,23 +44,25 @@ This feature transforms the PM interview experience from a simple Q&A format int
 ### Step-by-Step Journey
 
 1. **User starts interview**
+
    - Selects difficulty level
    - AI welcomes them
    - First question appears
    - **Conversation mode activates**
 
 2. **Asking clarifying questions**
+
    ```
    User: "What's the target market for this product?"
-   
-   AI: "Great question! Let's assume this product is targeting 
-   young professionals aged 25-35 in urban areas who are tech-savvy 
+
+   AI: "Great question! Let's assume this product is targeting
+   young professionals aged 25-35 in urban areas who are tech-savvy
    and value convenience."
-   
+
    User: "What's the budget constraint?"
-   
+
    AI: "For this exercise, assume you have a moderate budget—
-   enough for MVP development but not for large-scale marketing yet. 
+   enough for MVP development but not for large-scale marketing yet.
    Think lean startup approach."
    ```
 
@@ -65,8 +71,8 @@ This feature transforms the PM interview experience from a simple Q&A format int
    - Clicks "✓ Submit Final Answer" button
    - **Confirmation modal appears**:
      > "Submit Final Answer?  
-     > Are you ready to submit this as your final answer? Once submitted, 
-     > it will be evaluated and you won't be able to ask more clarifying 
+     > Are you ready to submit this as your final answer? Once submitted,
+     > it will be evaluated and you won't be able to ask more clarifying
      > questions for this question."
    - User clicks "Yes, Submit"
    - Answer is submitted for AI scoring
@@ -79,6 +85,7 @@ This feature transforms the PM interview experience from a simple Q&A format int
 ### Frontend Changes
 
 #### **New State Variables**
+
 ```javascript
 const [conversationMode, setConversationMode] = useState(false);
 const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -88,17 +95,20 @@ const [askingClarification, setAskingClarification] = useState(false);
 #### **New Functions**
 
 1. **`handleAskClarification()`**
+
    - Sends user message to clarification API
    - Maintains conversation history
    - Displays AI response in chat
    - Shows typing indicator during request
 
 2. **`handleSubmitFinalAnswerClick()`**
+
    - Triggered by Submit Final Answer button
    - Shows confirmation modal
    - Does NOT submit immediately
 
 3. **`handleConfirmSubmit()`**
+
    - Closes confirmation modal
    - Calls existing `handleSubmitAnswer()`
    - Exits conversation mode
@@ -111,9 +121,11 @@ const [askingClarification, setAskingClarification] = useState(false);
 #### **Updated Functions**
 
 1. **`handleStartInterview()`**
+
    - Enables `conversationMode` after first question appears
 
 2. **`handleKeyPress()`**
+
    ```javascript
    if (e.key === "Enter" && !e.shiftKey) {
      e.preventDefault();
@@ -132,6 +144,7 @@ const [askingClarification, setAskingClarification] = useState(false);
 #### **UI Components**
 
 1. **Input Area**
+
    ```jsx
    <textarea
      placeholder={
@@ -144,6 +157,7 @@ const [askingClarification, setAskingClarification] = useState(false);
    ```
 
 2. **Send Button**
+
    ```jsx
    <button
      onClick={conversationMode ? handleAskClarification : handleSubmitAnswer}
@@ -154,35 +168,44 @@ const [askingClarification, setAskingClarification] = useState(false);
    ```
 
 3. **Submit Final Answer Button**
+
    ```jsx
-   {conversationMode && !scores && (
-     <button
-       className={styles.submitFinalAnswerBtn}
-       onClick={handleSubmitFinalAnswerClick}
-       disabled={submitting || scoring || askingClarification || !answer.trim()}
-     >
-       ✓ Submit Final Answer
-     </button>
-   )}
+   {
+     conversationMode && !scores && (
+       <button
+         className={styles.submitFinalAnswerBtn}
+         onClick={handleSubmitFinalAnswerClick}
+         disabled={
+           submitting || scoring || askingClarification || !answer.trim()
+         }
+       >
+         ✓ Submit Final Answer
+       </button>
+     );
+   }
    ```
 
 4. **Confirmation Modal**
+
    ```jsx
-   {showConfirmModal && (
-     <div className={styles.modalOverlay}>
-       <div className={styles.confirmModal}>
-         <h3>Submit Final Answer?</h3>
-         <p>Are you ready to submit this as your final answer?...</p>
-         <div className={styles.confirmActions}>
-           <button onClick={handleCancelSubmit}>Cancel</button>
-           <button onClick={handleConfirmSubmit}>Yes, Submit</button>
+   {
+     showConfirmModal && (
+       <div className={styles.modalOverlay}>
+         <div className={styles.confirmModal}>
+           <h3>Submit Final Answer?</h3>
+           <p>Are you ready to submit this as your final answer?...</p>
+           <div className={styles.confirmActions}>
+             <button onClick={handleCancelSubmit}>Cancel</button>
+             <button onClick={handleConfirmSubmit}>Yes, Submit</button>
+           </div>
          </div>
        </div>
-     </div>
-   )}
+     );
+   }
    ```
 
 5. **Input Hint**
+
    ```jsx
    <p className={styles.inputHint}>
      {conversationMode
@@ -193,14 +216,16 @@ const [askingClarification, setAskingClarification] = useState(false);
 
 6. **Typing Indicator**
    ```jsx
-   {(submitting || scoring || askingClarification) && (
-     <div className={styles.typingIndicatorWrapper}>
-       <div className={styles.typingIndicator}>
-         <span className={styles.aiAvatarSmall}>AI</span>
-         <div className={styles.typingDots}>...</div>
+   {
+     (submitting || scoring || askingClarification) && (
+       <div className={styles.typingIndicatorWrapper}>
+         <div className={styles.typingIndicator}>
+           <span className={styles.aiAvatarSmall}>AI</span>
+           <div className={styles.typingDots}>...</div>
+         </div>
        </div>
-     </div>
-   )}
+     );
+   }
    ```
 
 ---
@@ -212,6 +237,7 @@ const [askingClarification, setAskingClarification] = useState(false);
 **POST `/api/clarify`**
 
 **Request Body:**
+
 ```json
 {
   "questionId": "question-id-here",
@@ -230,6 +256,7 @@ const [askingClarification, setAskingClarification] = useState(false);
 ```
 
 **Response:**
+
 ```json
 {
   "response": "Great question! Let's assume this feature is targeting young adults aged 18-30 who are active Instagram users and value creative expression.",
@@ -248,6 +275,7 @@ const [askingClarification, setAskingClarification] = useState(false);
 - Maintains conversation context
 
 **System Prompt:**
+
 ```javascript
 const systemPrompt = `You are an experienced Product Management interviewer conducting a mock interview. 
 The candidate has been asked the following question:
@@ -276,11 +304,12 @@ Remember: You're helping them understand the question better, not solving it for
 - Returns AI response
 
 #### **Event Logging**
+
 ```javascript
 await prisma.event.create({
   data: {
     userId: req.user.id,
-    eventType: 'clarification_requested',
+    eventType: "clarification_requested",
     metadata: JSON.stringify({
       questionId,
       userMessage: userMessage.substring(0, 100),
@@ -295,11 +324,16 @@ await prisma.event.create({
 ## 🎨 **Styling**
 
 ### Submit Final Answer Button
+
 ```scss
 .submitFinalAnswerBtn {
   margin-left: $spacing-sm;
   padding: $spacing-sm $spacing-lg;
-  background: linear-gradient(135deg, $success-color 0%, darken($success-color, 10%) 100%);
+  background: linear-gradient(
+    135deg,
+    $success-color 0%,
+    darken($success-color, 10%) 100%
+  );
   color: white;
   border: none;
   border-radius: $radius-md;
@@ -317,6 +351,7 @@ await prisma.event.create({
 ```
 
 ### Confirmation Modal
+
 ```scss
 .confirmModal {
   background: $dark-bg-secondary;
@@ -337,6 +372,7 @@ await prisma.event.create({
 ### Manual Testing
 
 #### Happy Path
+
 - [ ] Start interview → question appears → conversation mode activates
 - [ ] Send clarifying question → AI responds appropriately
 - [ ] Send multiple clarifications → conversation history maintained
@@ -344,6 +380,7 @@ await prisma.event.create({
 - [ ] Confirm submission → answer submitted → scoring begins → feedback shown
 
 #### Edge Cases
+
 - [ ] Try submitting empty final answer → button disabled
 - [ ] Cancel confirmation modal → returns to conversation mode
 - [ ] Press Enter in conversation mode → sends clarification (not final answer)
@@ -352,6 +389,7 @@ await prisma.event.create({
 - [ ] Submit final answer twice quickly → second click ignored
 
 #### UI/UX
+
 - [ ] Typing indicator appears during clarification
 - [ ] Input disabled during clarification request
 - [ ] Placeholder text changes based on mode
@@ -365,40 +403,46 @@ await prisma.event.create({
 ## 📊 **Benefits**
 
 ### For Candidates
+
 ✅ **Realistic practice** - Mimics real PM interview dynamics  
 ✅ **Reduced anxiety** - Can clarify scope before answering  
 ✅ **Better answers** - Can ask about constraints, users, etc.  
 ✅ **Confidence building** - Learns to ask good clarifying questions  
-✅ **Safe environment** - No penalty for asking questions  
+✅ **Safe environment** - No penalty for asking questions
 
 ### For PM Skill Development
+
 ✅ **Teaches clarification skills** - Key PM interview competency  
 ✅ **Encourages structured thinking** - Think before answering  
 ✅ **Promotes user-centric mindset** - Ask about users and context  
-✅ **Builds communication skills** - Practice articulating questions  
+✅ **Builds communication skills** - Practice articulating questions
 
 ### For Product Differentiation
+
 ✅ **Unique feature** - Not found in other PM prep tools  
 ✅ **Higher value** - More realistic than simple Q&A  
 ✅ **Better retention** - More engaging experience  
-✅ **Competitive moat** - Requires AI integration expertise  
+✅ **Competitive moat** - Requires AI integration expertise
 
 ---
 
 ## 🔒 **Security & Cost Considerations**
 
 ### Rate Limiting
+
 - Clarification endpoint uses same auth middleware
 - No additional rate limiting (yet)
 - Consider adding per-user clarification limits
 
 ### OpenAI Costs
+
 - **Clarifications**: ~150-300 tokens per request
 - **Temperature**: 0.7 (balanced)
 - **Model**: GPT-4 Turbo (cost-effective for quality)
 - **Cost**: ~$0.003-0.006 per clarification
 
 ### Monitoring
+
 - Track clarification event types
 - Monitor token usage per user
 - Alert on high clarification rates (potential abuse)
@@ -408,6 +452,7 @@ await prisma.event.create({
 ## 🚀 **Future Enhancements**
 
 ### Phase 2
+
 1. **Clarification limits** - Max 3-5 clarifications per question
 2. **Smart suggestions** - "You might want to ask about..."
 3. **Clarification quality** - Score quality of clarifying questions
@@ -415,6 +460,7 @@ await prisma.event.create({
 5. **Conversation summary** - Summarize key clarifications in feedback
 
 ### Phase 3
+
 1. **Voice clarifications** - Ask questions via voice
 2. **Real-time typing** - Show AI "typing..." indicator
 3. **Clarification templates** - Common clarifying question templates
@@ -446,12 +492,14 @@ console.log(response.data.response); // AI response
 **Authentication**: Required (JWT token)
 
 **Headers**:
+
 ```
 Authorization: Bearer <jwt_token>
 Content-Type: application/json
 ```
 
 **Request**:
+
 ```json
 {
   "questionId": "string (required)",
@@ -466,6 +514,7 @@ Content-Type: application/json
 ```
 
 **Success Response (200)**:
+
 ```json
 {
   "response": "AI clarification response",
@@ -474,6 +523,7 @@ Content-Type: application/json
 ```
 
 **Error Responses**:
+
 - `400`: Missing/invalid questionId or userMessage
 - `401`: Unauthorized (invalid/missing JWT)
 - `404`: Question not found
@@ -486,46 +536,58 @@ Content-Type: application/json
 ### Real PM Interview Scenario
 
 **Question:**
+
 > "Design a feature to help Instagram users discover new content creators."
 
 **Candidate:**
+
 > "Before I start, can I clarify the target audience for this feature?"
 
 **AI:**
-> "Great question! Let's focus on Instagram users aged 18-30 who are active 
-> content consumers but haven't found their niche yet. They follow 50-100 
+
+> "Great question! Let's focus on Instagram users aged 18-30 who are active
+> content consumers but haven't found their niche yet. They follow 50-100
 > accounts but feel their feed is getting stale."
 
 **Candidate:**
-> "What about the business goal? Are we optimizing for engagement or 
+
+> "What about the business goal? Are we optimizing for engagement or
 > creator growth?"
 
 **AI:**
-> "Excellent clarification! The primary goal is to increase time spent on 
-> the platform (engagement) while also supporting creator discovery as a 
+
+> "Excellent clarification! The primary goal is to increase time spent on
+> the platform (engagement) while also supporting creator discovery as a
 > secondary goal. Think win-win for users and creators."
 
 **Candidate:**
+
 > "One more thing - are there any technical constraints I should consider?"
 
 **AI:**
-> "For this exercise, assume you have access to Instagram's existing ML 
-> recommendation engine and user behavior data. No major technical 
+
+> "For this exercise, assume you have access to Instagram's existing ML
+> recommendation engine and user behavior data. No major technical
 > constraints, but keep scalability in mind."
 
 **Candidate:**
+
 > [Types comprehensive answer using CIRCLES framework with all the context]
 
 **Candidate:**
+
 > [Clicks "✓ Submit Final Answer"]
 
 **Modal:**
+
 > "Submit Final Answer? Are you ready to submit..."
 
 **Candidate:**
+
 > [Clicks "Yes, Submit"]
 
 **Result:**
+
 > Answer is scored on 5 dimensions with detailed feedback!
 
 ---
@@ -533,14 +595,16 @@ Content-Type: application/json
 ## 🎉 **Summary**
 
 ### What We Built
+
 ✅ **Conversational interview flow** with realistic interviewer interaction  
 ✅ **Clarification handling** via OpenAI GPT-4  
 ✅ **Submit Final Answer button** with confirmation  
 ✅ **Smart input handling** based on conversation mode  
 ✅ **Professional UI/UX** with dark theme consistency  
-✅ **Complete backend support** with event logging  
+✅ **Complete backend support** with event logging
 
 ### Impact
+
 - **More realistic** PM interview practice
 - **Teaches key skills** (asking clarifying questions)
 - **Reduces anxiety** (can clarify scope)
@@ -552,9 +616,9 @@ Content-Type: application/json
 **This feature brings PM Interview Practice closer to a real interview experience!** 🚀🎯
 
 **Deployed**:
+
 - Frontend: https://github.com/suyash-mankar/PMIP-FE (commit `bd1e40a`)
 - Backend: https://github.com/suyash-mankar/PMIP-BE (commit `0651cd1`)
 
 **Last Updated**: October 6, 2025  
 **Status**: ✅ Completed & Deployed
-

@@ -1,5 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { startInterview, submitAnswer, scoreAnswer, askClarification } from "../../api/client";
+import {
+  startInterview,
+  submitAnswer,
+  scoreAnswer,
+  askClarification,
+} from "../../api/client";
 import ChatBubble from "../../components/ChatBubble/ChatBubble";
 import ScoreCard from "../../components/ScoreCard/ScoreCard";
 import styles from "./Interview.module.scss";
@@ -548,8 +553,12 @@ function Interview() {
               />
               <button
                 className={styles.sendButton}
-                onClick={conversationMode ? handleAskClarification : handleSubmitAnswer}
-                disabled={submitting || scoring || askingClarification || !answer.trim()}
+                onClick={
+                  conversationMode ? handleAskClarification : handleSubmitAnswer
+                }
+                disabled={
+                  submitting || scoring || askingClarification || !answer.trim()
+                }
                 aria-label="Send message"
               >
                 {submitting || scoring || askingClarification ? (
@@ -578,7 +587,12 @@ function Interview() {
                 <button
                   className={styles.submitFinalAnswerBtn}
                   onClick={handleSubmitFinalAnswerClick}
-                  disabled={submitting || scoring || askingClarification || !answer.trim()}
+                  disabled={
+                    submitting ||
+                    scoring ||
+                    askingClarification ||
+                    !answer.trim()
+                  }
                   title="Submit your final answer for evaluation"
                 >
                   ✓ Submit Final Answer
@@ -637,17 +651,16 @@ function Interview() {
 
       {/* Confirmation Modal for Final Answer Submission */}
       {showConfirmModal && (
-        <div
-          className={styles.modalOverlay}
-          onClick={handleCancelSubmit}
-        >
+        <div className={styles.modalOverlay} onClick={handleCancelSubmit}>
           <div
             className={styles.confirmModal}
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className={styles.confirmTitle}>Submit Final Answer?</h3>
             <p className={styles.confirmMessage}>
-              Are you ready to submit this as your final answer? Once submitted, it will be evaluated and you won't be able to ask more clarifying questions for this question.
+              Are you ready to submit this as your final answer? Once submitted,
+              it will be evaluated and you won't be able to ask more clarifying
+              questions for this question.
             </p>
             <div className={styles.confirmActions}>
               <button
@@ -656,10 +669,7 @@ function Interview() {
               >
                 Cancel
               </button>
-              <button
-                className="btn btn-primary"
-                onClick={handleConfirmSubmit}
-              >
+              <button className="btn btn-primary" onClick={handleConfirmSubmit}>
                 Yes, Submit
               </button>
             </div>

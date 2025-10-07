@@ -500,7 +500,11 @@
 .submitFinalAnswerBtn {
   margin-left: $spacing-sm;
   padding: $spacing-sm $spacing-lg;
-  background: linear-gradient(135deg, $success-color 0%, darken($success-color, 10%) 100%);
+  background: linear-gradient(
+    135deg,
+    $success-color 0%,
+    darken($success-color, 10%) 100%
+  );
   color: white;
   border: none;
   border-radius: $radius-md;

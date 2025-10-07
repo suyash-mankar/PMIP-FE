@@ -64,7 +64,11 @@ export const scoreAnswer = (sessionId) => {
   });
 };
 
-export const askClarification = (questionId, userMessage, conversationHistory) => {
+export const askClarification = (
+  questionId,
+  userMessage,
+  conversationHistory
+) => {
   return apiClient.post("/api/clarify", {
     questionId,
     userMessage,
