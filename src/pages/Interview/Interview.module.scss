@@ -636,7 +636,7 @@
 }
 
 .inputContainer {
-  max-width: 800px;
+  max-width: 768px;
   margin: 0 auto;
   padding: 0 $spacing-xl;
   position: relative;
@@ -644,28 +644,37 @@
 
 .input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #40414f;
+  border: 1px solid #565869;
   border-radius: 12px;
-  padding: 12px 48px 12px 16px; // Right padding for button space
-  color: $dark-text-primary;
-  font-size: $font-size-base;
-  font-family: inherit;
+  padding: 12px 52px 12px 16px;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   line-height: 1.5;
   resize: none;
-  min-height: 48px;
+  min-height: 52px;
   max-height: 200px;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   box-sizing: border-box;
+  
+  // Hide scrollbar completely like ChatGPT
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  // Firefox scrollbar hiding
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &:focus {
     outline: none;
-    border-color: rgba(99, 102, 241, 0.5);
-    background: rgba(255, 255, 255, 0.07);
+    border-color: #8e8ea0;
+    background: #40414f;
   }
 
   &::placeholder {
-    color: $dark-text-muted;
+    color: #8e8ea0;
   }
 
   &:disabled {
@@ -733,10 +742,10 @@
   height: 32px;
   min-width: 32px;
   min-height: 32px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #565869;
+  border: 1px solid #565869;
   border-radius: 6px;
-  color: $dark-text-primary;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -745,14 +754,16 @@
   padding: 0;
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: $dark-text-primary;
+    background: #6b7280;
+    border-color: #6b7280;
+    color: #ffffff;
   }
 
   &:disabled {
-    opacity: 0.3;
+    opacity: 0.4;
     cursor: not-allowed;
+    background: #565869;
+    border-color: #565869;
   }
 
   svg {
@@ -840,6 +851,8 @@
 @media (max-width: $breakpoint-sm) {
   .input {
     font-size: 16px; // Prevents zoom on iOS
+    min-height: 48px;
+    padding: 10px 48px 10px 14px;
   }
 
   .inputContainer {
@@ -852,6 +865,7 @@
     height: 30px;
     min-width: 30px;
     min-height: 30px;
+    border-radius: 4px;
 
     svg {
       width: 14px;
