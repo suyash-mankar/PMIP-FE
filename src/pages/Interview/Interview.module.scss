@@ -551,7 +551,7 @@
   align-items: center;
   justify-content: space-between;
   gap: $spacing-lg;
-  
+
   @media (max-width: $breakpoint-sm) {
     flex-direction: column;
     gap: $spacing-md;
@@ -564,7 +564,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  
+
   @media (max-width: $breakpoint-sm) {
     flex-direction: column;
     gap: $spacing-xs;
@@ -590,7 +590,7 @@
     color: $dark-text-primary;
     margin: 0 0 2px 0;
   }
-  
+
   p {
     font-size: $font-size-xs;
     color: $dark-text-secondary;
@@ -669,8 +669,8 @@
 
 .inputActions {
   position: absolute;
-  right: $spacing-xl;
-  bottom: $spacing-xs;
+  right: calc($spacing-xl + 8px);
+  bottom: 8px;
   display: flex;
   gap: $spacing-xs;
   align-items: center;
@@ -725,18 +725,24 @@
 .sendBtn {
   width: 36px;
   height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: $radius-md;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   color: $dark-text-primary;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
 
   &:hover:not(:disabled) {
     background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: $primary-color;
   }
 
   &:disabled {
@@ -747,6 +753,7 @@
   svg {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
   }
 }
 
