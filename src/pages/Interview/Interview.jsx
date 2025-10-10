@@ -345,7 +345,11 @@ function Interview() {
       );
 
     // If we have ChatGPT format feedback, use it directly
-    if (scores.feedback && scores.feedback.includes('✅ STRENGTHS') && scores.feedback.includes('⚠️ AREAS TO IMPROVE')) {
+    if (
+      scores.feedback &&
+      scores.feedback.includes("✅ STRENGTHS") &&
+      scores.feedback.includes("⚠️ AREAS TO IMPROVE")
+    ) {
       return scores.feedback;
     }
 
@@ -741,7 +745,13 @@ function Interview() {
                   ref={inputRef}
                   className={styles.input}
                   value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
+                  onChange={(e) => {
+                    setAnswer(e.target.value);
+                    // Auto-resize only when user is typing
+                    e.target.style.height = "auto";
+                    e.target.style.height =
+                      Math.min(e.target.scrollHeight, 200) + "px";
+                  }}
                   onKeyPress={handleKeyPress}
                   placeholder={
                     conversationMode
@@ -750,11 +760,6 @@ function Interview() {
                   }
                   disabled={submitting || scoring || askingClarification}
                   rows={1}
-                  onInput={(e) => {
-                    e.target.style.height = "auto";
-                    e.target.style.height =
-                      Math.min(e.target.scrollHeight, 200) + "px";
-                  }}
                 />
                 <button
                   className={styles.sendBtn}
@@ -822,7 +827,7 @@ function renderScoreMarkdown(text, scoreData) {
   const lines = text.split("\n");
   return lines.map((line, i) => {
     const trimmedLine = line.trim();
-    
+
     // Skip empty lines
     if (!trimmedLine) {
       return <br key={i} />;
@@ -831,57 +836,111 @@ function renderScoreMarkdown(text, scoreData) {
     // Section headers with emojis
     if (trimmedLine.startsWith("## ")) {
       return (
-        <h2 key={i} className="score-heading" style={{ marginTop: '20px', marginBottom: '15px' }}>
+        <h2
+          key={i}
+          className="score-heading"
+          style={{ marginTop: "20px", marginBottom: "15px" }}
+        >
           {line.substring(3)}
         </h2>
       );
     } else if (trimmedLine.startsWith("### ")) {
       return (
-        <h3 key={i} className="score-subheading" style={{ marginTop: '15px', marginBottom: '10px' }}>
+        <h3
+          key={i}
+          className="score-subheading"
+          style={{ marginTop: "15px", marginBottom: "10px" }}
+        >
           {line.substring(4)}
         </h3>
       );
-    } 
+    }
     // ChatGPT-style section headers with emojis
     else if (trimmedLine.includes("✅ STRENGTHS")) {
       return (
-        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+        <h3
+          key={i}
+          style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            fontSize: "16px",
+            fontWeight: "600",
+          }}
+        >
           {trimmedLine}
         </h3>
       );
     } else if (trimmedLine.includes("⚠️ AREAS TO IMPROVE")) {
       return (
-        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+        <h3
+          key={i}
+          style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            fontSize: "16px",
+            fontWeight: "600",
+          }}
+        >
           {trimmedLine}
         </h3>
       );
-    } else if (trimmedLine.includes("🔥 REFRAMED") || trimmedLine.includes("🔥 REFRAMED")) {
+    } else if (
+      trimmedLine.includes("🔥 REFRAMED") ||
+      trimmedLine.includes("🔥 REFRAMED")
+    ) {
       return (
-        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+        <h3
+          key={i}
+          style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            fontSize: "16px",
+            fontWeight: "600",
+          }}
+        >
           {trimmedLine}
         </h3>
       );
     } else if (trimmedLine.includes("⚡ BRUTAL TRUTH")) {
       return (
-        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+        <h3
+          key={i}
+          style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            fontSize: "16px",
+            fontWeight: "600",
+          }}
+        >
           {trimmedLine}
         </h3>
       );
     }
     // Bold headers with arrows (like **User segment →**)
     else if (trimmedLine.match(/^\*\*.*→\*\*$/)) {
-      const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, '$1');
+      const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, "$1");
       return (
-        <p key={i} style={{ marginTop: '15px', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+        <p
+          key={i}
+          style={{
+            marginTop: "15px",
+            marginBottom: "8px",
+            fontWeight: "600",
+            fontSize: "14px",
+          }}
+        >
           {content}
         </p>
       );
     }
     // Regular bold text
     else if (trimmedLine.match(/^\*\*.*\*\*$/)) {
-      const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, '$1');
+      const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, "$1");
       return (
-        <p key={i} style={{ marginTop: '10px', marginBottom: '5px', fontWeight: '600' }}>
+        <p
+          key={i}
+          style={{ marginTop: "10px", marginBottom: "5px", fontWeight: "600" }}
+        >
           {content}
         </p>
       );
@@ -889,7 +948,10 @@ function renderScoreMarkdown(text, scoreData) {
     // Bullet points
     else if (trimmedLine.startsWith("• ")) {
       return (
-        <p key={i} style={{ marginLeft: '20px', marginBottom: '5px', lineHeight: '1.5' }}>
+        <p
+          key={i}
+          style={{ marginLeft: "20px", marginBottom: "5px", lineHeight: "1.5" }}
+        >
           {line}
         </p>
       );
@@ -897,7 +959,10 @@ function renderScoreMarkdown(text, scoreData) {
     // Numbered lists
     else if (trimmedLine.match(/^\d+\./)) {
       return (
-        <p key={i} style={{ marginLeft: '20px', marginBottom: '5px', lineHeight: '1.5' }}>
+        <p
+          key={i}
+          style={{ marginLeft: "20px", marginBottom: "5px", lineHeight: "1.5" }}
+        >
           {line}
         </p>
       );
@@ -907,10 +972,10 @@ function renderScoreMarkdown(text, scoreData) {
       // Parse inline bold text
       const parts = line.split(/(\*\*.*?\*\*)/g);
       return (
-        <p key={i} style={{ marginBottom: '8px', lineHeight: '1.5' }}>
+        <p key={i} style={{ marginBottom: "8px", lineHeight: "1.5" }}>
           {parts.map((part, j) => {
             if (part.match(/^\*\*.*\*\*$/)) {
-              return <strong key={j}>{part.replace(/\*\*/g, '')}</strong>;
+              return <strong key={j}>{part.replace(/\*\*/g, "")}</strong>;
             }
             return part;
           })}
