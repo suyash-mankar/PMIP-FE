@@ -344,6 +344,12 @@ function Interview() {
           5
       );
 
+    // If we have ChatGPT format feedback, use it directly
+    if (scores.feedback && scores.feedback.includes('✅ STRENGTHS') && scores.feedback.includes('⚠️ AREAS TO IMPROVE')) {
+      return scores.feedback;
+    }
+
+    // Fallback to old format
     let feedback = `## Your Score: ${totalScore}/10\n\n`;
     feedback += `### Dimension Scores:\n`;
     feedback += `- **Structure:** ${scores.structure}/10\n`;
@@ -812,31 +818,105 @@ function Interview() {
 }
 
 function renderScoreMarkdown(text, scoreData) {
-  // Parse and render the markdown-style feedback
+  // Parse and render the markdown-style feedback with ChatGPT formatting
   const lines = text.split("\n");
   return lines.map((line, i) => {
-    if (line.startsWith("## ")) {
+    const trimmedLine = line.trim();
+    
+    // Skip empty lines
+    if (!trimmedLine) {
+      return <br key={i} />;
+    }
+
+    // Section headers with emojis
+    if (trimmedLine.startsWith("## ")) {
       return (
-        <h2 key={i} className="score-heading">
+        <h2 key={i} className="score-heading" style={{ marginTop: '20px', marginBottom: '15px' }}>
           {line.substring(3)}
         </h2>
       );
-    } else if (line.startsWith("### ")) {
+    } else if (trimmedLine.startsWith("### ")) {
       return (
-        <h3 key={i} className="score-subheading">
+        <h3 key={i} className="score-subheading" style={{ marginTop: '15px', marginBottom: '10px' }}>
           {line.substring(4)}
         </h3>
       );
-    } else if (line.startsWith("- **")) {
+    } 
+    // ChatGPT-style section headers with emojis
+    else if (trimmedLine.includes("✅ STRENGTHS")) {
       return (
-        <p key={i} className="score-bullet">
+        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+          {trimmedLine}
+        </h3>
+      );
+    } else if (trimmedLine.includes("⚠️ AREAS TO IMPROVE")) {
+      return (
+        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+          {trimmedLine}
+        </h3>
+      );
+    } else if (trimmedLine.includes("🔥 REFRAMED") || trimmedLine.includes("🔥 REFRAMED")) {
+      return (
+        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+          {trimmedLine}
+        </h3>
+      );
+    } else if (trimmedLine.includes("⚡ BRUTAL TRUTH")) {
+      return (
+        <h3 key={i} style={{ marginTop: '20px', marginBottom: '10px', fontSize: '16px', fontWeight: '600' }}>
+          {trimmedLine}
+        </h3>
+      );
+    }
+    // Bold headers with arrows (like **User segment →**)
+    else if (trimmedLine.match(/^\*\*.*→\*\*$/)) {
+      const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, '$1');
+      return (
+        <p key={i} style={{ marginTop: '15px', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+          {content}
+        </p>
+      );
+    }
+    // Regular bold text
+    else if (trimmedLine.match(/^\*\*.*\*\*$/)) {
+      const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, '$1');
+      return (
+        <p key={i} style={{ marginTop: '10px', marginBottom: '5px', fontWeight: '600' }}>
+          {content}
+        </p>
+      );
+    }
+    // Bullet points
+    else if (trimmedLine.startsWith("• ")) {
+      return (
+        <p key={i} style={{ marginLeft: '20px', marginBottom: '5px', lineHeight: '1.5' }}>
           {line}
         </p>
       );
-    } else if (line.trim()) {
-      return <p key={i}>{line}</p>;
     }
-    return <br key={i} />;
+    // Numbered lists
+    else if (trimmedLine.match(/^\d+\./)) {
+      return (
+        <p key={i} style={{ marginLeft: '20px', marginBottom: '5px', lineHeight: '1.5' }}>
+          {line}
+        </p>
+      );
+    }
+    // Regular text with bold formatting
+    else {
+      // Parse inline bold text
+      const parts = line.split(/(\*\*.*?\*\*)/g);
+      return (
+        <p key={i} style={{ marginBottom: '8px', lineHeight: '1.5' }}>
+          {parts.map((part, j) => {
+            if (part.match(/^\*\*.*\*\*$/)) {
+              return <strong key={j}>{part.replace(/\*\*/g, '')}</strong>;
+            }
+            return part;
+          })}
+        </p>
+      );
+    }
   });
 }
 
