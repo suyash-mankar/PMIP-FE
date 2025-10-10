@@ -37,7 +37,11 @@
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.4) 0%,
+    transparent 70%
+  );
   top: -200px;
   left: -100px;
   animation: float 20s ease-in-out infinite;
@@ -49,7 +53,11 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.3) 0%,
+    transparent 70%
+  );
   bottom: -150px;
   right: -100px;
   animation: float 25s ease-in-out infinite reverse;
@@ -165,7 +173,8 @@
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5), 0 6px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5),
+      0 6px 16px rgba(0, 0, 0, 0.3);
 
     &::before {
       opacity: 1;
@@ -353,7 +362,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(168, 85, 247, 0.1) 100%
+  );
   border-radius: $radius-lg;
   color: #6366f1;
   transition: all 0.4s ease;
@@ -454,7 +467,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(168, 85, 247, 0.1) 100%
+  );
   border-radius: $radius-md;
   color: #6366f1;
   transition: all 0.4s ease;
@@ -648,7 +665,11 @@
   width: 800px;
   height: 800px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.3) 0%,
+    transparent 70%
+  );
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -787,7 +808,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
   }
   50% {
@@ -796,7 +818,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.3;
   }
@@ -807,7 +830,8 @@
 }
 
 @keyframes gradientShift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -816,7 +840,8 @@
 }
 
 @keyframes sparkle {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
