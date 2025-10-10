@@ -840,153 +840,225 @@ function renderScoreMarkdown(text, scoreData) {
       return <br key={i} />;
     }
 
-    // Section headers with emojis
-    if (trimmedLine.startsWith("## ")) {
+    // Section headers with emojis - Make them more prominent
+    if (trimmedLine.includes("✅ STRENGTHS")) {
       return (
-        <h2
-          key={i}
-          className="score-heading"
-          style={{ marginTop: "20px", marginBottom: "15px" }}
-        >
-          {line.substring(3)}
-        </h2>
-      );
-    } else if (trimmedLine.startsWith("### ")) {
-      return (
-        <h3
-          key={i}
-          className="score-subheading"
-          style={{ marginTop: "15px", marginBottom: "10px" }}
-        >
-          {line.substring(4)}
-        </h3>
-      );
-    }
-    // ChatGPT-style section headers with emojis
-    else if (trimmedLine.includes("✅ STRENGTHS")) {
-      return (
-        <h3
-          key={i}
-          style={{
-            marginTop: "20px",
-            marginBottom: "10px",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}
-        >
-          {trimmedLine}
-        </h3>
+        <div key={i} style={{ marginTop: "32px", marginBottom: "16px" }}>
+          <h3
+            style={{
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#ffffff",
+              margin: "0 0 8px 0",
+              padding: "12px 0",
+              borderBottom: "2px solid rgba(16, 185, 129, 0.3)",
+            }}
+          >
+            {trimmedLine}
+          </h3>
+        </div>
       );
     } else if (trimmedLine.includes("⚠️ AREAS TO IMPROVE")) {
       return (
-        <h3
-          key={i}
-          style={{
-            marginTop: "20px",
-            marginBottom: "10px",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}
-        >
-          {trimmedLine}
-        </h3>
+        <div key={i} style={{ marginTop: "32px", marginBottom: "16px" }}>
+          <h3
+            style={{
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#ffffff",
+              margin: "0 0 8px 0",
+              padding: "12px 0",
+              borderBottom: "2px solid rgba(245, 158, 11, 0.3)",
+            }}
+          >
+            {trimmedLine}
+          </h3>
+        </div>
       );
-    } else if (
-      trimmedLine.includes("🔥 REFRAMED") ||
-      trimmedLine.includes("🔥 REFRAMED")
-    ) {
+    } else if (trimmedLine.includes("🔥 REFRAMED")) {
       return (
-        <h3
-          key={i}
-          style={{
-            marginTop: "20px",
-            marginBottom: "10px",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}
-        >
-          {trimmedLine}
-        </h3>
+        <div key={i} style={{ marginTop: "32px", marginBottom: "16px" }}>
+          <h3
+            style={{
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#ffffff",
+              margin: "0 0 8px 0",
+              padding: "12px 0",
+              borderBottom: "2px solid rgba(239, 68, 68, 0.3)",
+            }}
+          >
+            {trimmedLine}
+          </h3>
+        </div>
       );
     } else if (trimmedLine.includes("⚡ BRUTAL TRUTH")) {
       return (
-        <h3
-          key={i}
-          style={{
-            marginTop: "20px",
-            marginBottom: "10px",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}
-        >
-          {trimmedLine}
-        </h3>
+        <div key={i} style={{ marginTop: "32px", marginBottom: "16px" }}>
+          <h3
+            style={{
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#ffffff",
+              margin: "0 0 8px 0",
+              padding: "12px 0",
+              borderBottom: "2px solid rgba(168, 85, 247, 0.3)",
+            }}
+          >
+            {trimmedLine}
+          </h3>
+        </div>
       );
     }
     // Bold headers with arrows (like **User segment →**)
     else if (trimmedLine.match(/^\*\*.*→\*\*$/)) {
       const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, "$1");
       return (
-        <p
+        <div
           key={i}
           style={{
-            marginTop: "15px",
-            marginBottom: "8px",
-            fontWeight: "600",
-            fontSize: "14px",
+            marginTop: "20px",
+            marginBottom: "12px",
+            padding: "8px 12px",
+            backgroundColor: "rgba(255, 255, 255, 0.03)",
+            borderRadius: "8px",
+            borderLeft: "4px solid #6366f1",
           }}
         >
-          {content}
-        </p>
+          <p
+            style={{
+              margin: "0",
+              fontWeight: "600",
+              fontSize: "15px",
+              color: "#ffffff",
+            }}
+          >
+            {content}
+          </p>
+        </div>
       );
     }
-    // Regular bold text
+    // Regular bold text headers
     else if (trimmedLine.match(/^\*\*.*\*\*$/)) {
       const content = trimmedLine.replace(/^\*\*(.*?)\*\*$/, "$1");
       return (
-        <p
+        <div
           key={i}
-          style={{ marginTop: "10px", marginBottom: "5px", fontWeight: "600" }}
+          style={{
+            marginTop: "16px",
+            marginBottom: "8px",
+            padding: "6px 0",
+          }}
         >
-          {content}
-        </p>
+          <p
+            style={{
+              margin: "0",
+              fontWeight: "600",
+              fontSize: "14px",
+              color: "#ffffff",
+            }}
+          >
+            {content}
+          </p>
+        </div>
       );
     }
-    // Bullet points
+    // Bullet points with better styling
     else if (trimmedLine.startsWith("• ")) {
+      const content = trimmedLine.substring(2);
       return (
-        <p
+        <div
           key={i}
-          style={{ marginLeft: "20px", marginBottom: "5px", lineHeight: "1.5" }}
+          style={{
+            marginLeft: "20px",
+            marginBottom: "8px",
+            paddingLeft: "8px",
+          }}
         >
-          {line}
-        </p>
+          <p
+            style={{
+              margin: "0",
+              lineHeight: "1.6",
+              color: "#e5e7eb",
+              fontSize: "14px",
+            }}
+          >
+            <span style={{ color: "#6366f1", marginRight: "8px" }}>•</span>
+            {content}
+          </p>
+        </div>
       );
     }
-    // Numbered lists
+    // Numbered lists with better styling
     else if (trimmedLine.match(/^\d+\./)) {
+      const match = trimmedLine.match(/^(\d+)\.\s*(.*)/);
+      const number = match[1];
+      const content = match[2];
       return (
-        <p
+        <div
           key={i}
-          style={{ marginLeft: "20px", marginBottom: "5px", lineHeight: "1.5" }}
+          style={{
+            marginLeft: "20px",
+            marginBottom: "12px",
+            paddingLeft: "8px",
+          }}
         >
-          {line}
-        </p>
+          <p
+            style={{
+              margin: "0",
+              lineHeight: "1.6",
+              color: "#e5e7eb",
+              fontSize: "14px",
+            }}
+          >
+            <span
+              style={{
+                color: "#6366f1",
+                fontWeight: "600",
+                marginRight: "8px",
+              }}
+            >
+              {number}.
+            </span>
+            {content}
+          </p>
+        </div>
       );
     }
-    // Regular text with bold formatting
+    // Regular paragraphs with better spacing and formatting
     else {
-      // Parse inline bold text
+      // Parse inline bold text and improve readability
       const parts = line.split(/(\*\*.*?\*\*)/g);
       return (
-        <p key={i} style={{ marginBottom: "8px", lineHeight: "1.5" }}>
-          {parts.map((part, j) => {
-            if (part.match(/^\*\*.*\*\*$/)) {
-              return <strong key={j}>{part.replace(/\*\*/g, "")}</strong>;
-            }
-            return part;
-          })}
-        </p>
+        <div
+          key={i}
+          style={{
+            marginBottom: "12px",
+            lineHeight: "1.7",
+            fontSize: "14px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0",
+              color: "#e5e7eb",
+            }}
+          >
+            {parts.map((part, j) => {
+              if (part.match(/^\*\*.*\*\*$/)) {
+                return (
+                  <strong
+                    key={j}
+                    style={{ color: "#ffffff", fontWeight: "600" }}
+                  >
+                    {part.replace(/\*\*/g, "")}
+                  </strong>
+                );
+              }
+              return part;
+            })}
+          </p>
+        </div>
       );
     }
   });
