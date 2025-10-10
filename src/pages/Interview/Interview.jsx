@@ -54,12 +54,17 @@ function Interview() {
     fetchCategories();
   }, []);
 
-  // Focus input after AI responds
+  // Focus input after AI responds and reset height when disabled
   useEffect(() => {
     if (!submitting && !scoring && interviewStarted && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [submitting, scoring, interviewStarted]);
+    
+    // Reset input height when disabled (during AI responses)
+    if (inputRef.current && (submitting || scoring || askingClarification)) {
+      inputRef.current.style.height = "52px";
+    }
+  }, [submitting, scoring, askingClarification, interviewStarted]);
 
   const handleStartInterview = async () => {
     setLoading(true);
@@ -747,10 +752,12 @@ function Interview() {
                   value={answer}
                   onChange={(e) => {
                     setAnswer(e.target.value);
-                    // Auto-resize only when user is typing
-                    e.target.style.height = "auto";
-                    e.target.style.height =
-                      Math.min(e.target.scrollHeight, 200) + "px";
+                    // Auto-resize only when user is typing and input is not disabled
+                    if (!submitting && !scoring && !askingClarification) {
+                      e.target.style.height = "auto";
+                      e.target.style.height =
+                        Math.min(e.target.scrollHeight, 200) + "px";
+                    }
                   }}
                   onKeyPress={handleKeyPress}
                   placeholder={
