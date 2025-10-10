@@ -59,7 +59,7 @@ function Interview() {
     if (!submitting && !scoring && interviewStarted && inputRef.current) {
       inputRef.current.focus();
     }
-    
+
     // Reset input height when disabled (during AI responses)
     if (inputRef.current && (submitting || scoring || askingClarification)) {
       inputRef.current.style.height = "52px";
