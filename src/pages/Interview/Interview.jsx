@@ -892,7 +892,12 @@ function Interview() {
 }
 
 function renderScoreMarkdown(text, scoreData) {
-  // Parse and render the markdown-style feedback with ChatGPT formatting
+  // Use the same markdown rendering as model answers for consistency
+  return renderModelAnswerMarkdown(text);
+}
+
+function renderScoreMarkdownOld(text, scoreData) {
+  // Old rendering logic kept for reference
   const lines = text.split("\n");
   return lines.map((line, i) => {
     const trimmedLine = line.trim();
