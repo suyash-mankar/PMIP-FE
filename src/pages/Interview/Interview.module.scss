@@ -1391,6 +1391,94 @@ button[class*="sendBtn"] {
   }
 }
 
+// Score Display Styles
+.scoreHeader {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-xl;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+.scoreLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: $dark-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: $spacing-sm;
+}
+
+.scoreValue {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: $spacing-md;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+
+  &.scorePoor {
+    color: #ef4444; // Red
+  }
+
+  &.scoreBelowAverage {
+    color: #f59e0b; // Orange
+  }
+
+  &.scoreGood {
+    color: #eab308; // Yellow
+  }
+
+  &.scoreExcellent {
+    color: #22c55e; // Green
+  }
+
+  &.scoreNa {
+    color: $dark-text-muted;
+  }
+}
+
+.scoreBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.scoreBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+
+  &.scorePoor {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+  }
+
+  &.scoreBelowAverage {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+  }
+
+  &.scoreGood {
+    background: linear-gradient(90deg, #eab308, #ca8a04);
+  }
+
+  &.scoreExcellent {
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+  }
+
+  &.scoreNa {
+    background: linear-gradient(90deg, #6b7280, #4b5563);
+  }
+}
+
+.feedbackContainer {
+  margin-top: $spacing-lg;
+}
+
 // Mobile Responsiveness
 @media (max-width: 768px) {
   .answerWritingMode {
@@ -1435,6 +1523,20 @@ button[class*="sendBtn"] {
   .backToChatBtn,
   .toggleSidebarBtn {
     padding: $spacing-xs $spacing-sm;
+    font-size: 12px;
+  }
+
+  // Mobile score display
+  .scoreHeader {
+    padding: $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+
+  .scoreValue {
+    font-size: 36px;
+  }
+
+  .scoreLabel {
     font-size: 12px;
   }
 }

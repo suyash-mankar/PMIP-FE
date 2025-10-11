@@ -124,12 +124,12 @@ function Interview() {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
-        {
-          sender: "ai",
-          message: interviewQuestion,
-          timestamp: new Date().toISOString(),
-        },
-      ]);
+          {
+            sender: "ai",
+            message: interviewQuestion,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
 
@@ -370,7 +370,7 @@ function Interview() {
       e.preventDefault();
       if (conversationMode) {
         handleAskClarification();
-        } else {
+      } else {
         handleSubmitAnswer();
       }
     }
@@ -395,7 +395,7 @@ function Interview() {
 
   const handleScore = async (sessionIdToUse = null) => {
     const currentSessionId = sessionIdToUse || sessionId;
-    
+
     if (!currentSessionId) {
       setError("No session ID available for scoring");
       return;
@@ -474,7 +474,7 @@ function Interview() {
       const newSessionId = response.data.sessionId;
       if (newSessionId) {
         setSessionId(newSessionId);
-        
+
         // Trigger scoring with the new sessionId
         await handleScore(newSessionId);
       } else {
@@ -533,7 +533,6 @@ function Interview() {
     }
     setAnswerMode(false);
   };
-
 
   const handleNextQuestion = async () => {
     setLoading(true);
@@ -644,7 +643,7 @@ function Interview() {
               <div className={styles.answerModeSidebar}>
                 <div className={styles.sidebarTitle}>
                   Question & Chat History
-        </div>
+                </div>
                 <div className={styles.sidebarMessages}>
                   {messages.map((msg, idx) => (
                     <div
@@ -897,15 +896,15 @@ Take your time and be thorough!`}
                     </button>
                   </div>
                 </div>
-                </div>
-              ) : (
+              </div>
+            ) : (
               /* Chat Messages - ChatGPT Style */
               <>
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
-                  {messages.map((msg, index) => (
+                    {messages.map((msg, index) => (
                       <div
-                      key={index}
+                        key={index}
                         className={`${styles.message} ${
                           msg.sender === "user"
                             ? styles.messageUser
@@ -957,15 +956,15 @@ Take your time and be thorough!`}
                             <span></span>
                           </div>
                         </div>
-                    </div>
-                  )}
+                      </div>
+                    )}
 
-                  <div ref={messagesEndRef} />
+                    <div ref={messagesEndRef} />
+                  </div>
                 </div>
-            </div>
 
                 {/* Input Area */}
-              <div className={styles.inputArea}>
+                <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
                   {/* Conversation Mode Banner */}
@@ -1057,10 +1056,10 @@ Take your time and be thorough!`}
                   )}
 
                   <div className={styles.inputContainer}>
-                <textarea
+                    <textarea
                       ref={inputRef}
                       className={styles.input}
-                  value={answer}
+                      value={answer}
                       onChange={(e) => {
                         setAnswer(e.target.value);
                         // Auto-resize only when user is typing and input is not disabled
@@ -1078,8 +1077,8 @@ Take your time and be thorough!`}
                       }
                       disabled={submitting || scoring || askingClarification}
                       rows={1}
-                />
-                <button
+                    />
+                    <button
                       className={styles.sendBtn}
                       onClick={
                         conversationMode
@@ -1107,8 +1106,8 @@ Take your time and be thorough!`}
                           strokeLinejoin="round"
                         />
                       </svg>
-                </button>
-              </div>
+                    </button>
+                  </div>
                 </div>
               </>
             )}
@@ -1120,8 +1119,60 @@ Take your time and be thorough!`}
 }
 
 function renderScoreMarkdown(text, scoreData) {
-  // Use the same markdown rendering as model answers for consistency
-  return renderModelAnswerMarkdown(text);
+  // Extract overall score from scoreData or text
+  const overallScore = scoreData?.overall_score || extractScoreFromText(text);
+  
+  return (
+    <div>
+      {/* Large prominent score display */}
+      <div className={styles.scoreHeader}>
+        <div className={styles.scoreLabel}>Overall Score</div>
+        <div className={`${styles.scoreValue} ${getScoreClass(overallScore)}`}>
+          {overallScore}/10
+        </div>
+        <div className={styles.scoreBar}>
+          <div 
+            className={`${styles.scoreBarFill} ${getScoreClass(overallScore)}`}
+            style={{ width: `${(overallScore / 10) * 100}%` }}
+          />
+        </div>
+      </div>
+      
+      {/* Detailed feedback with markdown */}
+      <div className={styles.feedbackContainer}>
+        {renderModelAnswerMarkdown(text)}
+      </div>
+    </div>
+  );
+}
+
+// Helper function to extract score from text if not in scoreData
+function extractScoreFromText(text) {
+  if (!text) return "N/A";
+  
+  // Look for patterns like "# Overall Score: X/10" or "Overall Score: X/10"
+  const scorePattern = /(?:#\s*)?Overall Score:\s*(\d+(?:\.\d+)?)\/10/i;
+  const match = text.match(scorePattern);
+  
+  if (match) {
+    return parseFloat(match[1]);
+  }
+  
+  // Fallback: look for any "X/10" pattern
+  const fallbackPattern = /(\d+(?:\.\d+)?)\/10/;
+  const fallbackMatch = text.match(fallbackPattern);
+  
+  return fallbackMatch ? parseFloat(fallbackMatch[1]) : "N/A";
+}
+
+// Helper function to get CSS class based on score
+function getScoreClass(score) {
+  if (score === "N/A") return styles.scoreNa;
+  if (score >= 0 && score < 5) return styles.scorePoor;
+  if (score >= 5 && score < 7) return styles.scoreBelowAverage;
+  if (score >= 7 && score < 9) return styles.scoreGood;
+  if (score >= 9 && score <= 10) return styles.scoreExcellent;
+  return styles.scoreNa;
 }
 
 function renderScoreMarkdownOld(text, scoreData) {
@@ -1229,8 +1280,8 @@ function renderScoreMarkdownOld(text, scoreData) {
             }}
           >
             {content}
-                </p>
-              </div>
+          </p>
+        </div>
       );
     }
     // Regular bold text headers
@@ -1255,7 +1306,7 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {content}
           </p>
-          </div>
+        </div>
       );
     }
     // Bullet points with better styling
@@ -1317,7 +1368,7 @@ function renderScoreMarkdownOld(text, scoreData) {
             </span>
             {content}
           </p>
-      </div>
+        </div>
       );
     }
     // Regular paragraphs with better spacing and formatting
@@ -1353,8 +1404,8 @@ function renderScoreMarkdownOld(text, scoreData) {
               return part;
             })}
           </p>
-    </div>
-  );
+        </div>
+      );
     }
   });
 }
