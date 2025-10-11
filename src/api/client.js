@@ -80,6 +80,12 @@ export const askClarification = (
   });
 };
 
+export const getModelAnswer = (questionId) => {
+  return apiClient.post("/api/model-answer", {
+    questionId,
+  });
+};
+
 // Session APIs
 export const getSessions = () => {
   return apiClient.get("/api/sessions");

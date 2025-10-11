@@ -5,6 +5,7 @@ import {
   scoreAnswer,
   askClarification,
   getCategories,
+  getModelAnswer,
 } from "../../api/client";
 import styles from "./Interview.module.scss";
 
@@ -29,6 +30,8 @@ function Interview() {
   const [askingClarification, setAskingClarification] = useState(false);
   const [questionHistory, setQuestionHistory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [loadingModelAnswer, setLoadingModelAnswer] = useState(false);
+  const [modelAnswer, setModelAnswer] = useState(null);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -387,12 +390,43 @@ function Interview() {
     }
   };
 
+  const handleShowModelAnswer = async () => {
+    setLoadingModelAnswer(true);
+    setError("");
+
+    try {
+      const response = await getModelAnswer(questionId);
+      setModelAnswer(response.data.modelAnswer);
+
+      // Add model answer to messages
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          message: response.data.modelAnswer,
+          timestamp: new Date().toISOString(),
+          isModelAnswer: true,
+        },
+      ]);
+    } catch (err) {
+      console.error("Get model answer error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to load model answer. Please try again."
+      );
+    } finally {
+      setLoadingModelAnswer(false);
+    }
+  };
+
   const handleNextQuestion = async () => {
     setLoading(true);
     setError("");
     setScores(null);
     setAnswer("");
     setConversationMode(false);
+    setModelAnswer(null);
 
     setMessages((prev) => [
       ...prev,
@@ -664,6 +698,15 @@ function Interview() {
                           <div className={styles.scoreDisplay}>
                             {renderScoreMarkdown(msg.message, msg.scoreData)}
                           </div>
+                        ) : msg.isModelAnswer ? (
+                          <div className={styles.modelAnswerDisplay}>
+                            <div className={styles.modelAnswerHeader}>
+                              💎 <strong>Perfect 10/10 Model Answer</strong>
+                            </div>
+                            <div className={styles.modelAnswerContent}>
+                              {renderModelAnswerMarkdown(msg.message)}
+                            </div>
+                          </div>
                         ) : (
                           msg.message
                         )}
@@ -733,7 +776,26 @@ function Interview() {
                 </div>
               )}
 
-              {scores && (
+              {scores && !modelAnswer && (
+                <div className={styles.actionButtons}>
+                  <button
+                    className={styles.modelAnswerBtn}
+                    onClick={handleShowModelAnswer}
+                    disabled={loadingModelAnswer}
+                  >
+                    {loadingModelAnswer ? "Loading..." : "💎 Show Model Answer"}
+                  </button>
+                  <button
+                    className={styles.nextQuestionBtn}
+                    onClick={handleNextQuestion}
+                    disabled={loading}
+                  >
+                    {loading ? "Loading..." : "➡️ Next Question"}
+                  </button>
+                </div>
+              )}
+
+              {scores && modelAnswer && (
                 <div className={styles.actionButtons}>
                   <button
                     className={styles.nextQuestionBtn}
@@ -1062,6 +1124,162 @@ function renderScoreMarkdown(text, scoreData) {
       );
     }
   });
+}
+
+// Helper function to process bold and italic text
+function processBoldAndItalic(text) {
+  const parts = [];
+  let currentIndex = 0;
+  let key = 0;
+
+  // Match **bold**, *italic*, and regular text
+  const regex = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    // Add text before match
+    if (match.index > currentIndex) {
+      parts.push(text.substring(currentIndex, match.index));
+    }
+
+    const matched = match[0];
+    // Bold text
+    if (matched.startsWith('**') && matched.endsWith('**')) {
+      parts.push(
+        <strong key={key++} style={{ fontWeight: '600', color: '#e5e7eb' }}>
+          {matched.slice(2, -2)}
+        </strong>
+      );
+    }
+    // Italic text
+    else if (matched.startsWith('*') && matched.endsWith('*')) {
+      parts.push(
+        <em key={key++} style={{ fontStyle: 'italic', color: '#9ca3af' }}>
+          {matched.slice(1, -1)}
+        </em>
+      );
+    }
+
+    currentIndex = match.index + matched.length;
+  }
+
+  // Add remaining text
+  if (currentIndex < text.length) {
+    parts.push(text.substring(currentIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+}
+
+function renderModelAnswerMarkdown(text) {
+  if (!text) return null;
+
+  const lines = text.split('\n');
+  const elements = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Main headings (##)
+    if (line.startsWith('## ')) {
+      const headingText = line.substring(3).trim();
+      elements.push(
+        <div key={i} style={{ 
+          fontSize: '20px', 
+          fontWeight: '600', 
+          color: '#e5e7eb',
+          marginTop: i > 0 ? '32px' : '0',
+          marginBottom: '16px',
+          paddingBottom: '8px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          {headingText}
+        </div>
+      );
+    }
+    // Bullet points (- or •)
+    else if (line.match(/^[\-•]\s+/)) {
+      const bulletText = line.substring(2).trim();
+      const processedText = processBoldAndItalic(bulletText);
+      elements.push(
+        <div key={i} style={{ 
+          marginLeft: '24px',
+          marginBottom: '8px',
+          lineHeight: '1.6',
+          color: '#d1d5db',
+          fontSize: '15px',
+          display: 'flex',
+          alignItems: 'flex-start'
+        }}>
+          <span style={{ marginRight: '12px', color: '#9ca3af', flexShrink: 0 }}>•</span>
+          <span>{processedText}</span>
+        </div>
+      );
+    }
+    // Numbered lists
+    else if (line.match(/^\d+\.\s+/)) {
+      const match = line.match(/^(\d+)\.\s+(.+)$/);
+      if (match) {
+        const number = match[1];
+        const listText = match[2];
+        const processedText = processBoldAndItalic(listText);
+        elements.push(
+          <div key={i} style={{ 
+            marginLeft: '24px',
+            marginBottom: '8px',
+            lineHeight: '1.6',
+            color: '#d1d5db',
+            fontSize: '15px',
+            display: 'flex',
+            alignItems: 'flex-start'
+          }}>
+            <span style={{ marginRight: '12px', color: '#9ca3af', fontWeight: '600', flexShrink: 0 }}>{number}.</span>
+            <span>{processedText}</span>
+          </div>
+        );
+      }
+    }
+    // Block quotes (>)
+    else if (line.startsWith('> ')) {
+      const quoteText = line.substring(2).trim();
+      const processedText = processBoldAndItalic(quoteText);
+      elements.push(
+        <div key={i} style={{ 
+          borderLeft: '3px solid #6b7280',
+          paddingLeft: '16px',
+          marginBottom: '12px',
+          fontStyle: 'italic',
+          color: '#9ca3af',
+          fontSize: '15px'
+        }}>
+          {processedText}
+        </div>
+      );
+    }
+    // Regular paragraphs
+    else if (line.trim()) {
+      const processedText = processBoldAndItalic(line);
+      elements.push(
+        <div key={i} style={{ 
+          marginBottom: '12px',
+          lineHeight: '1.7',
+          color: '#d1d5db',
+          fontSize: '15px'
+        }}>
+          {processedText}
+        </div>
+      );
+    }
+    // Empty lines
+    else {
+      elements.push(<div key={i} style={{ height: '8px' }} />);
+    }
+
+    i++;
+  }
+
+  return <div>{elements}</div>;
 }
 
 export default Interview;

@@ -709,6 +709,61 @@
   }
 }
 
+.modelAnswerBtn {
+  padding: $spacing-sm $spacing-lg;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: $spacing-sm;
+
+  &:hover:not(:disabled) {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modelAnswerDisplay {
+  background: rgba(30, 30, 40, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-xl;
+  margin-top: $spacing-sm;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modelAnswerHeader {
+  color: rgba(168, 85, 247, 0.9);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.modelAnswerContent {
+  color: #d1d5db;
+  line-height: 1.7;
+  font-size: 15px;
+  
+  // Ensure proper spacing and readability
+  & > div {
+    max-width: 100%;
+  }
+}
+
 .inputContainer {
   max-width: 768px;
   margin: 0 auto;
