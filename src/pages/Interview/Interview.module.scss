@@ -1026,30 +1026,33 @@ button[class*="sendBtn"] {
   background: rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   gap: $spacing-md;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .backToDiscussionBtn {
-  padding: $spacing-md $spacing-lg;
-  background: #ff4444 !important;
-  border: 2px solid #ff0000 !important;
+  padding: $spacing-sm $spacing-md;
+  background: $primary-color;
+  border: 1px solid $primary-color;
   border-radius: $radius-md;
-  color: white !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
-  z-index: 9999;
-  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.5);
+  z-index: 10000;
   
   &:hover {
-    background: #ff0000 !important;
-    border-color: #cc0000 !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.7);
+    background: $primary-hover;
+    border-color: $primary-hover;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
   }
   
   &:active {
@@ -1092,6 +1095,7 @@ button[class*="sendBtn"] {
   flex: 1;
   overflow: hidden;
   min-height: 0; // Important for flex children to shrink
+  margin-top: 70px; /* Account for fixed header height */
 }
 
 .answerModeSidebar {

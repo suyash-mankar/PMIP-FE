@@ -623,18 +623,8 @@ function Interview() {
             <button
               className={styles.backToDiscussionBtn}
               onClick={handleExitAnswerMode}
-              style={{ 
-                background: '#ff4444', 
-                border: '2px solid #ff0000', 
-                color: 'white',
-                padding: '12px 20px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                zIndex: 9999,
-                position: 'relative'
-              }}
             >
-              🔴 BACK TO DISCUSSION 🔴
+              ← Back to Discussion
             </button>
             <div className={styles.answerModeTitle}>Write Final Answer</div>
             <button
