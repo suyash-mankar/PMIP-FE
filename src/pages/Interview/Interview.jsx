@@ -114,7 +114,7 @@ function Interview() {
         throw new Error("No question received from server");
       }
 
-      setQuestionId(questionIdFromResponse);
+      setQuestionId(Number(questionIdFromResponse));
       setQuestion(interviewQuestion);
 
       // Show loading indicator for first question
@@ -393,6 +393,40 @@ function Interview() {
     setAnswerMode(false);
   };
 
+  const handleScore = async () => {
+    if (!sessionId) {
+      setError("No session ID available for scoring");
+      return;
+    }
+
+    setScoring(true);
+    setError("");
+
+    try {
+      const response = await scoreAnswer(sessionId);
+      setScores(response.data.score);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          message: response.data.score.feedback || "Score received!",
+          timestamp: new Date().toISOString(),
+          isScore: true,
+          scoreData: response.data.score,
+        },
+      ]);
+    } catch (err) {
+      console.error("Scoring error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to score answer. Please try again."
+      );
+    } finally {
+      setScoring(false);
+    }
+  };
+
   const handleSubmitFinalAnswer = async () => {
     if (!finalAnswerDraft.trim()) {
       setError("Please write your answer before submitting");
@@ -419,7 +453,7 @@ function Interview() {
     setScoring(false);
 
     try {
-      const response = await submitAnswer(sessionId, finalAnswerDraft);
+      const response = await submitAnswer(questionId, finalAnswerDraft);
 
       setMessages((prev) => [
         ...prev,
@@ -515,7 +549,7 @@ function Interview() {
     setError("");
 
     try {
-      await submitAnswer(sessionId, finalAnswerDraft);
+      await submitAnswer(questionId, finalAnswerDraft);
       const response = await scoreAnswer(sessionId);
 
       setScores(response.data.score);
@@ -588,7 +622,7 @@ function Interview() {
         throw new Error("No question received from server");
       }
 
-      setQuestionId(questionIdFromResponse);
+      setQuestionId(Number(questionIdFromResponse));
       setQuestion(interviewQuestion);
 
       setTimeout(() => {
