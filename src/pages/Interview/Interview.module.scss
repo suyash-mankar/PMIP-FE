@@ -1306,42 +1306,54 @@ button[class*="sendBtn"] {
   position: sticky;
   bottom: $spacing-lg;
   max-width: 768px;
-  margin: 0 auto $spacing-md auto;
+  margin: 0 auto $spacing-md;
   padding: 0 $spacing-xl;
   z-index: 10;
 }
 
 .writeAnswerBtn {
   width: 100%;
-  padding: $spacing-md $spacing-lg;
+  padding: $spacing-lg $spacing-xl;
   background: linear-gradient(
     135deg,
-    rgba(99, 102, 241, 0.2),
-    rgba(168, 85, 247, 0.2)
+    rgba(99, 102, 241, 0.15),
+    rgba(168, 85, 247, 0.15)
   );
-  border: 2px solid rgba(99, 102, 241, 0.4);
-  border-radius: $radius-md;
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  border-radius: $radius-lg;
   color: $dark-text-primary;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
 
   &:hover:not(:disabled) {
     background: linear-gradient(
       135deg,
-      rgba(99, 102, 241, 0.3),
-      rgba(168, 85, 247, 0.3)
+      rgba(99, 102, 241, 0.25),
+      rgba(168, 85, 247, 0.25)
     );
-    border-color: rgba(99, 102, 241, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+    border-color: rgba(99, 102, 241, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
   }
 }
 
