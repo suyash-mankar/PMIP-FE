@@ -124,12 +124,12 @@ function Interview() {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
-          {
-            sender: "ai",
-            message: interviewQuestion,
-            timestamp: new Date().toISOString(),
-          },
-        ]);
+        {
+          sender: "ai",
+          message: interviewQuestion,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
 
@@ -370,7 +370,7 @@ function Interview() {
       e.preventDefault();
       if (conversationMode) {
         handleAskClarification();
-      } else {
+        } else {
         handleSubmitAnswer();
       }
     }
@@ -643,7 +643,7 @@ function Interview() {
               <div className={styles.answerModeSidebar}>
                 <div className={styles.sidebarTitle}>
                   Question & Chat History
-                </div>
+        </div>
                 <div className={styles.sidebarMessages}>
                   {messages.map((msg, idx) => (
                     <div
@@ -896,15 +896,15 @@ Take your time and be thorough!`}
                     </button>
                   </div>
                 </div>
-              </div>
-            ) : (
+                </div>
+              ) : (
               /* Chat Messages - ChatGPT Style */
               <>
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
-                    {messages.map((msg, index) => (
+                  {messages.map((msg, index) => (
                       <div
-                        key={index}
+                      key={index}
                         className={`${styles.message} ${
                           msg.sender === "user"
                             ? styles.messageUser
@@ -956,56 +956,22 @@ Take your time and be thorough!`}
                             <span></span>
                           </div>
                         </div>
-                      </div>
-                    )}
+                    </div>
+                  )}
 
-                    <div ref={messagesEndRef} />
-                  </div>
+                  <div ref={messagesEndRef} />
                 </div>
+            </div>
 
                 {/* Input Area */}
-                <div className={styles.inputArea}>
+              <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
-                  {/* Conversation Mode Banner */}
+                  {/* Discussion Mode Indicator */}
                   {conversationMode && !scores && (
-                    <div className={styles.conversationBanner}>
-                      <div className={styles.conversationInfo}>
-                        <div className={styles.conversationIcon}>💬</div>
-                        <div className={styles.conversationText}>
-                          <h4>Discussion Mode</h4>
-                          <p>
-                            Ask clarifying questions. When ready, submit your
-                            final answer.
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        className={styles.submitFinalAnswerBtn}
-                        onClick={handleSubmitAnswer}
-                        disabled={
-                          submitting ||
-                          scoring ||
-                          askingClarification ||
-                          !answer.trim()
-                        }
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M9 11L12 14L22 4M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        Submit Final Answer
-                      </button>
+                    <div className={styles.discussionModeIndicator}>
+                      <span className={styles.discussionIcon}>💬</span>
+                      <span>Discussion Mode - Ask clarifying questions below</span>
                     </div>
                   )}
 
@@ -1056,10 +1022,10 @@ Take your time and be thorough!`}
                   )}
 
                   <div className={styles.inputContainer}>
-                    <textarea
+                <textarea
                       ref={inputRef}
                       className={styles.input}
-                      value={answer}
+                  value={answer}
                       onChange={(e) => {
                         setAnswer(e.target.value);
                         // Auto-resize only when user is typing and input is not disabled
@@ -1077,8 +1043,8 @@ Take your time and be thorough!`}
                       }
                       disabled={submitting || scoring || askingClarification}
                       rows={1}
-                    />
-                    <button
+                />
+                <button
                       className={styles.sendBtn}
                       onClick={
                         conversationMode
@@ -1106,8 +1072,8 @@ Take your time and be thorough!`}
                           strokeLinejoin="round"
                         />
                       </svg>
-                    </button>
-                  </div>
+                </button>
+              </div>
                 </div>
               </>
             )}
@@ -1284,8 +1250,8 @@ function renderScoreMarkdownOld(text, scoreData) {
             }}
           >
             {content}
-          </p>
-        </div>
+                </p>
+              </div>
       );
     }
     // Regular bold text headers
@@ -1310,7 +1276,7 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {content}
           </p>
-        </div>
+          </div>
       );
     }
     // Bullet points with better styling
@@ -1372,7 +1338,7 @@ function renderScoreMarkdownOld(text, scoreData) {
             </span>
             {content}
           </p>
-        </div>
+      </div>
       );
     }
     // Regular paragraphs with better spacing and formatting
@@ -1408,8 +1374,8 @@ function renderScoreMarkdownOld(text, scoreData) {
               return part;
             })}
           </p>
-        </div>
-      );
+    </div>
+  );
     }
   });
 }
