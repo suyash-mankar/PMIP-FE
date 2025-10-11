@@ -645,14 +645,14 @@
   font-size: $font-size-xs;
   color: $dark-text-muted;
   z-index: 10;
-  
+
   .modeDot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: $primary-color;
   }
-  
+
   .modeText {
     font-weight: 500;
   }
@@ -971,27 +971,27 @@ button[class*="sendBtn"] {
     right: $spacing-sm;
     padding: 4px $spacing-xs;
     font-size: 10px;
-    
+
     .modeDot {
       width: 4px;
       height: 4px;
     }
   }
-  
+
   .writeAnswerSection {
     padding: 0 $spacing-sm;
     margin-bottom: $spacing-md;
   }
-  
+
   .writeAnswerBtn {
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
   }
-  
+
   .answerModeHeader {
     padding: $spacing-sm $spacing-md;
   }
-  
+
   .backToDiscussionBtn,
   .toggleSidebarBtn {
     padding: $spacing-xs $spacing-sm;
@@ -1023,24 +1023,33 @@ button[class*="sendBtn"] {
   align-items: center;
   justify-content: space-between;
   padding: $spacing-md $spacing-xl;
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   gap: $spacing-md;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .backToDiscussionBtn {
   padding: $spacing-sm $spacing-md;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: $primary-color;
+  border: 1px solid $primary-color;
   border-radius: $radius-md;
-  color: $dark-text-primary;
+  color: white;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: $primary-hover;
+    border-color: $primary-hover;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
 }
 
@@ -1054,16 +1063,23 @@ button[class*="sendBtn"] {
 
 .toggleSidebarBtn {
   padding: $spacing-sm $spacing-md;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: $radius-md;
   color: $dark-text-primary;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
 }
 
@@ -1292,16 +1308,16 @@ button[class*="sendBtn"] {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover:not(:disabled) {
     background: $primary-hover;
     transform: translateY(-1px);
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
