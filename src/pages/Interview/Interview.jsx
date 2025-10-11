@@ -124,12 +124,12 @@ function Interview() {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
-          {
-            sender: "ai",
-            message: interviewQuestion,
-            timestamp: new Date().toISOString(),
-          },
-        ]);
+        {
+          sender: "ai",
+          message: interviewQuestion,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
 
@@ -370,7 +370,7 @@ function Interview() {
       e.preventDefault();
       if (conversationMode) {
         handleAskClarification();
-      } else {
+        } else {
         handleSubmitAnswer();
       }
     }
@@ -393,8 +393,10 @@ function Interview() {
     setAnswerMode(false);
   };
 
-  const handleScore = async () => {
-    if (!sessionId) {
+  const handleScore = async (sessionIdToUse = null) => {
+    const currentSessionId = sessionIdToUse || sessionId;
+    
+    if (!currentSessionId) {
       setError("No session ID available for scoring");
       return;
     }
@@ -403,7 +405,7 @@ function Interview() {
     setError("");
 
     try {
-      const response = await scoreAnswer(sessionId);
+      const response = await scoreAnswer(currentSessionId);
       setScores(response.data.score);
       setMessages((prev) => [
         ...prev,
@@ -468,8 +470,16 @@ function Interview() {
       // Clear the draft
       setFinalAnswerDraft("");
 
-      // Trigger scoring
-      handleScore();
+      // Get sessionId from submit response
+      const newSessionId = response.data.sessionId;
+      if (newSessionId) {
+        setSessionId(newSessionId);
+        
+        // Trigger scoring with the new sessionId
+        await handleScore(newSessionId);
+      } else {
+        setError("No session ID returned from submit answer");
+      }
     } catch (err) {
       console.error("Submit error:", err);
       setError(
@@ -524,62 +534,6 @@ function Interview() {
     setAnswerMode(false);
   };
 
-  const handleSubmitFinalAnswerOld = async () => {
-    if (!finalAnswerDraft.trim()) {
-      setError("Please write your answer before submitting");
-      return;
-    }
-
-    // Exit answer mode
-    setAnswerMode(false);
-
-    // Add user's answer to messages
-    setMessages((prev) => [
-      ...prev,
-      {
-        sender: "user",
-        message: finalAnswerDraft,
-        timestamp: new Date().toISOString(),
-      },
-    ]);
-
-    // Trigger scoring
-    setScoring(true);
-    setConversationMode(false);
-    setError("");
-
-    try {
-      await submitAnswer(questionId, finalAnswerDraft);
-      const response = await scoreAnswer(sessionId);
-
-      setScores(response.data.score);
-
-      // Add score message to chat
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "ai",
-          message: response.data.score.feedback || "Score received!",
-          timestamp: new Date().toISOString(),
-          isScore: true,
-          scoreData: response.data.score,
-        },
-      ]);
-
-      // Clear drafts
-      setFinalAnswerDraft("");
-      setAnswer("");
-    } catch (err) {
-      console.error("Submit final answer error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to submit answer. Please try again."
-      );
-    } finally {
-      setScoring(false);
-    }
-  };
 
   const handleNextQuestion = async () => {
     setLoading(true);
@@ -690,7 +644,7 @@ function Interview() {
               <div className={styles.answerModeSidebar}>
                 <div className={styles.sidebarTitle}>
                   Question & Chat History
-                </div>
+        </div>
                 <div className={styles.sidebarMessages}>
                   {messages.map((msg, idx) => (
                     <div
@@ -943,15 +897,15 @@ Take your time and be thorough!`}
                     </button>
                   </div>
                 </div>
-              </div>
-            ) : (
+                </div>
+              ) : (
               /* Chat Messages - ChatGPT Style */
               <>
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
-                    {messages.map((msg, index) => (
+                  {messages.map((msg, index) => (
                       <div
-                        key={index}
+                      key={index}
                         className={`${styles.message} ${
                           msg.sender === "user"
                             ? styles.messageUser
@@ -1003,15 +957,15 @@ Take your time and be thorough!`}
                             <span></span>
                           </div>
                         </div>
-                      </div>
-                    )}
+                    </div>
+                  )}
 
-                    <div ref={messagesEndRef} />
-                  </div>
+                  <div ref={messagesEndRef} />
                 </div>
+            </div>
 
                 {/* Input Area */}
-                <div className={styles.inputArea}>
+              <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
                   {/* Conversation Mode Banner */}
@@ -1103,10 +1057,10 @@ Take your time and be thorough!`}
                   )}
 
                   <div className={styles.inputContainer}>
-                    <textarea
+                <textarea
                       ref={inputRef}
                       className={styles.input}
-                      value={answer}
+                  value={answer}
                       onChange={(e) => {
                         setAnswer(e.target.value);
                         // Auto-resize only when user is typing and input is not disabled
@@ -1124,8 +1078,8 @@ Take your time and be thorough!`}
                       }
                       disabled={submitting || scoring || askingClarification}
                       rows={1}
-                    />
-                    <button
+                />
+                <button
                       className={styles.sendBtn}
                       onClick={
                         conversationMode
@@ -1153,8 +1107,8 @@ Take your time and be thorough!`}
                           strokeLinejoin="round"
                         />
                       </svg>
-                    </button>
-                  </div>
+                </button>
+              </div>
                 </div>
               </>
             )}
@@ -1275,8 +1229,8 @@ function renderScoreMarkdownOld(text, scoreData) {
             }}
           >
             {content}
-          </p>
-        </div>
+                </p>
+              </div>
       );
     }
     // Regular bold text headers
@@ -1301,7 +1255,7 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {content}
           </p>
-        </div>
+          </div>
       );
     }
     // Bullet points with better styling
@@ -1363,7 +1317,7 @@ function renderScoreMarkdownOld(text, scoreData) {
             </span>
             {content}
           </p>
-        </div>
+      </div>
       );
     }
     // Regular paragraphs with better spacing and formatting
@@ -1399,8 +1353,8 @@ function renderScoreMarkdownOld(text, scoreData) {
               return part;
             })}
           </p>
-        </div>
-      );
+    </div>
+  );
     }
   });
 }
