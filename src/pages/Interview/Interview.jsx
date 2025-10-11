@@ -1144,17 +1144,17 @@ function processBoldAndItalic(text) {
 
     const matched = match[0];
     // Bold text
-    if (matched.startsWith('**') && matched.endsWith('**')) {
+    if (matched.startsWith("**") && matched.endsWith("**")) {
       parts.push(
-        <strong key={key++} style={{ fontWeight: '600', color: '#e5e7eb' }}>
+        <strong key={key++} style={{ fontWeight: "600", color: "#e5e7eb" }}>
           {matched.slice(2, -2)}
         </strong>
       );
     }
     // Italic text
-    else if (matched.startsWith('*') && matched.endsWith('*')) {
+    else if (matched.startsWith("*") && matched.endsWith("*")) {
       parts.push(
-        <em key={key++} style={{ fontStyle: 'italic', color: '#9ca3af' }}>
+        <em key={key++} style={{ fontStyle: "italic", color: "#9ca3af" }}>
           {matched.slice(1, -1)}
         </em>
       );
@@ -1174,7 +1174,7 @@ function processBoldAndItalic(text) {
 function renderModelAnswerMarkdown(text) {
   if (!text) return null;
 
-  const lines = text.split('\n');
+  const lines = text.split("\n");
   const elements = [];
   let i = 0;
 
@@ -1182,18 +1182,21 @@ function renderModelAnswerMarkdown(text) {
     const line = lines[i];
 
     // Main headings (##)
-    if (line.startsWith('## ')) {
+    if (line.startsWith("## ")) {
       const headingText = line.substring(3).trim();
       elements.push(
-        <div key={i} style={{ 
-          fontSize: '20px', 
-          fontWeight: '600', 
-          color: '#e5e7eb',
-          marginTop: i > 0 ? '32px' : '0',
-          marginBottom: '16px',
-          paddingBottom: '8px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
+        <div
+          key={i}
+          style={{
+            fontSize: "20px",
+            fontWeight: "600",
+            color: "#e5e7eb",
+            marginTop: i > 0 ? "32px" : "0",
+            marginBottom: "16px",
+            paddingBottom: "8px",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          }}
+        >
           {headingText}
         </div>
       );
@@ -1203,16 +1206,23 @@ function renderModelAnswerMarkdown(text) {
       const bulletText = line.substring(2).trim();
       const processedText = processBoldAndItalic(bulletText);
       elements.push(
-        <div key={i} style={{ 
-          marginLeft: '24px',
-          marginBottom: '8px',
-          lineHeight: '1.6',
-          color: '#d1d5db',
-          fontSize: '15px',
-          display: 'flex',
-          alignItems: 'flex-start'
-        }}>
-          <span style={{ marginRight: '12px', color: '#9ca3af', flexShrink: 0 }}>•</span>
+        <div
+          key={i}
+          style={{
+            marginLeft: "24px",
+            marginBottom: "8px",
+            lineHeight: "1.6",
+            color: "#d1d5db",
+            fontSize: "15px",
+            display: "flex",
+            alignItems: "flex-start",
+          }}
+        >
+          <span
+            style={{ marginRight: "12px", color: "#9ca3af", flexShrink: 0 }}
+          >
+            •
+          </span>
           <span>{processedText}</span>
         </div>
       );
@@ -1225,34 +1235,49 @@ function renderModelAnswerMarkdown(text) {
         const listText = match[2];
         const processedText = processBoldAndItalic(listText);
         elements.push(
-          <div key={i} style={{ 
-            marginLeft: '24px',
-            marginBottom: '8px',
-            lineHeight: '1.6',
-            color: '#d1d5db',
-            fontSize: '15px',
-            display: 'flex',
-            alignItems: 'flex-start'
-          }}>
-            <span style={{ marginRight: '12px', color: '#9ca3af', fontWeight: '600', flexShrink: 0 }}>{number}.</span>
+          <div
+            key={i}
+            style={{
+              marginLeft: "24px",
+              marginBottom: "8px",
+              lineHeight: "1.6",
+              color: "#d1d5db",
+              fontSize: "15px",
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          >
+            <span
+              style={{
+                marginRight: "12px",
+                color: "#9ca3af",
+                fontWeight: "600",
+                flexShrink: 0,
+              }}
+            >
+              {number}.
+            </span>
             <span>{processedText}</span>
           </div>
         );
       }
     }
     // Block quotes (>)
-    else if (line.startsWith('> ')) {
+    else if (line.startsWith("> ")) {
       const quoteText = line.substring(2).trim();
       const processedText = processBoldAndItalic(quoteText);
       elements.push(
-        <div key={i} style={{ 
-          borderLeft: '3px solid #6b7280',
-          paddingLeft: '16px',
-          marginBottom: '12px',
-          fontStyle: 'italic',
-          color: '#9ca3af',
-          fontSize: '15px'
-        }}>
+        <div
+          key={i}
+          style={{
+            borderLeft: "3px solid #6b7280",
+            paddingLeft: "16px",
+            marginBottom: "12px",
+            fontStyle: "italic",
+            color: "#9ca3af",
+            fontSize: "15px",
+          }}
+        >
           {processedText}
         </div>
       );
@@ -1261,19 +1286,22 @@ function renderModelAnswerMarkdown(text) {
     else if (line.trim()) {
       const processedText = processBoldAndItalic(line);
       elements.push(
-        <div key={i} style={{ 
-          marginBottom: '12px',
-          lineHeight: '1.7',
-          color: '#d1d5db',
-          fontSize: '15px'
-        }}>
+        <div
+          key={i}
+          style={{
+            marginBottom: "12px",
+            lineHeight: "1.7",
+            color: "#d1d5db",
+            fontSize: "15px",
+          }}
+        >
           {processedText}
         </div>
       );
     }
     // Empty lines
     else {
-      elements.push(<div key={i} style={{ height: '8px' }} />);
+      elements.push(<div key={i} style={{ height: "8px" }} />);
     }
 
     i++;
