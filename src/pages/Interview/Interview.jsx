@@ -32,6 +32,9 @@ function Interview() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loadingModelAnswer, setLoadingModelAnswer] = useState(false);
   const [modelAnswer, setModelAnswer] = useState(null);
+  const [answerMode, setAnswerMode] = useState(false);
+  const [finalAnswerDraft, setFinalAnswerDraft] = useState('');
+  const [showAnswerSidebar, setShowAnswerSidebar] = useState(true);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -390,6 +393,81 @@ function Interview() {
     }
   };
 
+  const handleEnterAnswerMode = () => {
+    setAnswerMode(true);
+    // Pre-fill with any text from the small input box if exists
+    if (answer.trim()) {
+      setFinalAnswerDraft(answer);
+      setAnswer("");
+    }
+  };
+
+  const handleExitAnswerMode = () => {
+    // Save draft back to small input if needed
+    if (finalAnswerDraft.trim() && !answer.trim()) {
+      setAnswer(finalAnswerDraft);
+    }
+    setAnswerMode(false);
+  };
+
+  const handleSubmitFinalAnswer = async () => {
+    if (!finalAnswerDraft.trim()) {
+      setError("Please write your answer before submitting");
+      return;
+    }
+
+    // Exit answer mode
+    setAnswerMode(false);
+
+    // Add user's answer to messages
+    setMessages((prev) => [
+      ...prev,
+      {
+        sender: "user",
+        message: finalAnswerDraft,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    // Clear answer state and set for submission
+    setAnswer("");
+    setConversationMode(false);
+    setSubmitting(true);
+    setScoring(false);
+
+    try {
+      const response = await submitAnswer(sessionId, finalAnswerDraft);
+      
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          message: "Great! I've received your answer. Now let me evaluate it...",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+
+      // Clear the draft
+      setFinalAnswerDraft("");
+
+      // Trigger scoring
+      handleScore();
+    } catch (err) {
+      console.error("Submit error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to submit answer. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const toggleAnswerSidebar = () => {
+    setShowAnswerSidebar(!showAnswerSidebar);
+  };
+
   const handleShowModelAnswer = async () => {
     setLoadingModelAnswer(true);
     setError("");
@@ -418,6 +496,75 @@ function Interview() {
     } finally {
       setLoadingModelAnswer(false);
     }
+  };
+
+  const handleExitAnswerModeOld = () => {
+    // Save draft back to small input if needed
+    if (finalAnswerDraft.trim() && !answer.trim()) {
+      setAnswer(finalAnswerDraft);
+    }
+    setAnswerMode(false);
+  };
+
+  const handleSubmitFinalAnswerOld = async () => {
+    if (!finalAnswerDraft.trim()) {
+      setError('Please write your answer before submitting');
+      return;
+    }
+
+    // Exit answer mode
+    setAnswerMode(false);
+    
+    // Add user's answer to messages
+    setMessages((prev) => [
+      ...prev,
+      {
+        sender: "user",
+        message: finalAnswerDraft,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    // Trigger scoring
+    setScoring(true);
+    setConversationMode(false);
+    setError("");
+
+    try {
+      await submitAnswer(sessionId, finalAnswerDraft);
+      const response = await scoreAnswer(sessionId);
+
+      setScores(response.data.score);
+
+      // Add score message to chat
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          message: response.data.score.feedback || "Score received!",
+          timestamp: new Date().toISOString(),
+          isScore: true,
+          scoreData: response.data.score,
+        },
+      ]);
+
+      // Clear drafts
+      setFinalAnswerDraft('');
+      setAnswer('');
+    } catch (err) {
+      console.error("Submit final answer error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to submit answer. Please try again."
+      );
+    } finally {
+      setScoring(false);
+    }
+  };
+
+  const toggleAnswerSidebar = () => {
+    setShowAnswerSidebar(!showAnswerSidebar);
   };
 
   const handleNextQuestion = async () => {
@@ -498,8 +645,114 @@ function Interview() {
 
   return (
     <div className={styles.interviewPage}>
-      {/* Left Sidebar - Only show during interview */}
-      {interviewStarted && (
+      {answerMode ? (
+        // Full-Screen Answer Writing Mode
+        <div className={styles.answerWritingMode}>
+          {/* Header */}
+          <div className={styles.answerModeHeader}>
+            <button
+              className={styles.backToChatBtn}
+              onClick={handleExitAnswerMode}
+            >
+              ← Back to Chat
+            </button>
+            <div className={styles.answerModeTitle}>
+              Write Your Final Answer
+            </div>
+            <button
+              className={styles.toggleSidebarBtn}
+              onClick={toggleAnswerSidebar}
+            >
+              {showAnswerSidebar ? "✕ Hide Chat" : "💬 Show Chat"}
+            </button>
+          </div>
+
+          <div className={styles.answerModeContent}>
+            {/* Chat History Sidebar */}
+            {showAnswerSidebar && (
+              <div className={styles.answerModeSidebar}>
+                <div className={styles.sidebarTitle}>
+                  Question & Chat History
+                </div>
+                <div className={styles.sidebarMessages}>
+                  {messages.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className={`${styles.sidebarMessage} ${
+                        msg.sender === "ai"
+                          ? styles.sidebarAI
+                          : styles.sidebarUser
+                      }`}
+                    >
+                      <div className={styles.sidebarMessageSender}>
+                        {msg.sender === "ai" ? "AI" : "You"}
+                      </div>
+                      <div className={styles.sidebarMessageText}>
+                        {msg.message.length > 200
+                          ? msg.message.substring(0, 200) + "..."
+                          : msg.message}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Main Answer Editor */}
+            <div className={styles.answerModeMain}>
+              {/* Question Display */}
+              <div className={styles.questionDisplay}>
+                <div className={styles.questionLabel}>Question:</div>
+                <div className={styles.questionText}>{question}</div>
+              </div>
+
+              {/* Large Textarea */}
+              <textarea
+                className={styles.answerTextarea}
+                value={finalAnswerDraft}
+                onChange={(e) => setFinalAnswerDraft(e.target.value)}
+                placeholder={`Write your comprehensive answer here... 
+
+Use this space to structure your response like you would in a real interview:
+• Clarify the problem
+• Define your approach
+• Break down your solution
+• Discuss metrics and success criteria
+• Address risks and trade-offs
+
+Take your time and be thorough!`}
+                disabled={submitting || scoring}
+              />
+
+              {/* Character/Word Count */}
+              <div className={styles.answerStats}>
+                <span>{finalAnswerDraft.length} characters</span>
+                <span>
+                  {finalAnswerDraft.trim()
+                    ? finalAnswerDraft.trim().split(/\s+/).length
+                    : 0}{" "}
+                  words
+                </span>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                className={styles.submitFinalAnswerBtnLarge}
+                onClick={handleSubmitFinalAnswer}
+                disabled={submitting || scoring || !finalAnswerDraft.trim()}
+              >
+                {submitting || scoring
+                  ? "Submitting..."
+                  : "✓ Submit Final Answer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Existing Chat Interface
+        <>
+          {/* Left Sidebar - Only show during interview */}
+          {interviewStarted && (
         <div
           className={`${styles.sidebar} ${
             sidebarOpen ? styles.sidebarOpen : styles.sidebarCollapsed
@@ -807,6 +1060,36 @@ function Interview() {
                 </div>
               )}
 
+              {/* Write Final Answer Button - Show when question is asked and not in answer mode */}
+              {interviewStarted && question && !scores && !answerMode && (
+                <div className={styles.answerModeToggle}>
+                  <button
+                    className={styles.writeAnswerBtn}
+                    onClick={handleEnterAnswerMode}
+                    disabled={submitting || scoring || askingClarification}
+                  >
+                    📝 Write Final Answer
+                  </button>
+                </div>
+              )}
+
+              {/* Write Final Answer Button */}
+              {interviewStarted &&
+                question &&
+                !scores &&
+                !answerMode &&
+                conversationMode && (
+                  <div className={styles.answerModeToggle}>
+                    <button
+                      className={styles.writeAnswerBtn}
+                      onClick={handleEnterAnswerMode}
+                      disabled={submitting || scoring || askingClarification}
+                    >
+                      📝 Write Final Answer
+                    </button>
+                  </div>
+                )}
+
               <div className={styles.inputContainer}>
                 <textarea
                   ref={inputRef}
@@ -886,6 +1169,8 @@ function Interview() {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );
@@ -1040,6 +1325,362 @@ function renderScoreMarkdownOld(text, scoreData) {
             marginLeft: "20px",
             marginBottom: "8px",
             paddingLeft: "8px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0",
+              lineHeight: "1.6",
+              color: "#e5e7eb",
+              fontSize: "14px",
+            }}
+          >
+            <span style={{ color: "#6366f1", marginRight: "8px" }}>•</span>
+            {content}
+          </p>
+        </div>
+      );
+    }
+    // Numbered lists with better styling
+    else if (trimmedLine.match(/^\d+\./)) {
+      const match = trimmedLine.match(/^(\d+)\.\s*(.*)/);
+      const number = match[1];
+      const content = match[2];
+      return (
+        <div
+          key={i}
+          style={{
+            marginLeft: "20px",
+            marginBottom: "12px",
+            paddingLeft: "8px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0",
+              lineHeight: "1.6",
+              color: "#e5e7eb",
+              fontSize: "14px",
+            }}
+          >
+            <span
+              style={{
+                color: "#6366f1",
+                fontWeight: "600",
+                marginRight: "8px",
+              }}
+            >
+              {number}.
+            </span>
+            {content}
+          </p>
+        </div>
+      );
+    }
+    // Regular paragraphs with better spacing and formatting
+    else {
+      // Parse inline bold text and improve readability
+      const parts = line.split(/(\*\*.*?\*\*)/g);
+      return (
+        <div
+          key={i}
+          style={{
+            marginBottom: "12px",
+            lineHeight: "1.7",
+            fontSize: "14px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0",
+              color: "#e5e7eb",
+            }}
+          >
+            {parts.map((part, j) => {
+              if (part.match(/^\*\*.*\*\*$/)) {
+                return (
+                  <strong
+                    key={j}
+                    style={{ color: "#ffffff", fontWeight: "600" }}
+                  >
+                    {part.replace(/\*\*/g, "")}
+                  </strong>
+                );
+              }
+              return part;
+            })}
+          </p>
+        </div>
+      );
+    }
+  });
+}
+
+// Helper function to process bold and italic text
+function processBoldAndItalic(text) {
+  const parts = [];
+  let currentIndex = 0;
+  let key = 0;
+
+  // Match **bold**, *italic*, and regular text
+  const regex = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    // Add text before match
+    if (match.index > currentIndex) {
+      parts.push(text.substring(currentIndex, match.index));
+    }
+
+    const matched = match[0];
+    // Bold text
+    if (matched.startsWith("**") && matched.endsWith("**")) {
+      parts.push(
+        <strong key={key++} style={{ fontWeight: "600", color: "#e5e7eb" }}>
+          {matched.slice(2, -2)}
+        </strong>
+      );
+    }
+    // Italic text
+    else if (matched.startsWith("*") && matched.endsWith("*")) {
+      parts.push(
+        <em key={key++} style={{ fontStyle: "italic", color: "#9ca3af" }}>
+          {matched.slice(1, -1)}
+        </em>
+      );
+    }
+
+    currentIndex = match.index + matched.length;
+  }
+
+  // Add remaining text
+  if (currentIndex < text.length) {
+    parts.push(text.substring(currentIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+}
+
+function renderModelAnswerMarkdown(text) {
+  if (!text) return null;
+
+  const lines = text.split("\n");
+  const elements = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Main headings (##)
+    if (line.startsWith("## ")) {
+      const headingText = line.substring(3).trim();
+      elements.push(
+        <div
+          key={i}
+          style={{
+            fontSize: "20px",
+            fontWeight: "600",
+            color: "#e5e7eb",
+            marginTop: i > 0 ? "32px" : "0",
+            marginBottom: "16px",
+            paddingBottom: "8px",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          }}
+        >
+          {headingText}
+        </div>
+      );
+    }
+    // Bullet points (- or •)
+    else if (line.match(/^[\-•]\s+/)) {
+      const bulletText = line.substring(2).trim();
+      const processedText = processBoldAndItalic(bulletText);
+      elements.push(
+        <div
+          key={i}
+          style={{
+            marginLeft: "24px",
+            marginBottom: "8px",
+            lineHeight: "1.6",
+            color: "#d1d5db",
+            fontSize: "15px",
+            display: "flex",
+            alignItems: "flex-start",
+          }}
+        >
+          <span
+            style={{ marginRight: "12px", color: "#9ca3af", flexShrink: 0 }}
+          >
+            •
+          </span>
+          <span>{processedText}</span>
+        </div>
+      );
+    }
+    // Numbered lists
+    else if (line.match(/^\d+\.\s+/)) {
+      const match = line.match(/^(\d+)\.\s+(.+)$/);
+      if (match) {
+        const number = match[1];
+        const listText = match[2];
+        const processedText = processBoldAndItalic(listText);
+        elements.push(
+          <div
+            key={i}
+            style={{
+              marginLeft: "24px",
+              marginBottom: "8px",
+              lineHeight: "1.6",
+              color: "#d1d5db",
+              fontSize: "15px",
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          >
+            <span
+              style={{
+                marginRight: "12px",
+                color: "#9ca3af",
+                fontWeight: "600",
+                flexShrink: 0,
+              }}
+            >
+              {number}.
+            </span>
+            <span>{processedText}</span>
+          </div>
+        );
+      }
+    }
+    // Block quotes (>)
+    else if (line.startsWith("> ")) {
+      const quoteText = line.substring(2).trim();
+      const processedText = processBoldAndItalic(quoteText);
+      elements.push(
+        <div
+          key={i}
+          style={{
+            borderLeft: "3px solid #6b7280",
+            paddingLeft: "16px",
+            marginBottom: "12px",
+            fontStyle: "italic",
+            color: "#9ca3af",
+            fontSize: "15px",
+          }}
+        >
+          {processedText}
+        </div>
+      );
+    }
+    // Regular paragraphs
+    else if (line.trim()) {
+      const processedText = processBoldAndItalic(line);
+      elements.push(
+        <div
+          key={i}
+          style={{
+            marginBottom: "12px",
+            lineHeight: "1.7",
+            color: "#d1d5db",
+            fontSize: "15px",
+          }}
+        >
+          {processedText}
+        </div>
+      );
+    }
+    // Empty lines
+    else {
+      elements.push(<div key={i} style={{ height: "8px" }} />);
+    }
+
+    i++;
+  }
+
+  return <div>{elements}</div>;
+}
+
+export default Interview;
+
+        const processedText = processBoldAndItalic(listText);
+        elements.push(
+          <div
+            key={i}
+            style={{
+              marginLeft: "24px",
+              marginBottom: "8px",
+              lineHeight: "1.6",
+              color: "#d1d5db",
+              fontSize: "15px",
+              display: "flex",
+              alignItems: "flex-start",
+            }}
+          >
+            <span
+              style={{
+                marginRight: "12px",
+                color: "#9ca3af",
+                fontWeight: "600",
+                flexShrink: 0,
+              }}
+            >
+              {number}.
+            </span>
+            <span>{processedText}</span>
+          </div>
+        );
+      }
+    }
+    // Block quotes (>)
+    else if (line.startsWith("> ")) {
+      const quoteText = line.substring(2).trim();
+      const processedText = processBoldAndItalic(quoteText);
+      elements.push(
+        <div
+          key={i}
+          style={{
+            borderLeft: "3px solid #6b7280",
+            paddingLeft: "16px",
+            marginBottom: "12px",
+            fontStyle: "italic",
+            color: "#9ca3af",
+            fontSize: "15px",
+          }}
+        >
+          {processedText}
+        </div>
+      );
+    }
+    // Regular paragraphs
+    else if (line.trim()) {
+      const processedText = processBoldAndItalic(line);
+      elements.push(
+        <div
+          key={i}
+          style={{
+            marginBottom: "12px",
+            lineHeight: "1.7",
+            color: "#d1d5db",
+            fontSize: "15px",
+          }}
+        >
+          {processedText}
+        </div>
+      );
+    }
+    // Empty lines
+    else {
+      elements.push(<div key={i} style={{ height: "8px" }} />);
+    }
+
+    i++;
+  }
+
+  return <div>{elements}</div>;
+}
+
+export default Interview;
+
           }}
         >
           <p

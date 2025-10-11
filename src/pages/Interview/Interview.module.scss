@@ -526,7 +526,7 @@
 .scoreDisplay {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
-  
+
   :global {
     .score-heading {
       font-size: $font-size-2xl;
@@ -768,7 +768,7 @@
   font-size: 15px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
-  
+
   // Ensure proper spacing and readability
   & > div {
     max-width: 100%;
@@ -1056,5 +1056,607 @@ button[class*="sendBtn"] {
     width: 100%;
     justify-content: center;
     padding: $spacing-md $spacing-lg;
+  }
+}
+
+// Answer Writing Mode - Full Screen
+.answerWritingMode {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: $dark-bg-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+.answerModeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-xl;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: $spacing-md;
+}
+
+.backToChatBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.5);
+  }
+}
+
+.answerModeTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: $dark-text-primary;
+}
+
+.toggleSidebarBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.answerModeContent {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.answerModeSidebar {
+  width: 320px;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebarTitle {
+  padding: $spacing-md $spacing-lg;
+  font-weight: 600;
+  font-size: 14px;
+  color: $dark-text-secondary;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebarMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-md;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+}
+
+.sidebarMessage {
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  font-size: 13px;
+
+  &.sidebarAI {
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid rgba(99, 102, 241, 0.5);
+  }
+
+  &.sidebarUser {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+  }
+}
+
+.sidebarMessageSender {
+  font-weight: 600;
+  font-size: 11px;
+  color: $dark-text-secondary;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidebarMessageText {
+  color: $dark-text-primary;
+  line-height: 1.5;
+}
+
+.answerModeMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-xl;
+  overflow: hidden;
+}
+
+.questionDisplay {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.questionLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(99, 102, 241, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: $spacing-sm;
+}
+
+.questionText {
+  font-size: 16px;
+  font-weight: 500;
+  color: $dark-text-primary;
+  line-height: 1.6;
+}
+
+.answerTextarea {
+  flex: 1;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  color: $dark-text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  resize: none;
+  overflow-y: auto;
+  margin-bottom: $spacing-md;
+
+  &::placeholder {
+    color: $dark-text-muted;
+    line-height: 1.7;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+}
+
+.answerStats {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-lg;
+  font-size: 12px;
+  color: $dark-text-muted;
+  margin-bottom: $spacing-md;
+
+  span {
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+  }
+}
+
+.submitFinalAnswerBtnLarge {
+  padding: $spacing-md $spacing-xl;
+  background: rgba(34, 197, 94, 0.15);
+  border: 2px solid rgba(34, 197, 94, 0.4);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+
+  &:hover:not(:disabled) {
+    background: rgba(34, 197, 94, 0.25);
+    border-color: rgba(34, 197, 94, 0.6);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Write Answer Button (in chat mode)
+.answerModeToggle {
+  position: sticky;
+  bottom: $spacing-lg;
+  max-width: 768px;
+  margin: 0 auto $spacing-md auto;
+  padding: 0 $spacing-xl;
+  z-index: 10;
+}
+
+.writeAnswerBtn {
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+  border: 2px solid rgba(99, 102, 241, 0.4);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+    border-color: rgba(99, 102, 241, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Mobile Responsiveness
+@media (max-width: 768px) {
+  .answerModeSidebar {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+    z-index: 100;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .answerModeMain {
+    padding: $spacing-md;
+  }
+
+  .answerTextarea {
+    padding: $spacing-md;
+  }
+}
+
+// Answer Writing Mode - Full Screen
+.answerWritingMode {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: $dark-bg-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+.answerModeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-xl;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: $spacing-md;
+}
+
+.backToChatBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.5);
+  }
+}
+
+.answerModeTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: $dark-text-primary;
+}
+
+.toggleSidebarBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.answerModeContent {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.answerModeSidebar {
+  width: 320px;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebarTitle {
+  padding: $spacing-md $spacing-lg;
+  font-weight: 600;
+  font-size: 14px;
+  color: $dark-text-secondary;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebarMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-md;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+}
+
+.sidebarMessage {
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  font-size: 13px;
+
+  &.sidebarAI {
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid rgba(99, 102, 241, 0.5);
+  }
+
+  &.sidebarUser {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+  }
+}
+
+.sidebarMessageSender {
+  font-weight: 600;
+  font-size: 11px;
+  color: $dark-text-secondary;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidebarMessageText {
+  color: $dark-text-primary;
+  line-height: 1.5;
+}
+
+.answerModeMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-xl;
+  overflow: hidden;
+}
+
+.questionDisplay {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.questionLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(99, 102, 241, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: $spacing-sm;
+}
+
+.questionText {
+  font-size: 16px;
+  font-weight: 500;
+  color: $dark-text-primary;
+  line-height: 1.6;
+}
+
+.answerTextarea {
+  flex: 1;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  color: $dark-text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  resize: none;
+  overflow-y: auto;
+  margin-bottom: $spacing-md;
+
+  &::placeholder {
+    color: $dark-text-muted;
+    line-height: 1.7;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+}
+
+.answerStats {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-lg;
+  font-size: 12px;
+  color: $dark-text-muted;
+  margin-bottom: $spacing-md;
+
+  span {
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+  }
+}
+
+.submitFinalAnswerBtnLarge {
+  padding: $spacing-md $spacing-xl;
+  background: rgba(34, 197, 94, 0.15);
+  border: 2px solid rgba(34, 197, 94, 0.4);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+
+  &:hover:not(:disabled) {
+    background: rgba(34, 197, 94, 0.25);
+    border-color: rgba(34, 197, 94, 0.6);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Write Answer Button (in chat mode)
+.answerModeToggle {
+  max-width: 768px;
+  margin: 0 auto $spacing-md;
+  padding: 0 $spacing-xl;
+  z-index: 10;
+}
+
+.writeAnswerBtn {
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.2),
+    rgba(168, 85, 247, 0.2)
+  );
+  border: 2px solid rgba(99, 102, 241, 0.4);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.3),
+      rgba(168, 85, 247, 0.3)
+    );
+    border-color: rgba(99, 102, 241, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Mobile Responsiveness
+@media (max-width: 768px) {
+  .answerModeSidebar {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+    z-index: 100;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .answerModeMain {
+    padding: $spacing-md;
+  }
+
+  .answerTextarea {
+    padding: $spacing-md;
   }
 }
