@@ -879,9 +879,9 @@ Take your time and be thorough!`}
                               {cat.value === "metrics" && "📊"}
                               {cat.value === "product_strategy" && "🎯"}
                               {cat.value === "guesstimates" && "🧮"}
+                              {cat.value === "behavioral" && "👥"}
                             </div>
                             <h4>{cat.label}</h4>
-                            <p>{cat.count} questions</p>
                           </button>
                         ))}
                       </div>
@@ -1121,7 +1121,10 @@ Take your time and be thorough!`}
 function renderScoreMarkdown(text, scoreData) {
   // Extract overall score from scoreData or text
   // Try multiple possible field names
-  const overallScore = scoreData?.overall_score || scoreData?.totalScore || extractScoreFromText(text);
+  const overallScore =
+    scoreData?.overall_score ||
+    scoreData?.totalScore ||
+    extractScoreFromText(text);
 
   return (
     <div>
