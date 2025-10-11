@@ -256,7 +256,7 @@
 .chatArea {
   flex: 1;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
   background: $dark-bg-primary;
 }
 
@@ -292,7 +292,7 @@
 
 .welcomeContent {
   max-width: 900px;
-  width: 100%;
+    width: 100%;
   text-align: center;
   padding-bottom: $spacing-2xl;
 }
@@ -627,7 +627,11 @@
   max-width: 800px;
   margin: 0 auto $spacing-lg;
   padding: $spacing-md $spacing-lg;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(139, 92, 246, 0.05) 100%
+  );
   border: 1px solid rgba(99, 102, 241, 0.25);
   border-radius: $radius-lg;
   display: flex;
@@ -638,7 +642,11 @@
 
   &:hover {
     border-color: rgba(99, 102, 241, 0.4);
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.08) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.12) 0%,
+      rgba(139, 92, 246, 0.08) 100%
+    );
   }
 
   .discussionIcon {
@@ -1376,7 +1384,7 @@ button[class*="sendBtn"] {
     flex: 1;
 
     .writeAnswerLabel {
-      font-size: $font-size-md;
+      font-size: $font-size-base;
       font-weight: 600;
       color: $dark-text-primary;
       line-height: 1.2;
