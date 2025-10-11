@@ -256,7 +256,7 @@
 .chatArea {
   flex: 1;
   display: flex;
-  flex-direction: column;
+    flex-direction: column;
   background: $dark-bg-primary;
 }
 
@@ -292,7 +292,7 @@
 
 .welcomeContent {
   max-width: 900px;
-    width: 100%;
+  width: 100%;
   text-align: center;
   padding-bottom: $spacing-2xl;
 }
@@ -622,61 +622,31 @@
   font-size: $font-size-sm;
 }
 
-// Discussion Mode Indicator
+// Discussion Mode Indicator - Subtle
 .discussionModeIndicator {
   max-width: 800px;
-  margin: 0 auto $spacing-lg;
-  padding: $spacing-md $spacing-lg;
-  background: linear-gradient(
-    135deg,
-    rgba(99, 102, 241, 0.08) 0%,
-    rgba(139, 92, 246, 0.05) 100%
-  );
-  border: 1px solid rgba(99, 102, 241, 0.25);
-  border-radius: $radius-lg;
+  margin: 0 auto $spacing-sm;
+  padding: $spacing-xs $spacing-sm;
   display: flex;
   align-items: center;
-  gap: $spacing-md;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: rgba(99, 102, 241, 0.4);
-    background: linear-gradient(
-      135deg,
-      rgba(99, 102, 241, 0.12) 0%,
-      rgba(139, 92, 246, 0.08) 100%
-    );
-  }
+  gap: $spacing-xs;
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
 
   .discussionIcon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(99, 102, 241, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
+    font-size: 12px;
     flex-shrink: 0;
   }
 
   .discussionText {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-
     .discussionLabel {
-      font-size: $font-size-sm;
-      font-weight: 600;
-      color: $dark-text-primary;
-      line-height: 1.2;
+      font-size: $font-size-xs;
+      font-weight: 500;
+      color: $dark-text-muted;
     }
 
     .discussionHint {
-      font-size: $font-size-xs;
-      color: $dark-text-secondary;
-      line-height: 1.3;
+      display: none; // Hide the hint text to make it more subtle
     }
   }
 }
@@ -990,21 +960,15 @@ button[class*="sendBtn"] {
   }
 
   .discussionModeIndicator {
-    padding: $spacing-sm $spacing-md;
-    margin: 0 auto $spacing-md;
+    padding: $spacing-xs;
+    margin: 0 auto $spacing-sm;
 
     .discussionIcon {
-      width: 28px;
-      height: 28px;
-      font-size: 14px;
+      font-size: 10px;
     }
 
     .discussionText {
       .discussionLabel {
-        font-size: $font-size-xs;
-      }
-
-      .discussionHint {
         font-size: 10px;
       }
     }
@@ -1322,77 +1286,63 @@ button[class*="sendBtn"] {
 .writeAnswerBtn {
   width: 100%;
   padding: $spacing-lg $spacing-xl;
-  background: linear-gradient(
-    135deg,
-    rgba(99, 102, 241, 0.15),
-    rgba(168, 85, 247, 0.15)
-  );
-  border: 2px solid rgba(99, 102, 241, 0.3);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
   border-radius: $radius-lg;
-  color: $dark-text-primary;
-  font-size: 16px;
+  color: white;
+  font-size: $font-size-lg;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: $spacing-md;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(
-      135deg,
-      rgba(99, 102, 241, 0.25),
-      rgba(168, 85, 247, 0.25)
-    );
-    border-color: rgba(99, 102, 241, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
   }
 
   .writeAnswerIcon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(99, 102, 241, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-    font-size: 18px;
+    font-size: 20px;
     flex-shrink: 0;
   }
 
   .writeAnswerText {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 2px;
     flex: 1;
 
     .writeAnswerLabel {
-      font-size: $font-size-base;
+      font-size: $font-size-lg;
       font-weight: 600;
-      color: $dark-text-primary;
+      color: white;
       line-height: 1.2;
     }
 
     .writeAnswerSubtext {
-      font-size: $font-size-xs;
-      color: $dark-text-secondary;
+      font-size: $font-size-sm;
+      color: rgba(255, 255, 255, 0.8);
       line-height: 1.3;
     }
   }
