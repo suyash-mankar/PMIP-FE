@@ -621,20 +621,19 @@ function Interview() {
           {/* Header */}
           <div className={styles.answerModeHeader}>
             <button
-              className={styles.switchModeBtn}
+              className={styles.backToDiscussionBtn}
               onClick={handleExitAnswerMode}
             >
-              💬 Switch to Discussion Mode
+              ← Back to Discussion
             </button>
             <div className={styles.answerModeTitle}>
-              <span className={styles.answerModeIcon}>✍️</span>
-              Final Answer Mode
+              Write Final Answer
             </div>
             <button
               className={styles.toggleSidebarBtn}
               onClick={toggleAnswerSidebar}
             >
-              {showAnswerSidebar ? '✕ Hide Chat' : '💬 Show Chat'}
+              {showAnswerSidebar ? "Hide Chat" : "Show Chat"}
             </button>
           </div>
 
@@ -900,18 +899,12 @@ Take your time and be thorough!`}
                 </div>
               ) : (
               /* Chat Messages - ChatGPT Style */
-              <div className={`${styles.mainContent} ${answerMode ? styles.answerModeActive : styles.discussionModeActive}`}>
-                {/* Mode Status Badge - Show in header */}
-                {interviewStarted && question && !scores && (
-                  <div className={styles.modeStatusHeader}>
-                    <div className={`${styles.modeBadge} ${answerMode ? styles.answerModeBadge : styles.discussionModeBadge}`}>
-                      <span className={styles.modeIcon}>
-                        {answerMode ? '✍️' : '💬'}
-                      </span>
-                      <span className={styles.modeLabel}>
-                        {answerMode ? 'Final Answer Mode' : 'Discussion Mode'}
-                      </span>
-                    </div>
+              <div className={styles.mainContent}>
+                {/* Minimal Mode Indicator - Only show when needed */}
+                {interviewStarted && question && !scores && conversationMode && !answerMode && (
+                  <div className={styles.minimalModeIndicator}>
+                    <span className={styles.modeDot}></span>
+                    <span className={styles.modeText}>Discussion</span>
                   </div>
                 )}
 
@@ -982,7 +975,6 @@ Take your time and be thorough!`}
               <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
-
                   {scores && !modelAnswer && (
                     <div className={styles.actionButtons}>
                       <button
@@ -1016,16 +1008,15 @@ Take your time and be thorough!`}
                     </div>
                   )}
 
-                  {/* Floating Write Final Answer Button - Sticky at bottom */}
-                  {interviewStarted && question && !scores && !answerMode && (
-                    <div className={styles.floatingButtonContainer}>
+                  {/* Clean Write Final Answer Button - Integrated in input area */}
+                  {interviewStarted && question && !scores && !answerMode && conversationMode && (
+                    <div className={styles.writeAnswerSection}>
                       <button
-                        className={styles.floatingWriteAnswerBtn}
+                        className={styles.writeAnswerBtn}
                         onClick={handleEnterAnswerMode}
                         disabled={submitting || scoring || askingClarification}
                       >
-                        <span className={styles.floatingBtnIcon}>✍️</span>
-                        <span className={styles.floatingBtnText}>Write Final Answer</span>
+                        Write Final Answer
                       </button>
                     </div>
                   )}
@@ -1082,7 +1073,7 @@ Take your time and be thorough!`}
                         />
                       </svg>
                 </button>
-              </div>
+                  </div>
                 </div>
               </div>
             )}

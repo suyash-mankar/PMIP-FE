@@ -622,60 +622,40 @@
   font-size: $font-size-sm;
 }
 
-// Mode Status Header Badge
-.modeStatusHeader {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: $dark-bg-primary;
-  padding: $spacing-sm $spacing-xl;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+// Clean Main Content - No visual clutter
+.mainContent {
+  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  background: $dark-bg-primary;
+  position: relative;
 }
 
-.modeBadge {
-  display: inline-flex;
+// Minimal Mode Indicator - Subtle and unobtrusive
+.minimalModeIndicator {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-lg;
+  display: flex;
   align-items: center;
   gap: $spacing-xs;
-  padding: $spacing-xs $spacing-md;
-  border-radius: $radius-lg;
-  font-size: $font-size-sm;
-  font-weight: 500;
+  padding: $spacing-xs $spacing-sm;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
+  z-index: 10;
   
-  .modeIcon {
-    font-size: 14px;
+  .modeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $primary-color;
   }
   
-  .modeLabel {
-    line-height: 1;
+  .modeText {
+    font-weight: 500;
   }
-}
-
-.discussionModeBadge {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.answerModeBadge {
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-// Color-coded border for main interface
-.mainContent {
-  border-left: 3px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-.discussionModeActive {
-  border-left-color: rgba(59, 130, 246, 0.5);
-}
-
-.answerModeActive {
-  border-left-color: rgba(34, 197, 94, 0.5);
 }
 
 .actionButtons {
@@ -986,37 +966,34 @@ button[class*="sendBtn"] {
     }
   }
 
-  .modeStatusHeader {
-    padding: $spacing-xs $spacing-sm;
-  }
-  
-  .modeBadge {
-    font-size: $font-size-xs;
-    padding: 4px $spacing-sm;
+  .minimalModeIndicator {
+    top: $spacing-sm;
+    right: $spacing-sm;
+    padding: 4px $spacing-xs;
+    font-size: 10px;
     
-    .modeIcon {
-      font-size: 12px;
+    .modeDot {
+      width: 4px;
+      height: 4px;
     }
   }
   
-  .floatingButtonContainer {
+  .writeAnswerSection {
     padding: 0 $spacing-sm;
+    margin-bottom: $spacing-md;
   }
   
-  .floatingWriteAnswerBtn {
-    padding: $spacing-md $spacing-lg;
-    font-size: $font-size-base;
-    
-    .floatingBtnText {
-      font-size: $font-size-base;
-    }
+  .writeAnswerBtn {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
   }
   
   .answerModeHeader {
     padding: $spacing-sm $spacing-md;
   }
   
-  .switchModeBtn {
+  .backToDiscussionBtn,
+  .toggleSidebarBtn {
     padding: $spacing-xs $spacing-sm;
     font-size: 12px;
   }
@@ -1040,45 +1017,39 @@ button[class*="sendBtn"] {
   overflow: hidden;
 }
 
-// Updated Answer Mode Header
+// Clean Answer Mode Header
 .answerModeHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: $spacing-md $spacing-xl;
-  background: rgba(34, 197, 94, 0.05);
-  border-bottom: 2px solid rgba(34, 197, 94, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   gap: $spacing-md;
 }
 
-.switchModeBtn {
+.backToDiscussionBtn {
   padding: $spacing-sm $spacing-md;
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: $radius-md;
-  color: #60a5fa;
+  color: $dark-text-primary;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   
   &:hover {
-    background: rgba(59, 130, 246, 0.25);
-    border-color: rgba(59, 130, 246, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 }
 
 .answerModeTitle {
-  display: flex;
-  align-items: center;
-  gap: $spacing-xs;
   font-size: 18px;
   font-weight: 600;
-  color: #4ade80;
-  
-  .answerModeIcon {
-    font-size: 20px;
-  }
+  color: $dark-text-primary;
+  text-align: center;
+  flex: 1;
 }
 
 .toggleSidebarBtn {
@@ -1303,54 +1274,38 @@ button[class*="sendBtn"] {
   }
 }
 
-// Floating Write Final Answer Button
-.floatingButtonContainer {
-  position: sticky;
-  bottom: $spacing-md;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 $spacing-lg;
-  z-index: 50;
+// Clean Write Answer Section
+.writeAnswerSection {
+  max-width: 800px;
+  margin: 0 auto $spacing-lg;
+  padding: 0 $spacing-xl;
+  text-align: center;
 }
 
-.floatingWriteAnswerBtn {
-  width: 100%;
-  padding: $spacing-lg $spacing-xl;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+.writeAnswerBtn {
+  padding: $spacing-md $spacing-xl;
+  background: $primary-color;
   border: none;
-  border-radius: $radius-xl;
+  border-radius: $radius-md;
   color: white;
-  font-size: $font-size-lg;
-  font-weight: 600;
+  font-size: $font-size-base;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-sm;
+  transition: all 0.2s ease;
   
   &:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(34, 197, 94, 0.5);
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    background: $primary-hover;
+    transform: translateY(-1px);
   }
   
   &:active:not(:disabled) {
-    transform: translateY(-1px);
+    transform: translateY(0);
   }
   
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-  
-  .floatingBtnIcon {
-    font-size: 20px;
-  }
-  
-  .floatingBtnText {
-    font-size: $font-size-lg;
+    transform: none;
   }
 }
 
@@ -1480,7 +1435,7 @@ button[class*="sendBtn"] {
 
   .answerTextarea {
     padding: $spacing-md;
-    min-height: 300px;
+  min-height: 300px;
   }
 
   .submitFinalAnswerBtnLarge {
