@@ -124,12 +124,12 @@ function Interview() {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
-          {
-            sender: "ai",
-            message: interviewQuestion,
-            timestamp: new Date().toISOString(),
-          },
-        ]);
+        {
+          sender: "ai",
+          message: interviewQuestion,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
 
@@ -370,7 +370,7 @@ function Interview() {
       e.preventDefault();
       if (conversationMode) {
         handleAskClarification();
-      } else {
+        } else {
         handleSubmitAnswer();
       }
     }
@@ -623,8 +623,18 @@ function Interview() {
             <button
               className={styles.backToDiscussionBtn}
               onClick={handleExitAnswerMode}
+              style={{ 
+                background: '#ff4444', 
+                border: '2px solid #ff0000', 
+                color: 'white',
+                padding: '12px 20px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                zIndex: 9999,
+                position: 'relative'
+              }}
             >
-              ← Back to Discussion
+              🔴 BACK TO DISCUSSION 🔴
             </button>
             <div className={styles.answerModeTitle}>Write Final Answer</div>
             <button
@@ -633,7 +643,7 @@ function Interview() {
             >
               {showAnswerSidebar ? "Hide Chat" : "Show Chat"}
             </button>
-          </div>
+            </div>
 
           <div className={styles.answerModeContent}>
             {/* Chat History Sidebar */}
@@ -704,7 +714,7 @@ Take your time and be thorough!`}
               </div>
 
               {/* Submit Button */}
-              <button
+            <button
                 className={styles.submitFinalAnswerBtnLarge}
                 onClick={handleSubmitFinalAnswer}
                 disabled={submitting || scoring || !finalAnswerDraft.trim()}
@@ -712,8 +722,8 @@ Take your time and be thorough!`}
                 {submitting || scoring
                   ? "Submitting..."
                   : "✓ Submit Final Answer"}
-              </button>
-            </div>
+            </button>
+          </div>
           </div>
         </div>
       ) : (
@@ -759,7 +769,7 @@ Take your time and be thorough!`}
                     />
                   </svg>
                 </button>
-              </div>
+        </div>
 
               <div className={styles.questionList}>
                 {questionHistory.length === 0 ? (
@@ -894,8 +904,8 @@ Take your time and be thorough!`}
                     </button>
                   </div>
                 </div>
-              </div>
-            ) : (
+                </div>
+              ) : (
               /* Chat Messages - ChatGPT Style */
               <div className={styles.mainContent}>
                 {/* Minimal Mode Indicator - Only show when needed */}
@@ -912,9 +922,9 @@ Take your time and be thorough!`}
 
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
-                    {messages.map((msg, index) => (
+                  {messages.map((msg, index) => (
                       <div
-                        key={index}
+                      key={index}
                         className={`${styles.message} ${
                           msg.sender === "user"
                             ? styles.messageUser
@@ -966,15 +976,15 @@ Take your time and be thorough!`}
                             <span></span>
                           </div>
                         </div>
-                      </div>
-                    )}
+                    </div>
+                  )}
 
-                    <div ref={messagesEndRef} />
-                  </div>
+                  <div ref={messagesEndRef} />
                 </div>
+            </div>
 
                 {/* Input Area */}
-                <div className={styles.inputArea}>
+              <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
                   {scores && !modelAnswer && (
@@ -1030,10 +1040,10 @@ Take your time and be thorough!`}
                     )}
 
                   <div className={styles.inputContainer}>
-                    <textarea
+                <textarea
                       ref={inputRef}
                       className={styles.input}
-                      value={answer}
+                  value={answer}
                       onChange={(e) => {
                         setAnswer(e.target.value);
                         // Auto-resize only when user is typing and input is not disabled
@@ -1051,8 +1061,8 @@ Take your time and be thorough!`}
                       }
                       disabled={submitting || scoring || askingClarification}
                       rows={1}
-                    />
-                    <button
+                />
+                <button
                       className={styles.sendBtn}
                       onClick={
                         conversationMode
@@ -1080,7 +1090,7 @@ Take your time and be thorough!`}
                           strokeLinejoin="round"
                         />
                       </svg>
-                    </button>
+                </button>
                   </div>
                 </div>
               </div>
@@ -1258,8 +1268,8 @@ function renderScoreMarkdownOld(text, scoreData) {
             }}
           >
             {content}
-          </p>
-        </div>
+                </p>
+              </div>
       );
     }
     // Regular bold text headers
@@ -1284,7 +1294,7 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {content}
           </p>
-        </div>
+          </div>
       );
     }
     // Bullet points with better styling
@@ -1346,7 +1356,7 @@ function renderScoreMarkdownOld(text, scoreData) {
             </span>
             {content}
           </p>
-        </div>
+      </div>
       );
     }
     // Regular paragraphs with better spacing and formatting
@@ -1382,8 +1392,8 @@ function renderScoreMarkdownOld(text, scoreData) {
               return part;
             })}
           </p>
-        </div>
-      );
+    </div>
+  );
     }
   });
 }

@@ -555,7 +555,7 @@ function Landing() {
                 className={`btn btn-secondary btn-xl ${styles.ctaSecondaryButton}`}
               >
                 Sign In
-              </Link>
+            </Link>
             </div>
             <div className={styles.ctaFeatures}>
               <span className={styles.ctaFeature}>

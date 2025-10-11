@@ -1032,20 +1032,24 @@ button[class*="sendBtn"] {
 }
 
 .backToDiscussionBtn {
-  padding: $spacing-sm $spacing-md;
-  background: $primary-color;
-  border: 1px solid $primary-color;
+  padding: $spacing-md $spacing-lg;
+  background: #ff4444 !important;
+  border: 2px solid #ff0000 !important;
   border-radius: $radius-md;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
+  color: white !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
+  z-index: 9999;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.5);
   
   &:hover {
-    background: $primary-hover;
-    border-color: $primary-hover;
-    transform: translateY(-1px);
+    background: #ff0000 !important;
+    border-color: #cc0000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.7);
   }
   
   &:active {
@@ -1077,7 +1081,7 @@ button[class*="sendBtn"] {
     border-color: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
