@@ -124,12 +124,12 @@ function Interview() {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
-        {
-          sender: "ai",
-          message: interviewQuestion,
-          timestamp: new Date().toISOString(),
-        },
-      ]);
+          {
+            sender: "ai",
+            message: interviewQuestion,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
 
@@ -220,7 +220,6 @@ function Interview() {
       setAskingClarification(false);
     }
   };
-
 
   const handleSubmitAnswer = async () => {
     if (!answer.trim()) {
@@ -371,7 +370,7 @@ function Interview() {
       e.preventDefault();
       if (conversationMode) {
         handleAskClarification();
-        } else {
+      } else {
         handleSubmitAnswer();
       }
     }
@@ -657,7 +656,7 @@ function Interview() {
               <div className={styles.answerModeSidebar}>
                 <div className={styles.sidebarTitle}>
                   Question & Chat History
-        </div>
+                </div>
                 <div className={styles.sidebarMessages}>
                   {messages.map((msg, idx) => (
                     <div
@@ -910,15 +909,15 @@ Take your time and be thorough!`}
                     </button>
                   </div>
                 </div>
-                </div>
-              ) : (
+              </div>
+            ) : (
               /* Chat Messages - ChatGPT Style */
               <>
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
-                  {messages.map((msg, index) => (
+                    {messages.map((msg, index) => (
                       <div
-                      key={index}
+                        key={index}
                         className={`${styles.message} ${
                           msg.sender === "user"
                             ? styles.messageUser
@@ -970,15 +969,15 @@ Take your time and be thorough!`}
                             <span></span>
                           </div>
                         </div>
-                    </div>
-                  )}
+                      </div>
+                    )}
 
-                  <div ref={messagesEndRef} />
+                    <div ref={messagesEndRef} />
+                  </div>
                 </div>
-            </div>
 
                 {/* Input Area */}
-              <div className={styles.inputArea}>
+                <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
                   {/* Conversation Mode Banner */}
@@ -994,16 +993,16 @@ Take your time and be thorough!`}
                           </p>
                         </div>
                       </div>
-                       <button
-                         className={styles.submitFinalAnswerBtn}
-                         onClick={handleSubmitAnswer}
-                         disabled={
-                           submitting ||
-                           scoring ||
-                           askingClarification ||
-                           !answer.trim()
-                         }
-                       >
+                      <button
+                        className={styles.submitFinalAnswerBtn}
+                        onClick={handleSubmitAnswer}
+                        disabled={
+                          submitting ||
+                          scoring ||
+                          askingClarification ||
+                          !answer.trim()
+                        }
+                      >
                         <svg
                           width="16"
                           height="16"
@@ -1056,24 +1055,24 @@ Take your time and be thorough!`}
                     </div>
                   )}
 
-                   {/* Write Final Answer Button - Show when question is asked and not in answer mode */}
-                   {interviewStarted && question && !scores && !answerMode && (
-                     <div className={styles.answerModeToggle}>
-                       <button
-                         className={styles.writeAnswerBtn}
-                         onClick={handleEnterAnswerMode}
-                         disabled={submitting || scoring || askingClarification}
-                       >
-                         📝 Write Final Answer
-                       </button>
-                     </div>
-                   )}
+                  {/* Write Final Answer Button - Show when question is asked and not in answer mode */}
+                  {interviewStarted && question && !scores && !answerMode && (
+                    <div className={styles.answerModeToggle}>
+                      <button
+                        className={styles.writeAnswerBtn}
+                        onClick={handleEnterAnswerMode}
+                        disabled={submitting || scoring || askingClarification}
+                      >
+                        📝 Write Final Answer
+                      </button>
+                    </div>
+                  )}
 
                   <div className={styles.inputContainer}>
-                <textarea
+                    <textarea
                       ref={inputRef}
                       className={styles.input}
-                  value={answer}
+                      value={answer}
                       onChange={(e) => {
                         setAnswer(e.target.value);
                         // Auto-resize only when user is typing and input is not disabled
@@ -1091,8 +1090,8 @@ Take your time and be thorough!`}
                       }
                       disabled={submitting || scoring || askingClarification}
                       rows={1}
-                />
-                <button
+                    />
+                    <button
                       className={styles.sendBtn}
                       onClick={
                         conversationMode
@@ -1120,16 +1119,15 @@ Take your time and be thorough!`}
                           strokeLinejoin="round"
                         />
                       </svg>
-                </button>
-              </div>
+                    </button>
+                  </div>
                 </div>
               </>
             )}
           </div>
-
         </>
-            )}
-          </div>
+      )}
+    </div>
   );
 }
 
@@ -1182,7 +1180,7 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {trimmedLine}
           </h3>
-      </div>
+        </div>
       );
     } else if (trimmedLine.includes("🔥 REFRAMED")) {
       return (
@@ -1216,8 +1214,8 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {trimmedLine}
           </h3>
-    </div>
-  );
+        </div>
+      );
     }
     // Bold headers with arrows (like **User segment →**)
     else if (trimmedLine.match(/^\*\*.*→\*\*$/)) {
@@ -1243,8 +1241,8 @@ function renderScoreMarkdownOld(text, scoreData) {
             }}
           >
             {content}
-                </p>
-              </div>
+          </p>
+        </div>
       );
     }
     // Regular bold text headers
@@ -1269,7 +1267,7 @@ function renderScoreMarkdownOld(text, scoreData) {
           >
             {content}
           </p>
-          </div>
+        </div>
       );
     }
     // Bullet points with better styling
@@ -1331,7 +1329,7 @@ function renderScoreMarkdownOld(text, scoreData) {
             </span>
             {content}
           </p>
-      </div>
+        </div>
       );
     }
     // Regular paragraphs with better spacing and formatting
@@ -1367,8 +1365,8 @@ function renderScoreMarkdownOld(text, scoreData) {
               return part;
             })}
           </p>
-    </div>
-  );
+        </div>
+      );
     }
   });
 }
