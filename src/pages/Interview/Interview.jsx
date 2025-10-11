@@ -563,10 +563,6 @@ function Interview() {
     }
   };
 
-  const toggleAnswerSidebar = () => {
-    setShowAnswerSidebar(!showAnswerSidebar);
-  };
-
   const handleNextQuestion = async () => {
     setLoading(true);
     setError("");
@@ -574,6 +570,9 @@ function Interview() {
     setAnswer("");
     setConversationMode(false);
     setModelAnswer(null);
+    setAnswerMode(false);
+    setFinalAnswerDraft('');
+    setShowAnswerSidebar(true);
 
     setMessages((prev) => [
       ...prev,
@@ -1077,8 +1076,7 @@ Take your time and be thorough!`}
               {interviewStarted &&
                 question &&
                 !scores &&
-                !answerMode &&
-                conversationMode && (
+                !answerMode && (
                   <div className={styles.answerModeToggle}>
                     <button
                       className={styles.writeAnswerBtn}
