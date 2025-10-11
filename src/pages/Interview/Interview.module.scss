@@ -256,7 +256,7 @@
 .chatArea {
   flex: 1;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
   background: $dark-bg-primary;
 }
 
@@ -292,7 +292,7 @@
 
 .welcomeContent {
   max-width: 900px;
-  width: 100%;
+    width: 100%;
   text-align: center;
   padding-bottom: $spacing-2xl;
 }
@@ -979,16 +979,16 @@ button[class*="sendBtn"] {
   }
 
   .inputAreaWithButton {
-    flex-direction: column;
+  flex-direction: column;
     gap: $spacing-sm;
     padding: 0 $spacing-sm;
   }
-  
+
   .writeAnswerContainer {
     width: 100%;
     justify-content: center;
   }
-  
+
   .writeAnswerBtn {
     width: 100%;
     padding: $spacing-sm $spacing-md;
@@ -1041,6 +1041,37 @@ button[class*="sendBtn"] {
   z-index: 9999;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+// Action Buttons Container
+.actionButtonsContainer {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+  justify-content: flex-end;
+}
+
+.backToDiscussionBtnBottom {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .backToDiscussionBtn {
@@ -1262,7 +1293,7 @@ button[class*="sendBtn"] {
 }
 
 .submitFinalAnswerBtnLarge {
-  padding: $spacing-lg $spacing-2xl;
+  padding: $spacing-md $spacing-lg;
   background: linear-gradient(
     135deg,
     rgba(34, 197, 94, 0.2),
@@ -1271,11 +1302,10 @@ button[class*="sendBtn"] {
   border: 2px solid rgba(34, 197, 94, 0.5);
   border-radius: $radius-lg;
   color: $dark-text-primary;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  align-self: flex-end;
   flex-shrink: 0; // Prevent shrinking
   min-width: 200px;
   box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
@@ -1344,33 +1374,38 @@ button[class*="sendBtn"] {
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
   position: relative;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
     transition: left 0.5s;
   }
-  
+
   &:hover:not(:disabled) {
     background: linear-gradient(135deg, $primary-hover 0%, #7c3aed 100%);
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-    
+
     &::before {
       left: 100%;
     }
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0) scale(1);
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1391,7 +1426,11 @@ button[class*="sendBtn"] {
 
 // Bounce animation for the icon
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
@@ -1528,13 +1567,26 @@ button[class*="sendBtn"] {
 
   .answerTextarea {
     padding: $spacing-md;
-    min-height: 300px;
+  min-height: 300px;
   }
 
+  .actionButtonsContainer {
+    flex-direction: column;
+    gap: $spacing-sm;
+    align-items: stretch;
+  }
+  
+  .backToDiscussionBtnBottom {
+    order: 2;
+    padding: $spacing-sm;
+    font-size: 14px;
+  }
+  
   .submitFinalAnswerBtnLarge {
     padding: $spacing-md $spacing-lg;
-    font-size: 16px;
-    min-width: 150px;
+    font-size: 15px;
+    min-width: auto;
+    order: 1;
   }
 
   .backToChatBtn,

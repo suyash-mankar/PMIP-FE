@@ -620,27 +620,6 @@ function Interview() {
         <div className={styles.answerWritingMode}>
           {/* Header */}
           <div className={styles.answerModeHeader}>
-            <button
-              className={styles.backToDiscussionBtn}
-              onClick={handleExitAnswerMode}
-              style={{
-                display: 'block !important',
-                visibility: 'visible !important',
-                opacity: '1 !important',
-                background: '#8b5cf6',
-                color: 'white',
-                padding: '8px 16px',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                zIndex: '99999',
-                position: 'relative'
-              }}
-            >
-              ← Back to Discussion
-            </button>
             <div className={styles.answerModeTitle}>Write Final Answer</div>
             <button
               className={styles.toggleSidebarBtn}
@@ -718,17 +697,25 @@ Take your time and be thorough!`}
                 </span>
               </div>
 
-              {/* Submit Button */}
+              {/* Action Buttons */}
+              <div className={styles.actionButtonsContainer}>
             <button
-                className={styles.submitFinalAnswerBtnLarge}
-                onClick={handleSubmitFinalAnswer}
-                disabled={submitting || scoring || !finalAnswerDraft.trim()}
-              >
-                {submitting || scoring
-                  ? "Submitting..."
-                  : "✓ Submit Final Answer"}
+                  className={styles.backToDiscussionBtnBottom}
+                  onClick={handleExitAnswerMode}
+                >
+                  ← Back to Discussion
+                </button>
+                <button
+                  className={styles.submitFinalAnswerBtnLarge}
+                  onClick={handleSubmitFinalAnswer}
+                  disabled={submitting || scoring || !finalAnswerDraft.trim()}
+                >
+                  {submitting || scoring
+                    ? "Submitting..."
+                    : "✓ Submit Final Answer"}
             </button>
           </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -1096,7 +1083,9 @@ Take your time and be thorough!`}
                             }
                           >
                             <span className={styles.writeAnswerIcon}>✍️</span>
-                            <span className={styles.writeAnswerText}>Write Final Answer</span>
+                            <span className={styles.writeAnswerText}>
+                              Write Final Answer
+                            </span>
                 </button>
               </div>
             )}
