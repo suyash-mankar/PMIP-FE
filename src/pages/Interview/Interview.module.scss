@@ -1290,8 +1290,12 @@ button[class*="sendBtn"] {
 }
 
 .submitFinalAnswerBtnLarge {
-  padding: $spacing-lg $spacing-xxl;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.15));
+  padding: $spacing-lg $spacing-2xl;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.2),
+    rgba(34, 197, 94, 0.15)
+  );
   border: 2px solid rgba(34, 197, 94, 0.5);
   border-radius: $radius-lg;
   color: $dark-text-primary;
@@ -1303,10 +1307,15 @@ button[class*="sendBtn"] {
   flex-shrink: 0; // Prevent shrinking
   min-width: 200px;
   box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.25));
+    background: linear-gradient(
+      135deg,
+      rgba(34, 197, 94, 0.3),
+      rgba(34, 197, 94, 0.25)
+    );
     border-color: rgba(34, 197, 94, 0.7);
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(34, 197, 94, 0.3);
