@@ -1121,7 +1121,7 @@ Take your time and be thorough!`}
 function renderScoreMarkdown(text, scoreData) {
   // Extract overall score from scoreData or text
   const overallScore = scoreData?.overall_score || extractScoreFromText(text);
-  
+
   return (
     <div>
       {/* Large prominent score display */}
@@ -1131,13 +1131,13 @@ function renderScoreMarkdown(text, scoreData) {
           {overallScore}/10
         </div>
         <div className={styles.scoreBar}>
-          <div 
+          <div
             className={`${styles.scoreBarFill} ${getScoreClass(overallScore)}`}
             style={{ width: `${(overallScore / 10) * 100}%` }}
           />
         </div>
       </div>
-      
+
       {/* Detailed feedback with markdown */}
       <div className={styles.feedbackContainer}>
         {renderModelAnswerMarkdown(text)}
@@ -1149,19 +1149,19 @@ function renderScoreMarkdown(text, scoreData) {
 // Helper function to extract score from text if not in scoreData
 function extractScoreFromText(text) {
   if (!text) return "N/A";
-  
+
   // Look for patterns like "# Overall Score: X/10" or "Overall Score: X/10"
   const scorePattern = /(?:#\s*)?Overall Score:\s*(\d+(?:\.\d+)?)\/10/i;
   const match = text.match(scorePattern);
-  
+
   if (match) {
     return parseFloat(match[1]);
   }
-  
+
   // Fallback: look for any "X/10" pattern
   const fallbackPattern = /(\d+(?:\.\d+)?)\/10/;
   const fallbackMatch = text.match(fallbackPattern);
-  
+
   return fallbackMatch ? parseFloat(fallbackMatch[1]) : "N/A";
 }
 
