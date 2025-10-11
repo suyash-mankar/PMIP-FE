@@ -629,13 +629,21 @@ function Interview() {
             <div className={styles.answerModeTitle}>
               Write Your Final Answer
             </div>
+            <div className={styles.answerModeControls}>
             <button
-              className={styles.toggleSidebarBtn}
-              onClick={toggleAnswerSidebar}
-            >
-              {showAnswerSidebar ? "✕ Hide Chat" : "💬 Show Chat"}
+                className={styles.toggleSidebarBtn}
+                onClick={toggleAnswerSidebar}
+              >
+                {showAnswerSidebar ? "✕ Hide Chat" : "💬 Show Chat"}
+              </button>
+              <button
+                className={styles.toggleModeBtn}
+                onClick={handleExitAnswerMode}
+              >
+                💬 Back to Discussion
             </button>
           </div>
+        </div>
 
           <div className={styles.answerModeContent}>
             {/* Chat History Sidebar */}
@@ -970,8 +978,11 @@ Take your time and be thorough!`}
                   {/* Discussion Mode Indicator */}
                   {conversationMode && !scores && (
                     <div className={styles.discussionModeIndicator}>
-                      <span className={styles.discussionIcon}>💬</span>
-                      <span>Discussion Mode - Ask clarifying questions below</span>
+                      <div className={styles.discussionIcon}>💬</div>
+                      <div className={styles.discussionText}>
+                        <span className={styles.discussionLabel}>Discussion Mode</span>
+                        <span className={styles.discussionHint}>Ask clarifying questions below</span>
+                      </div>
                     </div>
                   )}
 
@@ -1016,7 +1027,11 @@ Take your time and be thorough!`}
                         onClick={handleEnterAnswerMode}
                         disabled={submitting || scoring || askingClarification}
                       >
-                        📝 Write Final Answer
+                        <div className={styles.writeAnswerIcon}>📝</div>
+                        <div className={styles.writeAnswerText}>
+                          <span className={styles.writeAnswerLabel}>Write Final Answer</span>
+                          <span className={styles.writeAnswerSubtext}>Full-screen editor with chat history</span>
+                        </div>
                       </button>
                     </div>
                   )}

@@ -625,20 +625,51 @@
 // Discussion Mode Indicator
 .discussionModeIndicator {
   max-width: 800px;
-  margin: 0 auto $spacing-md;
-  padding: $spacing-sm $spacing-md;
-  background: rgba(99, 102, 241, 0.08);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: $radius-md;
+  margin: 0 auto $spacing-lg;
+  padding: $spacing-md $spacing-lg;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: $radius-lg;
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  font-size: $font-size-sm;
-  color: $dark-text-secondary;
+  gap: $spacing-md;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.08) 100%);
+  }
 
   .discussionIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 16px;
     flex-shrink: 0;
+  }
+
+  .discussionText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .discussionLabel {
+      font-size: $font-size-sm;
+      font-weight: 600;
+      color: $dark-text-primary;
+      line-height: 1.2;
+    }
+
+    .discussionHint {
+      font-size: $font-size-xs;
+      color: $dark-text-secondary;
+      line-height: 1.3;
+    }
   }
 }
 
@@ -951,8 +982,24 @@ button[class*="sendBtn"] {
   }
 
   .discussionModeIndicator {
-    padding: $spacing-xs $spacing-sm;
-    font-size: $font-size-xs;
+    padding: $spacing-sm $spacing-md;
+    margin: 0 auto $spacing-md;
+
+    .discussionIcon {
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+    }
+
+    .discussionText {
+      .discussionLabel {
+        font-size: $font-size-xs;
+      }
+
+      .discussionHint {
+        font-size: 10px;
+      }
+    }
   }
 }
 
@@ -1009,6 +1056,12 @@ button[class*="sendBtn"] {
   color: $dark-text-primary;
 }
 
+.answerModeControls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
 .toggleSidebarBtn {
   padding: $spacing-sm $spacing-md;
   background: rgba(255, 255, 255, 0.05);
@@ -1021,6 +1074,23 @@ button[class*="sendBtn"] {
 
   &:hover {
     background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.toggleModeBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: $radius-md;
+  color: $dark-text-primary;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
   }
 }
 
@@ -1259,8 +1329,7 @@ button[class*="sendBtn"] {
   box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: $spacing-sm;
+  gap: $spacing-md;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
 
@@ -1285,6 +1354,39 @@ button[class*="sendBtn"] {
     cursor: not-allowed;
     transform: none;
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+  }
+
+  .writeAnswerIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .writeAnswerText {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    flex: 1;
+
+    .writeAnswerLabel {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: $dark-text-primary;
+      line-height: 1.2;
+    }
+
+    .writeAnswerSubtext {
+      font-size: $font-size-xs;
+      color: $dark-text-secondary;
+      line-height: 1.3;
+    }
   }
 }
 
@@ -1424,9 +1526,14 @@ button[class*="sendBtn"] {
   }
 
   .backToChatBtn,
-  .toggleSidebarBtn {
+  .toggleSidebarBtn,
+  .toggleModeBtn {
     padding: $spacing-xs $spacing-sm;
     font-size: 12px;
+  }
+
+  .answerModeControls {
+    gap: $spacing-xs;
   }
 
   // Mobile score display
