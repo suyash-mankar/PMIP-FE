@@ -623,6 +623,21 @@ function Interview() {
             <button
               className={styles.backToDiscussionBtn}
               onClick={handleExitAnswerMode}
+              style={{
+                display: 'block !important',
+                visibility: 'visible !important',
+                opacity: '1 !important',
+                background: '#8b5cf6',
+                color: 'white',
+                padding: '8px 16px',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                zIndex: '99999',
+                position: 'relative'
+              }}
             >
               ← Back to Discussion
             </button>
@@ -1011,77 +1026,81 @@ Take your time and be thorough!`}
                   )}
 
                   {/* Clean Write Final Answer Button - Integrated in input area */}
-                  {interviewStarted &&
-                    question &&
-                    !scores &&
-                    !answerMode &&
-                    conversationMode && (
-                      <div className={styles.writeAnswerSection}>
-                        <button
-                          className={styles.writeAnswerBtn}
-                          onClick={handleEnterAnswerMode}
-                          disabled={
-                            submitting || scoring || askingClarification
-                          }
-                        >
-                          Write Final Answer
-                        </button>
-                      </div>
-                    )}
-
-                  <div className={styles.inputContainer}>
+                  <div className={styles.inputAreaWithButton}>
+                    <div className={styles.inputContainer}>
                 <textarea
-                      ref={inputRef}
-                      className={styles.input}
+                        ref={inputRef}
+                        className={styles.input}
                   value={answer}
-                      onChange={(e) => {
-                        setAnswer(e.target.value);
-                        // Auto-resize only when user is typing and input is not disabled
-                        if (!submitting && !scoring && !askingClarification) {
-                          e.target.style.height = "auto";
-                          e.target.style.height =
-                            Math.min(e.target.scrollHeight, 200) + "px";
+                        onChange={(e) => {
+                          setAnswer(e.target.value);
+                          // Auto-resize only when user is typing and input is not disabled
+                          if (!submitting && !scoring && !askingClarification) {
+                            e.target.style.height = "auto";
+                            e.target.style.height =
+                              Math.min(e.target.scrollHeight, 200) + "px";
+                          }
+                        }}
+                        onKeyPress={handleKeyPress}
+                        placeholder={
+                          conversationMode
+                            ? "Ask clarifying questions or type your answer..."
+                            : "Type your answer here..."
                         }
-                      }}
-                      onKeyPress={handleKeyPress}
-                      placeholder={
-                        conversationMode
-                          ? "Ask clarifying questions or type your answer..."
-                          : "Type your answer here..."
-                      }
-                      disabled={submitting || scoring || askingClarification}
-                      rows={1}
+                        disabled={submitting || scoring || askingClarification}
+                        rows={1}
                 />
                 <button
-                      className={styles.sendBtn}
-                      onClick={
-                        conversationMode
-                          ? handleAskClarification
-                          : handleSubmitAnswer
-                      }
-                      disabled={
-                        submitting ||
-                        scoring ||
-                        askingClarification ||
-                        !answer.trim()
-                      }
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
+                        className={styles.sendBtn}
+                        onClick={
+                          conversationMode
+                            ? handleAskClarification
+                            : handleSubmitAnswer
+                        }
+                        disabled={
+                          submitting ||
+                          scoring ||
+                          askingClarification ||
+                          !answer.trim()
+                        }
                       >
-                        <path
-                          d="M7 11L12 6L17 11M12 18V7"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M7 11L12 6L17 11M12 18V7"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Write Final Answer Button - Now positioned to the right */}
+                    {interviewStarted &&
+                      question &&
+                      !scores &&
+                      !answerMode &&
+                      conversationMode && (
+                        <div className={styles.writeAnswerContainer}>
+                          <button
+                            className={styles.writeAnswerBtn}
+                            onClick={handleEnterAnswerMode}
+                            disabled={
+                              submitting || scoring || askingClarification
+                            }
+                          >
+                            <span className={styles.writeAnswerIcon}>✍️</span>
+                            <span className={styles.writeAnswerText}>Write Final Answer</span>
                 </button>
-                  </div>
+              </div>
+            )}
+          </div>
                 </div>
               </div>
             )}
