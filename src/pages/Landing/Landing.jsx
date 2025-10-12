@@ -4,6 +4,7 @@ import styles from "./Landing.module.scss";
 
 function Landing() {
   const [isVisible, setIsVisible] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const sectionRefs = useRef({});
 
   useEffect(() => {
@@ -26,6 +27,12 @@ function Landing() {
     });
 
     return () => observer.disconnect();
+  }, []);
+
+  // Check login status
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    setIsLoggedIn(!!token);
   }, []);
 
   const setSectionRef = (section) => (el) => {
@@ -62,10 +69,10 @@ function Landing() {
             </p>
             <div className={styles.heroCTA}>
               <Link
-                to="/auth/register"
+                to={isLoggedIn ? "/interview" : "/auth/register"}
                 className={`btn btn-primary btn-xl ${styles.ctaButton}`}
               >
-                Start Practicing Free
+                {isLoggedIn ? "Start Interview" : "Start Practicing Free"}
                 <span className={styles.ctaArrow}>→</span>
               </Link>
               <div className={styles.trustBadges}>
@@ -544,18 +551,18 @@ function Landing() {
             </p>
             <div className={styles.ctaButtons}>
               <Link
-                to="/auth/register"
+                to={isLoggedIn ? "/interview" : "/auth/register"}
                 className={`btn btn-primary btn-xl ${styles.ctaPrimaryButton}`}
               >
-                Start Practicing Free
+                {isLoggedIn ? "Start Interview" : "Start Practicing Free"}
                 <span className={styles.ctaArrow}>→</span>
               </Link>
               <Link
-                to="/auth/login"
+                to={isLoggedIn ? "/dashboard" : "/auth/login"}
                 className={`btn btn-secondary btn-xl ${styles.ctaSecondaryButton}`}
               >
-                Sign In
-            </Link>
+                {isLoggedIn ? "Dashboard" : "Sign In"}
+              </Link>
             </div>
             <div className={styles.ctaFeatures}>
               <span className={styles.ctaFeature}>

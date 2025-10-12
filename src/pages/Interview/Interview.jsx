@@ -34,6 +34,8 @@ function Interview() {
   const [answerMode, setAnswerMode] = useState(false);
   const [finalAnswerDraft, setFinalAnswerDraft] = useState("");
   const [showAnswerSidebar, setShowAnswerSidebar] = useState(true);
+  const [showCategoryOptions, setShowCategoryOptions] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -46,14 +48,17 @@ function Interview() {
     scrollToBottom();
   }, [messages]);
 
-  // Fetch available categories on component mount
+  // Fetch available categories in the background on component mount
   useEffect(() => {
     const fetchCategories = async () => {
+      setLoadingCategories(true);
       try {
         const response = await getCategories();
         setAvailableCategories(response.data.categories);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
+      } finally {
+        setLoadingCategories(false);
       }
     };
     fetchCategories();
@@ -158,6 +163,16 @@ function Interview() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSelectCategoryClick = () => {
+    setShowCategoryOptions(true);
+    setCategory(null); // Reset category selection when showing options
+  };
+
+  const handleRandomMixClick = () => {
+    setCategory(null);
+    setShowCategoryOptions(false);
   };
 
   const handleAskClarification = async () => {
@@ -904,9 +919,11 @@ Take your time and be thorough!`}
                       <div className={styles.categoryGrid}>
                         <button
                           className={`${styles.categoryCard} ${
-                            !category ? styles.selected : ""
+                            !category && !showCategoryOptions
+                              ? styles.selected
+                              : ""
                           }`}
-                          onClick={() => setCategory(null)}
+                          onClick={handleRandomMixClick}
                         >
                           <div className={styles.categoryIcon}>
                             <svg
@@ -925,118 +942,156 @@ Take your time and be thorough!`}
                           <h4>Random Mix</h4>
                           <p>All categories</p>
                         </button>
-                        {availableCategories.map((cat) => (
+
+                        {!showCategoryOptions ? (
                           <button
-                            key={cat.value}
                             className={`${styles.categoryCard} ${
-                              category === cat.value ? styles.selected : ""
+                              showCategoryOptions ? styles.selected : ""
                             }`}
-                            onClick={() => setCategory(cat.value)}
+                            onClick={handleSelectCategoryClick}
                           >
                             <div className={styles.categoryIcon}>
-                              {cat.value === "root_cause_analysis" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <circle cx="11" cy="11" r="8" />
-                                  <path d="m21 21-4.35-4.35" />
-                                </svg>
-                              )}
-                              {cat.value === "product_improvement" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
-                                </svg>
-                              )}
-                              {cat.value === "product_design" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <rect
-                                    x="3"
-                                    y="3"
-                                    width="18"
-                                    height="18"
-                                    rx="2"
-                                    ry="2"
-                                  />
-                                  <circle cx="9" cy="9" r="2" />
-                                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                                </svg>
-                              )}
-                              {cat.value === "metrics" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <line x1="18" y1="20" x2="18" y2="10" />
-                                  <line x1="12" y1="20" x2="12" y2="4" />
-                                  <line x1="6" y1="20" x2="6" y2="14" />
-                                </svg>
-                              )}
-                              {cat.value === "product_strategy" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <circle cx="12" cy="12" r="10" />
-                                  <path d="m9 12 2 2 4-4" />
-                                </svg>
-                              )}
-                              {cat.value === "guesstimates" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <circle cx="12" cy="12" r="10" />
-                                  <path d="M12 6v6l4 2" />
-                                </svg>
-                              )}
-                              {cat.value === "behavioral" && (
-                                <svg
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                  <circle cx="12" cy="7" r="4" />
-                                </svg>
-                              )}
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" />
+                                <path d="M9 11V9a3 3 0 0 1 6 0v2" />
+                                <path d="M12 16v-2" />
+                              </svg>
                             </div>
-                            <h4>{cat.label}</h4>
+                            <h4>Select Category</h4>
+                            <p>Choose specific category</p>
                           </button>
-                        ))}
+                        ) : (
+                          <>
+                            {loadingCategories ? (
+                              <div className={styles.loadingCard}>
+                                <div className={styles.loadingSpinner}></div>
+                                <h4>Loading Categories...</h4>
+                              </div>
+                            ) : (
+                              availableCategories.map((cat) => (
+                                <button
+                                  key={cat.value}
+                                  className={`${styles.categoryCard} ${
+                                    category === cat.value
+                                      ? styles.selected
+                                      : ""
+                                  }`}
+                                  onClick={() => setCategory(cat.value)}
+                                >
+                                  <div className={styles.categoryIcon}>
+                                    {cat.value === "root_cause_analysis" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="m21 21-4.35-4.35" />
+                                      </svg>
+                                    )}
+                                    {cat.value === "product_improvement" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
+                                      </svg>
+                                    )}
+                                    {cat.value === "product_design" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <rect
+                                          x="3"
+                                          y="3"
+                                          width="18"
+                                          height="18"
+                                          rx="2"
+                                          ry="2"
+                                        />
+                                        <circle cx="9" cy="9" r="2" />
+                                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                      </svg>
+                                    )}
+                                    {cat.value === "metrics" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <line x1="18" y1="20" x2="18" y2="10" />
+                                        <line x1="12" y1="20" x2="12" y2="4" />
+                                        <line x1="6" y1="20" x2="6" y2="14" />
+                                      </svg>
+                                    )}
+                                    {cat.value === "product_strategy" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="m9 12 2 2 4-4" />
+                                      </svg>
+                                    )}
+                                    {cat.value === "guesstimates" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 6v6l4 2" />
+                                      </svg>
+                                    )}
+                                    {cat.value === "behavioral" && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                      >
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                      </svg>
+                                    )}
+                                  </div>
+                                  <h4>{cat.label}</h4>
+                                </button>
+                              ))
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
 
