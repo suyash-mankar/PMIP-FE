@@ -143,3 +143,91 @@
     margin-top: $spacing-md;
   }
 }
+
+.profileDropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profileBtn {
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  border: none;
+  cursor: pointer;
+  padding: $spacing-sm;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, $primary-hover 0%, $accent-light 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.profileIcon {
+  width: 20px;
+  height: 20px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: $dark-bg-secondary;
+  border: 1px solid $dark-border-light;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  padding: $spacing-sm 0;
+  min-width: 150px;
+  z-index: 1000;
+  margin-top: $spacing-xs;
+}
+
+.dropdownLink {
+  display: block;
+  padding: $spacing-sm $spacing-md;
+  color: $dark-text-secondary;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: $font-size-base;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: $dark-text-primary;
+  }
+}
+
+.dropdownLogoutBtn {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: $spacing-sm $spacing-md;
+  color: #ef4444;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: $font-size-base;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+  border-top: 1px solid $dark-border-light;
+  margin-top: $spacing-xs;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+  }
+}
