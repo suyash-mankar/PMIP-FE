@@ -23,8 +23,16 @@ function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.headerContainer}`}>
         <Link to="/" className={styles.logo}>
-          <span className={styles.logoIcon}>🎯</span>
-          <span className={styles.logoText}>PM Interview Practice</span>
+          <img
+            src="/logo.svg"
+            alt="PM Interview Practice Logo"
+            className={styles.logoIcon}
+          />
+          <img
+            src="/logo_text.svg"
+            alt="PM Interview Practice"
+            className={styles.logoText}
+          />
         </Link>
 
         <button

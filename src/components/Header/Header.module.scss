@@ -39,7 +39,8 @@
 }
 
 .logoIcon {
-  font-size: $font-size-3xl;
+  height: 80px;
+  width: auto;
   transition: transform 0.3s ease;
 }
 
@@ -48,6 +49,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  height: 90px;
 
   @media (max-width: $breakpoint-sm) {
     display: none;
