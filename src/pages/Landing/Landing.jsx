@@ -120,6 +120,59 @@ function Landing() {
             </div>
             <div className={styles.productScreenshot}>
               <div className={styles.screenshotPlaceholder}>
+                {/* Mac Browser Header */}
+                <div className={styles.browserHeader}>
+                  <div className={styles.browserControls}>
+                    <div
+                      className={`${styles.browserDot} ${styles.close}`}
+                    ></div>
+                    <div
+                      className={`${styles.browserDot} ${styles.minimize}`}
+                    ></div>
+                    <div
+                      className={`${styles.browserDot} ${styles.maximize}`}
+                    ></div>
+                  </div>
+                  <div className={styles.browserUrlBar}>
+                    <div className={styles.browserIcon}>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M12 2L2 7L12 12L22 7L12 2Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M2 17L12 22L22 17"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M2 12L12 17L22 12"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div className={styles.urlText}>
+                      pminterviewpractice.com
+                    </div>
+                    <div className={styles.browserActions}>
+                      <div className={styles.actionIcon}>↻</div>
+                      <div className={styles.actionIcon}>⋮</div>
+                    </div>
+                  </div>
+                </div>
                 <div className={styles.mockChat}>
                   <div className={styles.chatHeader}>
                     <div className={styles.chatAvatar}>
