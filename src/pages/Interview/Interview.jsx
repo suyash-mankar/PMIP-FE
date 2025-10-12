@@ -805,7 +805,7 @@ Take your time and be thorough!`}
               /* Welcome Screen */
               <div className={styles.welcomeScreen}>
                 <div className={styles.welcomeContent}>
-                  <h1 className={styles.welcomeTitle}>PM Interview Practice</h1>
+                  {/* <h1 className={styles.welcomeTitle}>PM Interview Practice</h1> */}
                   <p className={styles.welcomeSubtitle}>
                     Practice PM interviews with AI. Get harsh, honest feedback
                     instantly.
@@ -820,7 +820,20 @@ Take your time and be thorough!`}
                         }`}
                         onClick={() => setDifficulty("junior")}
                       >
-                        <div className={styles.cardIcon}>🌱</div>
+                        <div className={styles.cardIcon}>
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                            <path d="M2 12l10 5 10-5" />
+                          </svg>
+                        </div>
                         <h3>Entry Level</h3>
                         <p>For aspiring PMs and career switchers</p>
                       </button>
@@ -831,7 +844,27 @@ Take your time and be thorough!`}
                         }`}
                         onClick={() => setDifficulty("mid")}
                       >
-                        <div className={styles.cardIcon}>💼</div>
+                        <div className={styles.cardIcon}>
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <rect
+                              x="2"
+                              y="3"
+                              width="20"
+                              height="14"
+                              rx="2"
+                              ry="2"
+                            />
+                            <line x1="8" y1="21" x2="16" y2="21" />
+                            <line x1="12" y1="17" x2="12" y2="21" />
+                          </svg>
+                        </div>
                         <h3>Mid Level</h3>
                         <p>For PMs with 2-5 years of experience</p>
                       </button>
@@ -842,7 +875,22 @@ Take your time and be thorough!`}
                         }`}
                         onClick={() => setDifficulty("senior")}
                       >
-                        <div className={styles.cardIcon}>🚀</div>
+                        <div className={styles.cardIcon}>
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                            <path d="M4 22h16" />
+                            <path d="M10 14.66V17c0 .55.47.98.97 1.21l1.03.5c.5.23 1.03.23 1.53 0l1.03-.5c.5-.23.97-.66.97-1.21v-2.34" />
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
+                          </svg>
+                        </div>
                         <h3>Senior Level</h3>
                         <p>For experienced PMs and leadership roles</p>
                       </button>
@@ -860,7 +908,20 @@ Take your time and be thorough!`}
                           }`}
                           onClick={() => setCategory(null)}
                         >
-                          <div className={styles.categoryIcon}>🎯</div>
+                          <div className={styles.categoryIcon}>
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                              <circle cx="12" cy="12" r="6" />
+                              <circle cx="12" cy="12" r="2" />
+                            </svg>
+                          </div>
                           <h4>Random Mix</h4>
                           <p>All categories</p>
                         </button>
@@ -873,13 +934,105 @@ Take your time and be thorough!`}
                             onClick={() => setCategory(cat.value)}
                           >
                             <div className={styles.categoryIcon}>
-                              {cat.value === "root_cause_analysis" && "🔍"}
-                              {cat.value === "product_improvement" && "⚡"}
-                              {cat.value === "product_design" && "🎨"}
-                              {cat.value === "metrics" && "📊"}
-                              {cat.value === "product_strategy" && "🎯"}
-                              {cat.value === "guesstimates" && "🧮"}
-                              {cat.value === "behavioral" && "👥"}
+                              {cat.value === "root_cause_analysis" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <circle cx="11" cy="11" r="8" />
+                                  <path d="m21 21-4.35-4.35" />
+                                </svg>
+                              )}
+                              {cat.value === "product_improvement" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
+                                </svg>
+                              )}
+                              {cat.value === "product_design" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <rect
+                                    x="3"
+                                    y="3"
+                                    width="18"
+                                    height="18"
+                                    rx="2"
+                                    ry="2"
+                                  />
+                                  <circle cx="9" cy="9" r="2" />
+                                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                </svg>
+                              )}
+                              {cat.value === "metrics" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <line x1="18" y1="20" x2="18" y2="10" />
+                                  <line x1="12" y1="20" x2="12" y2="4" />
+                                  <line x1="6" y1="20" x2="6" y2="14" />
+                                </svg>
+                              )}
+                              {cat.value === "product_strategy" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <circle cx="12" cy="12" r="10" />
+                                  <path d="m9 12 2 2 4-4" />
+                                </svg>
+                              )}
+                              {cat.value === "guesstimates" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <circle cx="12" cy="12" r="10" />
+                                  <path d="M12 6v6l4 2" />
+                                </svg>
+                              )}
+                              {cat.value === "behavioral" && (
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                  <circle cx="12" cy="7" r="4" />
+                                </svg>
+                              )}
                             </div>
                             <h4>{cat.label}</h4>
                           </button>
@@ -888,7 +1041,7 @@ Take your time and be thorough!`}
                     </div>
 
                     <button
-                      className="btn btn-primary btn-xl"
+                      className={`btn btn-primary btn-xl ${styles.startInterviewButton}`}
                       onClick={handleStartInterview}
                       disabled={loading}
                     >

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "./Header.module.scss";
 
@@ -7,6 +7,7 @@ function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
@@ -35,6 +36,9 @@ function Header() {
     setIsLoggedIn(false);
     navigate("/auth/login");
   };
+
+  // Check if we're currently on the interview page
+  const isOnInterviewPage = location.pathname === "/interview";
 
   return (
     <header className={styles.header}>
@@ -65,6 +69,14 @@ function Header() {
         >
           {isLoggedIn ? (
             <>
+              {!isOnInterviewPage && (
+                <Link
+                  to="/interview"
+                  className={`btn btn-primary ${styles.startInterviewBtn}`}
+                >
+                  Start Interview
+                </Link>
+              )}
               <div className={styles.profileDropdown}>
                 <button
                   className={styles.profileBtn}

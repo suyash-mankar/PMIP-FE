@@ -264,37 +264,28 @@
 .welcomeScreen {
   flex: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
-  overflow-y: auto;
-  min-height: 100vh;
-
-  // Custom scrollbar styling
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-  }
+  padding: $spacing-md;
+  overflow: hidden;
+  height: calc(100vh - 70px);
+  background: linear-gradient(
+    180deg,
+    $dark-bg-primary 0%,
+    rgba(99, 102, 241, 0.03) 100%
+  );
 }
 
 .welcomeContent {
   max-width: 900px;
   width: 100%;
   text-align: center;
-  padding-bottom: $spacing-2xl;
+  padding: $spacing-xl;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: $radius-xl;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .welcomeTitle {
@@ -312,51 +303,106 @@
 }
 
 .welcomeSubtitle {
-  font-size: $font-size-xl;
+  font-size: $font-size-lg;
   color: $dark-text-secondary;
-  margin-bottom: $spacing-2xl;
+  margin-bottom: $spacing-xl;
+  font-weight: 500;
+  line-height: 1.6;
 }
 
 .difficultySelector {
-  margin-top: $spacing-2xl;
+  margin-top: $spacing-md;
 }
 
 .selectorLabel {
-  font-size: $font-size-lg;
+  font-size: $font-size-base;
   font-weight: 600;
   color: $dark-text-primary;
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-md;
+  display: inline-block;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+    border-radius: 2px;
+  }
 }
 
 .difficultyCards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: $spacing-lg;
-  margin-bottom: $spacing-xl;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
 }
 
 .difficultyCard {
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: $radius-lg;
-  padding: $spacing-xl;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: $radius-xl;
+  padding: $spacing-lg;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.05) 0%,
+      rgba(168, 85, 247, 0.05) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   &:hover {
-    border-color: rgba(99, 102, 241, 0.5);
-    background: rgba(99, 102, 241, 0.05);
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.03);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   &.selected {
     border-color: $primary-color;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(99, 102, 241, 0.08);
+    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   .cardIcon {
     font-size: $font-size-5xl;
     margin-bottom: $spacing-md;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-color;
+    position: relative;
+    z-index: 1;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   h3 {
@@ -364,51 +410,93 @@
     font-weight: 600;
     color: $dark-text-primary;
     margin-bottom: $spacing-sm;
+    position: relative;
+    z-index: 1;
   }
 
   p {
     font-size: $font-size-sm;
     color: $dark-text-muted;
     margin: 0;
+    position: relative;
+    z-index: 1;
   }
 }
 
 // Category Selector
 .categorySelector {
-  margin-bottom: $spacing-2xl;
+  margin-bottom: $spacing-md;
 }
 
 .categoryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: $spacing-md;
-  margin-bottom: $spacing-lg;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: $spacing-xs;
+  margin-bottom: $spacing-sm;
 }
 
 .categoryCard {
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: $radius-lg;
-  padding: $spacing-lg;
+  padding: $spacing-md;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.03) 0%,
+      rgba(168, 85, 247, 0.03) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   &:hover {
-    border-color: rgba(99, 102, 241, 0.5);
-    background: rgba(99, 102, 241, 0.05);
-    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.03);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   &.selected {
     border-color: $primary-color;
-    background: rgba(99, 102, 241, 0.1);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    background: rgba(99, 102, 241, 0.08);
+    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.2);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   .categoryIcon {
     font-size: $font-size-2xl;
     margin-bottom: $spacing-sm;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-color;
+    position: relative;
+    z-index: 1;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   h4 {
@@ -416,12 +504,49 @@
     font-weight: 600;
     color: $dark-text-primary;
     margin-bottom: $spacing-xs;
+    position: relative;
+    z-index: 1;
   }
 
   p {
     font-size: $font-size-xs;
     color: $dark-text-muted;
     margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Start Interview Button
+.startInterviewButton {
+  margin-top: $spacing-lg !important;
+  background: linear-gradient(
+    135deg,
+    $primary-color 0%,
+    $accent-color 100%
+  ) !important;
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5),
+      0 6px 16px rgba(0, 0, 0, 0.3) !important;
+    background: linear-gradient(
+      135deg,
+      $primary-hover 0%,
+      $accent-light 100%
+    ) !important;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) !important;
+  }
+
+  &:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
   }
 }
 

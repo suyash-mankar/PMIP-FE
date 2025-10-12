@@ -144,6 +144,16 @@
   }
 }
 
+.startInterviewBtn {
+  margin-right: $spacing-md;
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: $spacing-md;
+  }
+}
+
 .profileDropdown {
   position: relative;
   display: flex;
