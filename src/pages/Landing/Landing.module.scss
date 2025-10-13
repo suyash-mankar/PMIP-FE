@@ -285,7 +285,7 @@
   }
 
   &::before {
-    content: "" !important;
+    // content: "" !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
@@ -1433,7 +1433,7 @@
   }
 
   p {
-    padding: 0 $spacing-xl $spacing-lg;
+    padding: $spacing-xl $spacing-lg;
     color: $dark-text-secondary;
     line-height: 1.6;
     margin: 0;
