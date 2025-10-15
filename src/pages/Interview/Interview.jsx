@@ -98,6 +98,9 @@ function Interview() {
 
     setMessages([welcomeMessage]);
 
+    // Show loading indicator immediately after welcome message
+    setLoadingFirstQuestion(true);
+
     try {
       const response = await startInterview(difficulty, category);
       console.log("Start interview response:", response.data);
@@ -121,9 +124,6 @@ function Interview() {
 
       setQuestionId(Number(questionIdFromResponse));
       setQuestion(interviewQuestion);
-
-      // Show loading indicator for first question
-      setLoadingFirstQuestion(true);
 
       // Add question after a brief delay for natural feel
       setTimeout(() => {
