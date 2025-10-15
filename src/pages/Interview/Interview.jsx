@@ -1108,18 +1108,6 @@ Take your time and be thorough!`}
             ) : (
               /* Chat Messages - ChatGPT Style */
               <div className={styles.mainContent}>
-                {/* Minimal Mode Indicator - Only show when needed */}
-                {interviewStarted &&
-                  question &&
-                  !scores &&
-                  conversationMode &&
-                  !answerMode && (
-                    <div className={styles.minimalModeIndicator}>
-                      <span className={styles.modeDot}></span>
-                      <span className={styles.modeText}>Discussion</span>
-                    </div>
-                  )}
-
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
                     {messages.map((msg, index) => (
