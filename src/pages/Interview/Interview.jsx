@@ -222,6 +222,7 @@ function Interview() {
           sender: "ai",
           message: aiResponse,
           timestamp: new Date().toISOString(),
+          isClarification: true, // Flag for markdown formatting
         },
       ]);
     } catch (err) {
@@ -1142,6 +1143,10 @@ Take your time and be thorough!`}
                                 <div className={styles.modelAnswerContent}>
                                   {renderModelAnswerMarkdown(msg.message)}
                                 </div>
+                              </div>
+                            ) : msg.sender === "ai" ? (
+                              <div className={styles.clarificationDisplay}>
+                                {renderModelAnswerMarkdown(msg.message)}
                               </div>
                             ) : (
                               msg.message
