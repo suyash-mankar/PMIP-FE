@@ -616,6 +616,7 @@ function Interview() {
           message: modelAnswer,
           timestamp: new Date().toISOString(),
           isModelAnswer: true,
+          questionId: questionId, // Track which question this belongs to
         },
       ]);
       return;
@@ -637,6 +638,7 @@ function Interview() {
           message: response.data.modelAnswer,
           timestamp: new Date().toISOString(),
           isModelAnswer: true,
+          questionId: questionId, // Track which question this belongs to
         },
       ]);
     } catch (err) {
@@ -676,6 +678,7 @@ function Interview() {
     setShowDetailedFeedback(false);
     setDetailedScore(null);
     setLoadingDetailedScore(false);
+    setLoadingModelAnswer(false);
 
     setMessages((prev) => [
       ...prev,
@@ -1300,38 +1303,44 @@ Take your time and be thorough!`}
                 <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
-                  {scores && !messages.some((m) => m.isModelAnswer) && (
-                    <div className={styles.actionButtons}>
-                      <button
-                        className={styles.modelAnswerBtn}
-                        onClick={handleShowModelAnswer}
-                        disabled={loadingModelAnswer}
-                      >
-                        {loadingModelAnswer
-                          ? "Loading..."
-                          : "💎 Show Model Answer"}
-                      </button>
-                      <button
-                        className={styles.nextQuestionBtn}
-                        onClick={handleNextQuestion}
-                        disabled={loading}
-                      >
-                        {loading ? "Loading..." : "➡️ Next Question"}
-                      </button>
-                    </div>
-                  )}
+                  {scores &&
+                    !messages.some(
+                      (m) => m.isModelAnswer && m.questionId === questionId
+                    ) && (
+                      <div className={styles.actionButtons}>
+                        <button
+                          className={styles.modelAnswerBtn}
+                          onClick={handleShowModelAnswer}
+                          disabled={loadingModelAnswer}
+                        >
+                          {loadingModelAnswer
+                            ? "Loading..."
+                            : "💎 Show Model Answer"}
+                        </button>
+                        <button
+                          className={styles.nextQuestionBtn}
+                          onClick={handleNextQuestion}
+                          disabled={loading}
+                        >
+                          {loading ? "Loading..." : "➡️ Next Question"}
+                        </button>
+                      </div>
+                    )}
 
-                  {scores && messages.some((m) => m.isModelAnswer) && (
-                    <div className={styles.actionButtons}>
-                      <button
-                        className={styles.nextQuestionBtn}
-                        onClick={handleNextQuestion}
-                        disabled={loading}
-                      >
-                        {loading ? "Loading..." : "➡️ Next Question"}
-                      </button>
-                    </div>
-                  )}
+                  {scores &&
+                    messages.some(
+                      (m) => m.isModelAnswer && m.questionId === questionId
+                    ) && (
+                      <div className={styles.actionButtons}>
+                        <button
+                          className={styles.nextQuestionBtn}
+                          onClick={handleNextQuestion}
+                          disabled={loading}
+                        >
+                          {loading ? "Loading..." : "➡️ Next Question"}
+                        </button>
+                      </div>
+                    )}
 
                   {/* Clean Write Final Answer Button - Integrated in input area */}
                   <div className={styles.inputAreaWithButton}>
