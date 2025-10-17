@@ -149,6 +149,7 @@ function Interview() {
             id: questionIdFromResponse,
             question: interviewQuestion,
             difficulty,
+            category: response.data.category || null,
             timestamp: new Date().toISOString(),
             status: "in_progress",
           },
@@ -731,6 +732,7 @@ function Interview() {
             id: questionIdFromResponse,
             question: interviewQuestion,
             difficulty,
+            category: response.data.category || null,
             timestamp: new Date().toISOString(),
             status: "in_progress",
           },
@@ -917,6 +919,11 @@ Take your time and be thorough!`}
                           {q.question.substring(0, 60)}...
                         </p>
                         <div className={styles.questionMeta}>
+                          {q.category && (
+                            <span className={styles.questionCategory}>
+                              {q.category}
+                            </span>
+                          )}
                           <span className={styles.questionDifficulty}>
                             {q.difficulty}
                           </span>
