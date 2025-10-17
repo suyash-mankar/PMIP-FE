@@ -571,9 +571,10 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
   min-height: 0; // Important for flex scrolling
+  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
 
   &::-webkit-scrollbar-track {
@@ -593,7 +594,7 @@
 }
 
 .messagesInner {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: $spacing-xl 0;
 }
@@ -601,9 +602,10 @@
 // Message Styling - No Bubbles, ChatGPT Style
 .message {
   padding: $spacing-lg $spacing-xl;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
+  animation: messageSlideIn 0.3s ease-out;
 
   &.messageUser {
     background: $dark-bg-primary;
@@ -614,20 +616,36 @@
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .messageContent {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   gap: $spacing-lg;
   align-items: flex-start;
+  padding: 0 $spacing-xl;
 }
 
 .messageAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
   background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
   color: white;
   font-size: $font-size-xs;
@@ -636,13 +654,25 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  .message:hover & {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  }
 }
 
 .messageAvatarUser {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: $dark-text-primary;
   font-size: $font-size-xs;
   font-weight: 600;
@@ -650,6 +680,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+
+  .message:hover & {
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 }
 
 .messageText {
@@ -657,10 +693,47 @@
   color: $dark-text-primary;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 15.5px;
+  line-height: 1.75;
   white-space: pre-wrap;
   word-wrap: break-word;
+  letter-spacing: 0.01em;
+
+  // Improved typography
+  p {
+    margin: 0.5em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  strong {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+    margin: 0.75em 0;
+  }
+
+  li {
+    margin: 0.4em 0;
+  }
+
+  code {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: "Monaco", "Courier New", monospace;
+  }
 }
 
 // Score Display - Inline Styling
