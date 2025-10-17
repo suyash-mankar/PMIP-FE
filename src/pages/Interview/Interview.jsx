@@ -3,6 +3,7 @@ import {
   startInterview,
   submitAnswer,
   scoreAnswer,
+  scoreAnswerSummarised,
   askClarification,
   getCategories,
   getModelAnswer,
@@ -36,6 +37,9 @@ function Interview() {
   const [showAnswerSidebar, setShowAnswerSidebar] = useState(true);
   const [showCategoryOptions, setShowCategoryOptions] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
+  const [showDetailedFeedback, setShowDetailedFeedback] = useState(false);
+  const [detailedScore, setDetailedScore] = useState(null);
+  const [loadingDetailedScore, setLoadingDetailedScore] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -278,23 +282,25 @@ function Interview() {
         },
       ]);
 
-      // Start scoring
+      // Start scoring - first get summarised score
       setScoring(true);
 
       try {
-        const scoreResponse = await scoreAnswer(
+        // Step 1: Get summarised score (fast)
+        const summaryScoreResponse = await scoreAnswerSummarised(
           sessionIdFromSubmit || sessionId
         );
-        console.log("Score response:", scoreResponse.data);
-        const scoreData = scoreResponse.data;
+        console.log("Summary score response:", summaryScoreResponse.data);
+        const summaryScoreData = summaryScoreResponse.data;
 
-        const scoresPayload = scoreData.score || scoreData.scores || scoreData;
+        const summaryScoresPayload =
+          summaryScoreData.score || summaryScoreData.scores || summaryScoreData;
 
-        console.log("Scores payload:", scoresPayload);
-        setScores(scoresPayload);
+        console.log("Summary scores payload:", summaryScoresPayload);
+        setScores(summaryScoresPayload);
 
         // Format feedback message with scores inline
-        const feedbackMessage = formatScoreFeedback(scoresPayload);
+        const feedbackMessage = formatScoreFeedback(summaryScoresPayload);
 
         setMessages((prev) => [
           ...prev,
@@ -303,7 +309,7 @@ function Interview() {
             message: feedbackMessage,
             timestamp: new Date().toISOString(),
             isScore: true,
-            scoreData: scoresPayload,
+            scoreData: summaryScoresPayload,
           },
         ]);
 
@@ -314,11 +320,37 @@ function Interview() {
               ? {
                   ...q,
                   status: "completed",
-                  score: scoresPayload.totalScore || 0,
+                  score: summaryScoresPayload.totalScore || 0,
                 }
               : q
           )
         );
+
+        setScoring(false);
+
+        // Step 2: Get detailed score in background (slower)
+        setLoadingDetailedScore(true);
+
+        try {
+          const detailedScoreResponse = await scoreAnswer(
+            sessionIdFromSubmit || sessionId
+          );
+          console.log("Detailed score response:", detailedScoreResponse.data);
+          const detailedScoreData = detailedScoreResponse.data;
+
+          const detailedScoresPayload =
+            detailedScoreData.score ||
+            detailedScoreData.scores ||
+            detailedScoreData;
+
+          console.log("Detailed scores payload:", detailedScoresPayload);
+          setDetailedScore(detailedScoresPayload);
+        } catch (detailedScoreError) {
+          console.error("Detailed scoring error:", detailedScoreError);
+          // Don't show error to user - they already have summary
+        } finally {
+          setLoadingDetailedScore(false);
+        }
       } catch (scoreError) {
         console.error("Scoring error:", scoreError);
         setError(
@@ -326,7 +358,6 @@ function Interview() {
             scoreError.message ||
             "Failed to score answer. Please try again."
         );
-      } finally {
         setScoring(false);
       }
     } catch (err) {
@@ -419,30 +450,93 @@ function Interview() {
 
     setScoring(true);
     setError("");
+    setLoadingDetailedScore(true);
+    setLoadingModelAnswer(true);
 
-    try {
-      const response = await scoreAnswer(currentSessionId);
-      setScores(response.data.score);
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "ai",
-          message: response.data.score.feedback || "Score received!",
-          timestamp: new Date().toISOString(),
-          isScore: true,
-          scoreData: response.data.score,
-        },
-      ]);
-    } catch (err) {
-      console.error("Scoring error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to score answer. Please try again."
-      );
-    } finally {
-      setScoring(false);
-    }
+    // Call summary score API first and show immediately
+    scoreAnswerSummarised(currentSessionId)
+      .then((summaryScoreResponse) => {
+        console.log("Summary score response:", summaryScoreResponse.data);
+        const summaryScoreData = summaryScoreResponse.data;
+
+        const summaryScoresPayload =
+          summaryScoreData.score || summaryScoreData.scores || summaryScoreData;
+
+        console.log("Summary scores payload:", summaryScoresPayload);
+        setScores(summaryScoresPayload);
+
+        // Format feedback message with scores inline
+        const feedbackMessage = formatScoreFeedback(summaryScoresPayload);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "ai",
+            message: feedbackMessage,
+            timestamp: new Date().toISOString(),
+            isScore: true,
+            scoreData: summaryScoresPayload,
+          },
+        ]);
+
+        // Update question history
+        setQuestionHistory((prev) =>
+          prev.map((q) =>
+            q.id === questionId
+              ? {
+                  ...q,
+                  status: "completed",
+                  score: summaryScoresPayload.totalScore || 0,
+                }
+              : q
+          )
+        );
+
+        setScoring(false);
+      })
+      .catch((err) => {
+        console.error("Summary scoring error:", err);
+        setError(
+          err.response?.data?.message ||
+            err.message ||
+            "Failed to score answer. Please try again."
+        );
+        setScoring(false);
+      });
+
+    // Load detailed score in background
+    scoreAnswer(currentSessionId)
+      .then((detailedScoreResponse) => {
+        console.log("Detailed score response:", detailedScoreResponse.data);
+        const detailedScoreData = detailedScoreResponse.data;
+
+        const detailedScoresPayload =
+          detailedScoreData.score ||
+          detailedScoreData.scores ||
+          detailedScoreData;
+
+        console.log("Detailed scores payload:", detailedScoresPayload);
+        setDetailedScore(detailedScoresPayload);
+        setLoadingDetailedScore(false);
+      })
+      .catch((err) => {
+        console.error("Detailed scoring error:", err);
+        setLoadingDetailedScore(false);
+        // Don't show error - user already has summary
+      });
+
+    // Load model answer in background
+    getModelAnswer(questionId)
+      .then((modelAnswerResponse) => {
+        console.log("Model answer loaded in background");
+        setModelAnswer(modelAnswerResponse.data.modelAnswer);
+        setLoadingModelAnswer(false);
+      })
+      .catch((err) => {
+        console.error("Model answer error:", err);
+        setLoadingModelAnswer(false);
+        // Don't show error - not critical
+      });
   };
 
   const handleSubmitFinalAnswer = async () => {
@@ -513,6 +607,21 @@ function Interview() {
   };
 
   const handleShowModelAnswer = async () => {
+    // If model answer is already loaded (from background), just show it
+    if (modelAnswer) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          message: modelAnswer,
+          timestamp: new Date().toISOString(),
+          isModelAnswer: true,
+        },
+      ]);
+      return;
+    }
+
+    // Otherwise, fetch it
     setLoadingModelAnswer(true);
     setError("");
 
@@ -550,6 +659,10 @@ function Interview() {
     setAnswerMode(false);
   };
 
+  const toggleDetailedFeedback = () => {
+    setShowDetailedFeedback(!showDetailedFeedback);
+  };
+
   const handleNextQuestion = async () => {
     setLoading(true);
     setError("");
@@ -560,6 +673,9 @@ function Interview() {
     setAnswerMode(false);
     setFinalAnswerDraft("");
     setShowAnswerSidebar(true);
+    setShowDetailedFeedback(false);
+    setDetailedScore(null);
+    setLoadingDetailedScore(false);
 
     setMessages((prev) => [
       ...prev,
@@ -1132,7 +1248,11 @@ Take your time and be thorough!`}
                               <div className={styles.scoreDisplay}>
                                 {renderScoreMarkdown(
                                   msg.message,
-                                  msg.scoreData
+                                  msg.scoreData,
+                                  showDetailedFeedback,
+                                  toggleDetailedFeedback,
+                                  loadingDetailedScore,
+                                  detailedScore
                                 )}
                               </div>
                             ) : msg.isModelAnswer ? (
@@ -1180,7 +1300,7 @@ Take your time and be thorough!`}
                 <div className={styles.inputArea}>
                   {error && <div className={styles.errorBanner}>{error}</div>}
 
-                  {scores && !modelAnswer && (
+                  {scores && !messages.some((m) => m.isModelAnswer) && (
                     <div className={styles.actionButtons}>
                       <button
                         className={styles.modelAnswerBtn}
@@ -1201,7 +1321,7 @@ Take your time and be thorough!`}
                     </div>
                   )}
 
-                  {scores && modelAnswer && (
+                  {scores && messages.some((m) => m.isModelAnswer) && (
                     <div className={styles.actionButtons}>
                       <button
                         className={styles.nextQuestionBtn}
@@ -1298,13 +1418,32 @@ Take your time and be thorough!`}
   );
 }
 
-function renderScoreMarkdown(text, scoreData) {
+function renderScoreMarkdown(
+  text,
+  scoreData,
+  showDetailedFeedback,
+  toggleDetailedFeedback,
+  loadingDetailedScore,
+  detailedScore
+) {
   // Extract overall score from scoreData or text
   // Try multiple possible field names
   const overallScore =
     scoreData?.overall_score ||
     scoreData?.totalScore ||
     extractScoreFromText(text);
+
+  // Extract summary and detailed feedback
+  const { summaryFeedback, detailedFeedback } = extractFeedbackSections(text);
+
+  // Extract dimension scores
+  const dimensionScores = {
+    structure: scoreData?.structure || 0,
+    metrics: scoreData?.metrics || 0,
+    prioritization: scoreData?.prioritization || 0,
+    userEmpathy: scoreData?.userEmpathy || 0,
+    communication: scoreData?.communication || 0,
+  };
 
   return (
     <div>
@@ -1322,10 +1461,127 @@ function renderScoreMarkdown(text, scoreData) {
         </div>
       </div>
 
-      {/* Detailed feedback with markdown */}
-      <div className={styles.feedbackContainer}>
-        {renderModelAnswerMarkdown(text)}
+      {/* Dimension Score Bars */}
+      <div className={styles.dimensionScores}>
+        <div className={styles.dimensionRow}>
+          <div className={styles.dimensionLabel}>Structure</div>
+          <div className={styles.dimensionBar}>
+            <div
+              className={`${styles.dimensionBarFill} ${getScoreClass(
+                dimensionScores.structure
+              )}`}
+              style={{ width: `${(dimensionScores.structure / 10) * 100}%` }}
+            />
+          </div>
+          <div className={styles.dimensionScore}>
+            {dimensionScores.structure}/10
+          </div>
+        </div>
+        <div className={styles.dimensionRow}>
+          <div className={styles.dimensionLabel}>Metrics</div>
+          <div className={styles.dimensionBar}>
+            <div
+              className={`${styles.dimensionBarFill} ${getScoreClass(
+                dimensionScores.metrics
+              )}`}
+              style={{ width: `${(dimensionScores.metrics / 10) * 100}%` }}
+            />
+          </div>
+          <div className={styles.dimensionScore}>
+            {dimensionScores.metrics}/10
+          </div>
+        </div>
+        <div className={styles.dimensionRow}>
+          <div className={styles.dimensionLabel}>Prioritization</div>
+          <div className={styles.dimensionBar}>
+            <div
+              className={`${styles.dimensionBarFill} ${getScoreClass(
+                dimensionScores.prioritization
+              )}`}
+              style={{
+                width: `${(dimensionScores.prioritization / 10) * 100}%`,
+              }}
+            />
+          </div>
+          <div className={styles.dimensionScore}>
+            {dimensionScores.prioritization}/10
+          </div>
+        </div>
+        <div className={styles.dimensionRow}>
+          <div className={styles.dimensionLabel}>User Empathy</div>
+          <div className={styles.dimensionBar}>
+            <div
+              className={`${styles.dimensionBarFill} ${getScoreClass(
+                dimensionScores.userEmpathy
+              )}`}
+              style={{ width: `${(dimensionScores.userEmpathy / 10) * 100}%` }}
+            />
+          </div>
+          <div className={styles.dimensionScore}>
+            {dimensionScores.userEmpathy}/10
+          </div>
+        </div>
+        <div className={styles.dimensionRow}>
+          <div className={styles.dimensionLabel}>Communication</div>
+          <div className={styles.dimensionBar}>
+            <div
+              className={`${styles.dimensionBarFill} ${getScoreClass(
+                dimensionScores.communication
+              )}`}
+              style={{
+                width: `${(dimensionScores.communication / 10) * 100}%`,
+              }}
+            />
+          </div>
+          <div className={styles.dimensionScore}>
+            {dimensionScores.communication}/10
+          </div>
+        </div>
       </div>
+
+      {/* Summary Feedback or Loading Indicator */}
+      {!showDetailedFeedback && (
+        <div className={styles.summaryFeedback}>
+          {summaryFeedback && (
+            <div className={styles.summaryText}>{summaryFeedback}</div>
+          )}
+
+          {!summaryFeedback && (
+            <div className={styles.feedbackContainer}>
+              {renderModelAnswerMarkdown(text)}
+            </div>
+          )}
+
+          {loadingDetailedScore && (
+            <div className={styles.loadingDetailedIndicator}>
+              <span className={styles.loadingDot}></span>
+              Loading detailed feedback...
+            </div>
+          )}
+
+          {detailedScore && !loadingDetailedScore && (
+            <button
+              className={styles.seeDetailedBtn}
+              onClick={() => toggleDetailedFeedback()}
+            >
+              See Detailed Feedback
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Detailed feedback with markdown */}
+      {showDetailedFeedback && detailedScore && (
+        <div className={styles.feedbackContainer}>
+          <button
+            className={styles.hideDetailedBtn}
+            onClick={() => toggleDetailedFeedback()}
+          >
+            Hide Detailed Feedback
+          </button>
+          {renderModelAnswerMarkdown(detailedScore.feedback || text)}
+        </div>
+      )}
     </div>
   );
 }
@@ -1357,6 +1613,27 @@ function getScoreClass(score) {
   if (score >= 7 && score < 9) return styles.scoreGood;
   if (score >= 9 && score <= 10) return styles.scoreExcellent;
   return styles.scoreNa;
+}
+
+// Helper function to extract summary and detailed feedback from text
+function extractFeedbackSections(text) {
+  if (!text) return { summaryFeedback: "", detailedFeedback: "" };
+
+  // Check if text contains the new format with SUMMARY and DETAILED sections
+  if (text.includes("SUMMARY:") && text.includes("DETAILED:")) {
+    const summaryMatch = text.match(
+      /SUMMARY:\s*(.*?)(?=\n\n---|\n\nDETAILED:|$)/s
+    );
+    const detailedMatch = text.match(/DETAILED:\s*(.*?)$/s);
+
+    return {
+      summaryFeedback: summaryMatch ? summaryMatch[1].trim() : "",
+      detailedFeedback: detailedMatch ? detailedMatch[1].trim() : text,
+    };
+  }
+
+  // Fallback to original text
+  return { summaryFeedback: "", detailedFeedback: text };
 }
 
 function renderScoreMarkdownOld(text, scoreData) {

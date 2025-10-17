@@ -890,6 +890,168 @@
   }
 }
 
+// Dimension Score Bars
+.dimensionScores {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin: $spacing-md 0;
+  padding: $spacing-md;
+  background: rgba(30, 30, 40, 0.6);
+  border-radius: $radius-sm;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dimensionRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.dimensionLabel {
+  min-width: 100px;
+  font-size: $font-size-xs;
+  color: $dark-text-secondary;
+  font-weight: 500;
+}
+
+.dimensionBar {
+  flex: 1;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: $radius-sm;
+  overflow: hidden;
+  position: relative;
+}
+
+.dimensionBarFill {
+  height: 100%;
+  transition: width 0.8s ease;
+  border-radius: $radius-sm;
+
+  // Color coding based on score
+  &.scorePoor {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+  }
+
+  &.scoreBelowAverage {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+  }
+
+  &.scoreGood {
+    background: linear-gradient(90deg, #10b981, #059669);
+  }
+
+  &.scoreExcellent {
+    background: linear-gradient(90deg, #6366f1, #4f46e5);
+  }
+
+  &.scoreNa {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.dimensionScore {
+  min-width: 45px;
+  text-align: right;
+  font-weight: 700;
+  font-size: $font-size-sm;
+  color: $dark-text-primary;
+}
+
+// Summary Feedback - Compact
+.summaryFeedback {
+  margin: $spacing-md 0;
+  padding: $spacing-md;
+  background: rgba(30, 30, 40, 0.6);
+  border-radius: $radius-sm;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summaryText {
+  color: #d1d5db;
+  line-height: 1.6;
+  font-size: 15px;
+  margin-bottom: $spacing-md;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+.seeDetailedBtn {
+  background: linear-gradient(135deg, $primary-color, $accent-color);
+  color: white;
+  border: none;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+}
+
+.hideDetailedBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: $dark-text-primary;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: $spacing-md;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.feedbackContainer {
+  &.hidden {
+    display: none;
+  }
+
+  &.alwaysVisible {
+    display: block;
+  }
+}
+
+.loadingDetailedIndicator {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  color: $dark-text-secondary;
+  font-size: $font-size-sm;
+  margin-top: $spacing-md;
+  padding: $spacing-sm 0;
+}
+
+.loadingDot {
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, $primary-color, $accent-color);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
 .inputContainer {
   max-width: 768px;
   margin: 0 auto;
@@ -1569,9 +1731,9 @@ button[class*="sendBtn"] {
     rgba(255, 255, 255, 0.02)
   );
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: $radius-lg;
-  padding: $spacing-lg;
-  margin-bottom: $spacing-xl;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, sans-serif;

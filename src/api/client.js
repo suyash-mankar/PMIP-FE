@@ -68,6 +68,12 @@ export const scoreAnswer = (sessionId) => {
   });
 };
 
+export const scoreAnswerSummarised = (sessionId) => {
+  return apiClient.post("/api/score-summarised", {
+    sessionId: sessionId,
+  });
+};
+
 export const askClarification = (
   questionId,
   userMessage,
