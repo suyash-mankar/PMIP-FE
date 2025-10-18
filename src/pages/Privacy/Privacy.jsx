@@ -7,254 +7,156 @@ function Privacy() {
       <div className="container">
         <div className={styles.policyHeader}>
           <h1>Privacy Policy</h1>
-          <p className={styles.lastUpdated}>Last Updated: October 18, 2025</p>
+          <p className={styles.lastUpdated}>Last updated on Oct 18 2025</p>
         </div>
 
         <div className={styles.policyContent}>
           <section className={styles.section}>
-            <h2>1. Introduction</h2>
             <p>
-              Welcome to PM Interview Practice ("we," "our," or "us"). We are
-              committed to protecting your privacy and handling your data in an
-              open and transparent manner. This Privacy Policy explains how we
-              collect, use, disclose, and safeguard your information when you
-              use our website and services at pminterviewpractice.com.
+              This privacy policy sets out how SUYASH MANKAR uses and protects
+              any information that you give SUYASH MANKAR when you visit their
+              website and/or agree to purchase from them.
             </p>
           </section>
 
           <section className={styles.section}>
-            <h2>2. Information We Collect</h2>
+            <p>
+              SUYASH MANKAR is committed to ensuring that your privacy is
+              protected. Should we ask you to provide certain information by
+              which you can be identified when using this website, and then you
+              can be assured that it will only be used in accordance with this
+              privacy statement.
+            </p>
+          </section>
 
-            <h3>2.1 Personal Information</h3>
-            <p>We collect information that you provide directly to us:</p>
-            <ul>
-              <li>
-                <strong>Account Information:</strong> Email address, password
-                (encrypted), and name
-              </li>
-              <li>
-                <strong>Practice Responses:</strong> Your answers to interview
-                questions
-              </li>
-              <li>
-                <strong>Payment Information:</strong> Billing details processed
-                securely through Razorpay (we do not store credit card numbers)
-              </li>
-              <li>
-                <strong>Communication Data:</strong> Messages you send to our
-                support team
-              </li>
-            </ul>
+          <section className={styles.section}>
+            <p>
+              SUYASH MANKAR may change this policy from time to time by updating
+              this page. You should check this page from time to time to ensure
+              that you adhere to these changes.
+            </p>
+          </section>
 
-            <h3>2.2 Automatically Collected Information</h3>
+          <section className={styles.section}>
+            <h2>We may collect the following information:</h2>
             <ul>
+              <li>Name</li>
+              <li>Contact information including email address</li>
               <li>
-                <strong>Usage Data:</strong> Pages visited, features used, time
-                spent on platform
+                Demographic information such as postcode, preferences and
+                interests, if required
               </li>
               <li>
-                <strong>Device Information:</strong> Browser type, operating
-                system, IP address
-              </li>
-              <li>
-                <strong>Cookies:</strong> Session identifiers and preference
-                cookies
+                Other information relevant to customer surveys and/or offers
               </li>
             </ul>
           </section>
 
           <section className={styles.section}>
-            <h2>3. How We Use Your Information</h2>
-            <p>We use the collected information for:</p>
-            <ul>
-              <li>
-                Providing and maintaining our AI-powered interview practice
-                service
-              </li>
-              <li>Processing payments and managing subscriptions</li>
-              <li>
-                Generating personalized feedback on your interview responses
-              </li>
-              <li>Improving our AI models and service quality</li>
-              <li>
-                Sending service updates, security alerts, and support messages
-              </li>
-              <li>Analyzing usage patterns to enhance user experience</li>
-              <li>Preventing fraud and ensuring platform security</li>
-            </ul>
-          </section>
-
-          <section className={styles.section}>
-            <h2>4. Third-Party Services</h2>
+            <h2>What we do with the information we gather</h2>
             <p>
-              We use the following third-party services that may process your
-              data:
+              We require this information to understand your needs and provide
+              you with a better service, and in particular for the following
+              reasons:
             </p>
             <ul>
+              <li>Internal record keeping.</li>
               <li>
-                <strong>OpenAI:</strong> Powers our AI feedback system. Your
-                responses are processed to generate feedback.
+                We may use the information to improve our products and services.
               </li>
               <li>
-                <strong>Razorpay:</strong> Processes payments securely. Subject
-                to Razorpay's privacy policy.
+                We may periodically send promotional emails about new products,
+                special offers or other information which we think you may find
+                interesting using the email address which you have provided.
               </li>
               <li>
-                <strong>Google OAuth:</strong> Optional login method. Subject to
-                Google's privacy policy.
+                From time to time, we may also use your information to contact
+                you for market research purposes. We may contact you by email,
+                phone, fax or mail. We may use the information to customise the
+                website according to your interests.
               </li>
             </ul>
           </section>
 
           <section className={styles.section}>
-            <h2>5. Data Storage and Security</h2>
             <p>
-              We implement appropriate technical and organizational measures to
-              protect your personal data:
+              We are committed to ensuring that your information is secure. In
+              order to prevent unauthorised access or disclosure we have put in
+              suitable measures.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>How we use cookies</h2>
+            <p>
+              A cookie is a small file which asks permission to be placed on
+              your computer's hard drive. Once you agree, the file is added and
+              the cookie helps analyze web traffic or lets you know when you
+              visit a particular site. Cookies allow web applications to respond
+              to you as an individual. The web application can tailor its
+              operations to your needs, likes and dislikes by gathering and
+              remembering information about your preferences.
+            </p>
+            <p>
+              We use traffic log cookies to identify which pages are being used.
+              This helps us analyze data about webpage traffic and improve our
+              website in order to tailor it to customer needs. We only use this
+              information for statistical analysis purposes and then the data is
+              removed from the system.
+            </p>
+            <p>
+              Overall, cookies help us provide you with a better website, by
+              enabling us to monitor which pages you find useful and which you
+              do not. A cookie in no way gives us access to your computer or any
+              information about you, other than the data you choose to share
+              with us.
+            </p>
+            <p>
+              You can choose to accept or decline cookies. Most web browsers
+              automatically accept cookies, but you can usually modify your
+              browser setting to decline cookies if you prefer. This may prevent
+              you from taking full advantage of the website.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>Controlling your personal information</h2>
+            <p>
+              You may choose to restrict the collection or use of your personal
+              information in the following ways:
             </p>
             <ul>
               <li>
-                Passwords are encrypted using industry-standard hashing (bcrypt)
-              </li>
-              <li>Data is stored on secure servers with encryption at rest</li>
-              <li>HTTPS/TLS encryption for data transmission</li>
-              <li>Regular security audits and updates</li>
-              <li>Access controls limiting employee access to personal data</li>
-            </ul>
-          </section>
-
-          <section className={styles.section}>
-            <h2>6. Your Rights and Choices</h2>
-            <p>You have the following rights regarding your personal data:</p>
-            <ul>
-              <li>
-                <strong>Access:</strong> Request a copy of your personal data
+                whenever you are asked to fill in a form on the website, look
+                for the box that you can click to indicate that you do not want
+                the information to be used by anybody for direct marketing
+                purposes
               </li>
               <li>
-                <strong>Correction:</strong> Update or correct inaccurate
-                information
-              </li>
-              <li>
-                <strong>Deletion:</strong> Request deletion of your account and
-                data
-              </li>
-              <li>
-                <strong>Portability:</strong> Export your interview history and
-                responses
-              </li>
-              <li>
-                <strong>Opt-out:</strong> Unsubscribe from marketing emails
-                (service emails may still be sent)
-              </li>
-            </ul>
-            <p>
-              To exercise these rights, contact us at{" "}
-              <a href="mailto:privacy@pminterviewpractice.com">
-                privacy@pminterviewpractice.com
-              </a>
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2>7. Data Retention</h2>
-            <p>We retain your personal data only as long as necessary:</p>
-            <ul>
-              <li>
-                <strong>Active Accounts:</strong> Data retained while account is
-                active
-              </li>
-              <li>
-                <strong>Deleted Accounts:</strong> Most data deleted within 30
-                days; some records retained for legal/financial compliance
-              </li>
-              <li>
-                <strong>Payment Records:</strong> Retained for 7 years for tax
-                and accounting purposes
-              </li>
-            </ul>
-          </section>
-
-          <section className={styles.section}>
-            <h2>8. Cookies</h2>
-            <p>We use cookies and similar technologies to:</p>
-            <ul>
-              <li>Keep you logged in (authentication cookies)</li>
-              <li>Remember your preferences</li>
-              <li>Analyze usage patterns</li>
-            </ul>
-            <p>
-              You can control cookies through your browser settings, but
-              disabling them may affect functionality.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2>9. Children's Privacy</h2>
-            <p>
-              Our service is not intended for users under 18 years of age. We do
-              not knowingly collect personal information from children under 18.
-              If you are a parent or guardian and believe your child has
-              provided us with personal information, please contact us.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2>10. International Data Transfers</h2>
-            <p>
-              Your information may be transferred to and processed in countries
-              other than your country of residence. We ensure appropriate
-              safeguards are in place to protect your data in accordance with
-              this Privacy Policy.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2>11. Changes to This Policy</h2>
-            <p>
-              We may update this Privacy Policy from time to time. We will
-              notify you of material changes by posting the new policy on this
-              page and updating the "Last Updated" date. Continued use of our
-              services after changes constitutes acceptance of the updated
-              policy.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2>12. Contact Us</h2>
-            <p>
-              If you have questions about this Privacy Policy or our data
-              practices, please contact us:
-            </p>
-            <ul>
-              <li>
-                <strong>Email:</strong>{" "}
-                <a href="mailto:privacy@pminterviewpractice.com">
-                  privacy@pminterviewpractice.com
-                </a>
-              </li>
-              <li>
-                <strong>Support:</strong>{" "}
-                <a href="mailto:support@pminterviewpractice.com">
-                  support@pminterviewpractice.com
+                if you have previously agreed to us using your personal
+                information for direct marketing purposes, you may change your
+                mind at any time by writing to or emailing us at{" "}
+                <a href="mailto:pminterviewpracticemain@gmail.com">
+                  pminterviewpracticemain@gmail.com
                 </a>
               </li>
             </ul>
-          </section>
-
-          <section className={styles.section}>
-            <h2>13. GDPR Compliance (EU Users)</h2>
             <p>
-              If you are located in the European Economic Area (EEA), you have
-              additional rights under GDPR:
+              We will not sell, distribute or lease your personal information to
+              third parties unless we have your permission or are required by
+              law to do so. We may use your personal information to send you
+              promotional information about third parties which we think you may
+              find interesting if you tell us that you wish this to happen.
             </p>
-            <ul>
-              <li>Right to object to processing</li>
-              <li>Right to restrict processing</li>
-              <li>Right to lodge a complaint with a supervisory authority</li>
-            </ul>
             <p>
-              Our lawful basis for processing your data is primarily based on
-              consent and contract performance (providing our service to you).
+              If you believe that any information we are holding on you is
+              incorrect or incomplete, please write to #365, Sector 7, HSR
+              Layout Bengaluru KARNATAKA 560102 . or contact us at 9994489681 or{" "}
+              <a href="mailto:pminterviewpracticemain@gmail.com">
+                pminterviewpracticemain@gmail.com
+              </a>{" "}
+              as soon as possible. We will promptly correct any information
+              found to be incorrect.
             </p>
           </section>
         </div>
