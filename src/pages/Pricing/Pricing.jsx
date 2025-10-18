@@ -1,16 +1,32 @@
 import { useState } from "react";
 import { createCheckoutSession } from "../../api/client";
+import { useNavigate } from "react-router-dom";
 import styles from "./Pricing.module.scss";
 
 function Pricing() {
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [currency, setCurrency] = useState("usd"); // 'usd' or 'inr'
+  const navigate = useNavigate();
+
+  const pricing = {
+    usd: {
+      symbol: "$",
+      amount: "9",
+      fullAmount: "9.00",
+    },
+    inr: {
+      symbol: "₹",
+      amount: "749",
+      fullAmount: "749",
+    },
+  };
 
   const plans = [
     {
       id: "free",
       name: "Free",
-      price: "$0",
+      price: pricing[currency].symbol + "0",
       interval: "forever",
       features: [
         "3 practice interviews per month",
@@ -19,13 +35,13 @@ function Pricing() {
         "Community support",
       ],
       cta: "Current Plan",
-      priceId: null,
+      isFree: true,
       highlighted: false,
     },
     {
       id: "pro",
       name: "Pro",
-      price: "$9",
+      price: pricing[currency].symbol + pricing[currency].amount,
       interval: "month",
       features: [
         "Unlimited practice interviews",
@@ -36,14 +52,14 @@ function Pricing() {
         "Priority email support",
       ],
       cta: "Upgrade to Pro",
-      priceId: "price_pro_monthly",
+      isFree: false,
       highlighted: true,
     },
     {
       id: "enterprise",
       name: "Enterprise",
-      price: "$99",
-      interval: "month",
+      price: "Custom",
+      interval: "",
       features: [
         "Everything in Pro",
         "Custom question sets",
@@ -53,44 +69,87 @@ function Pricing() {
         "Custom integrations",
       ],
       cta: "Contact Sales",
-      priceId: "price_enterprise_monthly",
+      isEnterprise: true,
       highlighted: false,
     },
   ];
 
-  const handleCheckout = async (priceId, planName) => {
-    if (!priceId) {
-      alert("This is your current plan!");
+  const handleCheckout = async (plan) => {
+    if (plan.isFree) {
+      alert("This is the free plan - just sign up to get started!");
       return;
     }
 
-    if (planName === "Enterprise") {
-      alert(
-        "Please contact sales@pminterviewpractice.com for enterprise plans."
-      );
+    if (plan.isEnterprise) {
+      window.location.href =
+        "mailto:enterprise@pminterviewpractice.com?subject=Enterprise Plan Inquiry";
       return;
     }
 
-    setLoading(priceId);
+    setLoading(true);
     setError("");
 
     try {
-      const response = await createCheckoutSession(priceId);
-      const { checkout_url } = response.data;
+      // Create checkout session on backend
+      const response = await createCheckoutSession(currency);
+      const {
+        subscriptionId,
+        amount,
+        currency: curr,
+        planName,
+        razorpayKeyId,
+        userEmail,
+        userName,
+      } = response.data;
 
-      if (checkout_url) {
-        window.location.href = checkout_url;
-      } else {
-        setError("Failed to create checkout session. Please try again.");
-      }
+      // Initialize Razorpay checkout
+      const options = {
+        key: razorpayKeyId,
+        subscription_id: subscriptionId,
+        name: "PM Interview Practice",
+        description: planName,
+        image: "/logo.png", // Your logo
+        prefill: {
+          name: userName,
+          email: userEmail,
+        },
+        theme: {
+          color: "#6366f1", // Your primary color
+        },
+        handler: function (response) {
+          // Payment successful
+          console.log("Payment successful:", response);
+
+          // Redirect to dashboard with success message
+          navigate("/dashboard?payment=success");
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment failed:", response.error);
+        setError(
+          response.error.description ||
+            "Payment failed. Please try again or contact support."
+        );
+        setLoading(false);
+      });
+
+      rzp.open();
     } catch (err) {
       console.error("Checkout error:", err);
       setError(
-        err.response?.data?.message ||
+        err.response?.data?.error ||
+          err.response?.data?.message ||
           "Failed to start checkout. Please try again or contact support."
       );
-    } finally {
-      setLoading(null);
+      setLoading(false);
     }
   };
 
@@ -103,9 +162,36 @@ function Pricing() {
             Choose the plan that&apos;s right for you. Upgrade or downgrade
             anytime.
           </p>
+
+          {/* Currency Selector */}
+          <div className={styles.currencySelector}>
+            <button
+              className={`${styles.currencyBtn} ${
+                currency === "usd" ? styles.active : ""
+              }`}
+              onClick={() => setCurrency("usd")}
+            >
+              🇺🇸 USD ($)
+            </button>
+            <button
+              className={`${styles.currencyBtn} ${
+                currency === "inr" ? styles.active : ""
+              }`}
+              onClick={() => setCurrency("inr")}
+            >
+              🇮🇳 INR (₹)
+            </button>
+          </div>
         </div>
 
-        {error && <div className={styles.errorBox}>{error}</div>}
+        {error && (
+          <div className={styles.errorBox}>
+            {error}
+            <button className={styles.closeError} onClick={() => setError("")}>
+              ×
+            </button>
+          </div>
+        )}
 
         <div className={styles.plansGrid}>
           {plans.map((plan) => (
@@ -123,7 +209,11 @@ function Pricing() {
                 <h3 className={styles.planName}>{plan.name}</h3>
                 <div className={styles.planPrice}>
                   <span className={styles.priceAmount}>{plan.price}</span>
-                  <span className={styles.priceInterval}>/{plan.interval}</span>
+                  {plan.interval && (
+                    <span className={styles.priceInterval}>
+                      /{plan.interval}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -141,13 +231,34 @@ function Pricing() {
                   plan.highlighted ? "btn-primary" : "btn-outline"
                 } btn-lg`}
                 style={{ width: "100%" }}
-                onClick={() => handleCheckout(plan.priceId, plan.name)}
-                disabled={loading === plan.priceId}
+                onClick={() => handleCheckout(plan)}
+                disabled={loading}
               >
-                {loading === plan.priceId ? "Loading..." : plan.cta}
+                {loading ? "Loading..." : plan.cta}
               </button>
             </div>
           ))}
+        </div>
+
+        <div className={styles.trustBadges}>
+          <div className={styles.trustBadge}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+            </svg>
+            Secure Payment via Razorpay
+          </div>
+          <div className={styles.trustBadge}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+            </svg>
+            7-Day Money Back Guarantee
+          </div>
+          <div className={styles.trustBadge}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+            Cancel Anytime
+          </div>
         </div>
 
         <div className={styles.faq}>
@@ -165,15 +276,43 @@ function Pricing() {
                 What payment methods do you accept?
               </h3>
               <p className={styles.faqAnswer}>
-                We accept all major credit cards through Stripe, our secure
-                payment processor.
+                We accept all major credit cards, debit cards, UPI, net banking,
+                and wallets through Razorpay, our secure payment processor.
               </p>
             </div>
             <div className={styles.faqItem}>
               <h3 className={styles.faqQuestion}>Is there a free trial?</h3>
               <p className={styles.faqAnswer}>
-                The free plan gives you a taste of our platform. Upgrade anytime
-                to unlock unlimited interviews.
+                The free plan gives you a taste of our platform with 3
+                interviews per month. Upgrade anytime to unlock unlimited
+                interviews.
+              </p>
+            </div>
+            <div className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>
+                What&apos;s the refund policy?
+              </h3>
+              <p className={styles.faqAnswer}>
+                We offer a 7-day money-back guarantee for first-time Pro
+                subscribers. See our full <a href="/refund">refund policy</a>{" "}
+                for details.
+              </p>
+            </div>
+            <div className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>
+                Can I switch currencies later?
+              </h3>
+              <p className={styles.faqAnswer}>
+                Your subscription will be in the currency you choose at
+                checkout. If you need to change currencies, please contact
+                support.
+              </p>
+            </div>
+            <div className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>Is my payment secure?</h3>
+              <p className={styles.faqAnswer}>
+                Yes! All payments are processed securely through Razorpay with
+                industry-standard encryption. We never store your card details.
               </p>
             </div>
           </div>

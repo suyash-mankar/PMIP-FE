@@ -41,6 +41,61 @@
   margin-bottom: $spacing-lg;
 }
 
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: $spacing-lg 0;
+  color: $dark-text-secondary;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid $dark-border-light;
+  }
+
+  span {
+    padding: 0 $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: 500;
+  }
+}
+
+.googleButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  background: white;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .footer {
   text-align: center;
   padding-top: $spacing-lg;

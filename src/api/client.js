@@ -46,6 +46,10 @@ export const register = (email, password) => {
   return apiClient.post("/api/auth/register", { email, password });
 };
 
+export const getGoogleAuthUrl = () => {
+  return `${API_BASE_URL}/api/auth/google`;
+};
+
 // Interview APIs
 export const startInterview = (level, category = null) => {
   return apiClient.post("/api/start-interview", { level, category });
@@ -101,9 +105,17 @@ export const getSession = (sessionId) => {
   return apiClient.get(`/api/sessions/${sessionId}`);
 };
 
-// Pricing APIs
-export const createCheckoutSession = (priceId) => {
-  return apiClient.post("/api/create-checkout-session", { price_id: priceId });
+// Payment APIs
+export const createCheckoutSession = (currency = "usd") => {
+  return apiClient.post("/api/payment/create-checkout-session", { currency });
+};
+
+export const cancelSubscription = () => {
+  return apiClient.post("/api/payment/cancel-subscription");
+};
+
+export const getSubscriptionStatus = () => {
+  return apiClient.get("/api/payment/subscription-status");
 };
 
 export default apiClient;

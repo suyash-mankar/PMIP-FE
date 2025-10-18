@@ -8,6 +8,11 @@ import Interview from "./pages/Interview/Interview";
 import History from "./pages/History/History";
 import Pricing from "./pages/Pricing/Pricing";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Privacy from "./pages/Privacy/Privacy";
+import Terms from "./pages/Terms/Terms";
+import Refund from "./pages/Refund/Refund";
+import Contact from "./pages/Contact/Contact";
+import Shipping from "./pages/Shipping/Shipping";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
@@ -45,6 +50,11 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/refund" element={<Refund />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/shipping" element={<Shipping />} />
           </Routes>
         </main>
         <Footer />

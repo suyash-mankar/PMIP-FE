@@ -777,39 +777,35 @@ function Landing() {
               </ul>
             </div>
             <div className={styles.footerColumn}>
-              <h4>Company</h4>
+              <h4>Legal</h4>
               <ul>
                 <li>
-                  <Link to="/about">About</Link>
+                  <Link to="/terms">Terms & Conditions</Link>
                 </li>
                 <li>
-                  <Link to="/terms">Terms</Link>
+                  <Link to="/privacy">Privacy Policy</Link>
                 </li>
                 <li>
-                  <Link to="/privacy">Privacy</Link>
+                  <Link to="/refund">Refund Policy</Link>
                 </li>
                 <li>
-                  <Link to="/contact">Contact</Link>
+                  <Link to="/shipping">Shipping Policy</Link>
                 </li>
               </ul>
             </div>
             <div className={styles.footerColumn}>
-              <h4>Social</h4>
+              <h4>Support</h4>
               <ul>
                 <li>
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    LinkedIn
+                  <Link to="/contact">Contact Us</Link>
+                </li>
+                <li>
+                  <a href="mailto:support@pminterviewpractice.com">
+                    Email Support
                   </a>
                 </li>
                 <li>
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    Twitter
-                  </a>
-                </li>
-                <li>
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    Product Hunt
-                  </a>
+                  <Link to="/#faq">FAQ</Link>
                 </li>
               </ul>
             </div>
