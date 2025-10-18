@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { createCheckoutSession } from "../../api/client";
 import styles from "./Landing.module.scss";
 
 function Landing() {
   const [isVisible, setIsVisible] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [loading, setLoading] = useState(false);
   const sectionRefs = useRef({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -42,6 +45,71 @@ function Landing() {
 
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const handleGoProClick = async (e) => {
+    e.preventDefault();
+
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      navigate("/auth/login");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Create checkout session on backend (INR only for India launch)
+      const response = await createCheckoutSession("inr");
+      const {
+        subscriptionId,
+        amount,
+        currency: curr,
+        planName,
+        razorpayKeyId,
+        userEmail,
+        userName,
+      } = response.data;
+
+      // Initialize Razorpay checkout
+      const options = {
+        key: razorpayKeyId,
+        subscription_id: subscriptionId,
+        name: "PM Interview Practice",
+        description: planName,
+        image: "/logo.png",
+        prefill: {
+          name: userName,
+          email: userEmail,
+        },
+        theme: {
+          color: "#6366f1",
+        },
+        handler: function (response) {
+          console.log("Payment successful:", response);
+          navigate("/dashboard?payment=success");
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+
+      rzp.on("payment.failed", function (response) {
+        console.error("Payment failed:", response.error);
+        alert("Payment failed. Please try again.");
+        setLoading(false);
+      });
+
+      rzp.open();
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Failed to start checkout. Please try again.");
+      setLoading(false);
+    }
   };
 
   // Star Rating Component
@@ -493,6 +561,7 @@ function Landing() {
             </h2>
             <p className={styles.sectionSubtitle}>
               Start free. Upgrade only when you're ready for unlimited practice.
+              All prices in INR (₹).
             </p>
           </div>
           <div
@@ -524,7 +593,7 @@ function Landing() {
               <div className={styles.popularBadge}>Most Popular</div>
               <h3 className={styles.pricingTitle}>Pro Plan</h3>
               <div className={styles.pricingPrice}>
-                <span className={styles.price}>$10</span>
+                <span className={styles.price}>Rs. 499</span>
                 <span className={styles.period}>/month</span>
               </div>
               <p className={styles.pricingDescription}>For serious PM prep</p>
@@ -534,9 +603,14 @@ function Landing() {
                 <li>Progress dashboard</li>
                 <li>Priority support</li>
               </ul>
-              <Link to="/pricing" className="btn btn-primary btn-lg">
-                Go Pro
-              </Link>
+              <button
+                onClick={handleGoProClick}
+                className="btn btn-primary btn-lg"
+                disabled={loading}
+                style={{ width: "100%" }}
+              >
+                {loading ? "Loading..." : "Go Pro"}
+              </button>
             </div>
           </div>
           <p className={styles.pricingNote}>

@@ -6,27 +6,13 @@ import styles from "./Pricing.module.scss";
 function Pricing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [currency, setCurrency] = useState("usd"); // 'usd' or 'inr'
   const navigate = useNavigate();
-
-  const pricing = {
-    usd: {
-      symbol: "$",
-      amount: "9",
-      fullAmount: "9.00",
-    },
-    inr: {
-      symbol: "₹",
-      amount: "749",
-      fullAmount: "749",
-    },
-  };
 
   const plans = [
     {
       id: "free",
       name: "Free",
-      price: pricing[currency].symbol + "0",
+      price: "₹0",
       interval: "forever",
       features: [
         "3 practice interviews per month",
@@ -41,7 +27,7 @@ function Pricing() {
     {
       id: "pro",
       name: "Pro",
-      price: pricing[currency].symbol + pricing[currency].amount,
+      price: "Rs. 499",
       interval: "month",
       features: [
         "Unlimited practice interviews",
@@ -90,8 +76,8 @@ function Pricing() {
     setError("");
 
     try {
-      // Create checkout session on backend
-      const response = await createCheckoutSession(currency);
+      // Create checkout session on backend (INR only for India launch)
+      const response = await createCheckoutSession("inr");
       const {
         subscriptionId,
         amount,
@@ -160,28 +146,8 @@ function Pricing() {
           <h1 className={styles.pageTitle}>Simple, Transparent Pricing</h1>
           <p className={styles.subtitle}>
             Choose the plan that&apos;s right for you. Upgrade or downgrade
-            anytime.
+            anytime. All prices in INR (₹).
           </p>
-
-          {/* Currency Selector */}
-          <div className={styles.currencySelector}>
-            <button
-              className={`${styles.currencyBtn} ${
-                currency === "usd" ? styles.active : ""
-              }`}
-              onClick={() => setCurrency("usd")}
-            >
-              🇺🇸 USD ($)
-            </button>
-            <button
-              className={`${styles.currencyBtn} ${
-                currency === "inr" ? styles.active : ""
-              }`}
-              onClick={() => setCurrency("inr")}
-            >
-              🇮🇳 INR (₹)
-            </button>
-          </div>
         </div>
 
         {error && (
@@ -299,13 +265,10 @@ function Pricing() {
               </p>
             </div>
             <div className={styles.faqItem}>
-              <h3 className={styles.faqQuestion}>
-                Can I switch currencies later?
-              </h3>
+              <h3 className={styles.faqQuestion}>Why only INR pricing?</h3>
               <p className={styles.faqAnswer}>
-                Your subscription will be in the currency you choose at
-                checkout. If you need to change currencies, please contact
-                support.
+                We're launching in India first! All payments are processed in
+                INR through Razorpay. We'll add more currencies soon.
               </p>
             </div>
             <div className={styles.faqItem}>
