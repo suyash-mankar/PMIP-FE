@@ -12,7 +12,6 @@ import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import styles from "./Interview.module.scss";
 
 function Interview() {
-  const [difficulty, setDifficulty] = useState("mid");
   const [category, setCategory] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [questionId, setQuestionId] = useState(null);
@@ -92,13 +91,7 @@ function Interview() {
     // Add welcome message
     const welcomeMessage = {
       sender: "ai",
-      message: `Great! Let's begin your ${
-        difficulty === "junior"
-          ? "Entry"
-          : difficulty === "mid"
-          ? "Mid"
-          : "Senior"
-      } level PM interview. I'll ask you a question, and you can take your time to provide a thoughtful answer. Ready?`,
+      message: `Great! Let's begin your PM interview. I'll ask you a question, and you can take your time to provide a thoughtful answer. Ready?`,
       timestamp: new Date().toISOString(),
     };
 
@@ -108,7 +101,7 @@ function Interview() {
     setLoadingFirstQuestion(true);
 
     try {
-      const response = await startInterview(difficulty, category);
+      const response = await startInterview(category);
       console.log("Start interview response:", response.data);
 
       const questionIdFromResponse =
@@ -150,8 +143,8 @@ function Interview() {
           {
             id: questionIdFromResponse,
             question: interviewQuestion,
-            difficulty,
             category: response.data.category || null,
+            company: response.data.company || [],
             timestamp: new Date().toISOString(),
             status: "in_progress",
           },
@@ -733,8 +726,8 @@ function Interview() {
           {
             id: questionIdFromResponse,
             question: interviewQuestion,
-            difficulty,
             category: response.data.category || null,
+            company: response.data.company || [],
             timestamp: new Date().toISOString(),
             status: "in_progress",
           },
@@ -942,9 +935,11 @@ Take your time and be thorough!`}
                               {q.category}
                             </span>
                           )}
-                          <span className={styles.questionDifficulty}>
-                            {q.difficulty}
-                          </span>
+                          {q.company && q.company.length > 0 && (
+                            <span className={styles.questionCompany}>
+                              {q.company.join(", ")}
+                            </span>
+                          )}
                           {q.score !== undefined && (
                             <span className={styles.questionScore}>
                               {q.score}/10
@@ -971,104 +966,44 @@ Take your time and be thorough!`}
                     instantly.
                   </p>
 
-                  <div className={styles.difficultySelector}>
-                    <p className={styles.selectorLabel}>Select Difficulty:</p>
-                    <div className={styles.difficultyCards}>
+                  {/* Category Selector */}
+                  <div className={styles.categorySelector}>
+                    <p className={styles.selectorLabel}>
+                      Select Category (Optional):
+                    </p>
+                    <div className={styles.categoryGrid}>
                       <button
-                        className={`${styles.difficultyCard} ${
-                          difficulty === "junior" ? styles.selected : ""
+                        className={`${styles.categoryCard} ${
+                          !category && !showCategoryOptions
+                            ? styles.selected
+                            : ""
                         }`}
-                        onClick={() => setDifficulty("junior")}
+                        onClick={handleRandomMixClick}
                       >
-                        <div className={styles.cardIcon}>
+                        <div className={styles.categoryIcon}>
                           <svg
-                            width="24"
-                            height="24"
+                            width="20"
+                            height="20"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
                           >
-                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                            <path d="M2 17l10 5 10-5" />
-                            <path d="M2 12l10 5 10-5" />
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="6" />
+                            <circle cx="12" cy="12" r="2" />
                           </svg>
                         </div>
-                        <h3>Entry Level</h3>
-                        <p>For aspiring PMs and career switchers</p>
+                        <h4>Random Mix</h4>
+                        <p>All categories</p>
                       </button>
 
-                      <button
-                        className={`${styles.difficultyCard} ${
-                          difficulty === "mid" ? styles.selected : ""
-                        }`}
-                        onClick={() => setDifficulty("mid")}
-                      >
-                        <div className={styles.cardIcon}>
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <rect
-                              x="2"
-                              y="3"
-                              width="20"
-                              height="14"
-                              rx="2"
-                              ry="2"
-                            />
-                            <line x1="8" y1="21" x2="16" y2="21" />
-                            <line x1="12" y1="17" x2="12" y2="21" />
-                          </svg>
-                        </div>
-                        <h3>Mid Level</h3>
-                        <p>For PMs with 2-5 years of experience</p>
-                      </button>
-
-                      <button
-                        className={`${styles.difficultyCard} ${
-                          difficulty === "senior" ? styles.selected : ""
-                        }`}
-                        onClick={() => setDifficulty("senior")}
-                      >
-                        <div className={styles.cardIcon}>
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                            <path d="M4 22h16" />
-                            <path d="M10 14.66V17c0 .55.47.98.97 1.21l1.03.5c.5.23 1.03.23 1.53 0l1.03-.5c.5-.23.97-.66.97-1.21v-2.34" />
-                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
-                          </svg>
-                        </div>
-                        <h3>Senior Level</h3>
-                        <p>For experienced PMs and leadership roles</p>
-                      </button>
-                    </div>
-
-                    {/* Category Selector */}
-                    <div className={styles.categorySelector}>
-                      <p className={styles.selectorLabel}>
-                        Select Category (Optional):
-                      </p>
-                      <div className={styles.categoryGrid}>
+                      {!showCategoryOptions ? (
                         <button
                           className={`${styles.categoryCard} ${
-                            !category && !showCategoryOptions
-                              ? styles.selected
-                              : ""
+                            showCategoryOptions ? styles.selected : ""
                           }`}
-                          onClick={handleRandomMixClick}
+                          onClick={handleSelectCategoryClick}
                         >
                           <div className={styles.categoryIcon}>
                             <svg
@@ -1079,175 +1014,147 @@ Take your time and be thorough!`}
                               stroke="currentColor"
                               strokeWidth="2"
                             >
-                              <circle cx="12" cy="12" r="10" />
-                              <circle cx="12" cy="12" r="6" />
-                              <circle cx="12" cy="12" r="2" />
+                              <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" />
+                              <path d="M9 11V9a3 3 0 0 1 6 0v2" />
+                              <path d="M12 16v-2" />
                             </svg>
                           </div>
-                          <h4>Random Mix</h4>
-                          <p>All categories</p>
+                          <h4>Select Category</h4>
+                          <p>Choose specific category</p>
                         </button>
-
-                        {!showCategoryOptions ? (
-                          <button
-                            className={`${styles.categoryCard} ${
-                              showCategoryOptions ? styles.selected : ""
-                            }`}
-                            onClick={handleSelectCategoryClick}
-                          >
-                            <div className={styles.categoryIcon}>
-                              <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" />
-                                <path d="M9 11V9a3 3 0 0 1 6 0v2" />
-                                <path d="M12 16v-2" />
-                              </svg>
+                      ) : (
+                        <>
+                          {loadingCategories ? (
+                            <div className={styles.loadingCard}>
+                              <div className={styles.loadingSpinner}></div>
+                              <h4>Loading Categories...</h4>
                             </div>
-                            <h4>Select Category</h4>
-                            <p>Choose specific category</p>
-                          </button>
-                        ) : (
-                          <>
-                            {loadingCategories ? (
-                              <div className={styles.loadingCard}>
-                                <div className={styles.loadingSpinner}></div>
-                                <h4>Loading Categories...</h4>
-                              </div>
-                            ) : (
-                              availableCategories.map((cat) => (
-                                <button
-                                  key={cat.value}
-                                  className={`${styles.categoryCard} ${
-                                    category === cat.value
-                                      ? styles.selected
-                                      : ""
-                                  }`}
-                                  onClick={() => setCategory(cat.value)}
-                                >
-                                  <div className={styles.categoryIcon}>
-                                    {cat.value === "root_cause_analysis" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <circle cx="11" cy="11" r="8" />
-                                        <path d="m21 21-4.35-4.35" />
-                                      </svg>
-                                    )}
-                                    {cat.value === "product_improvement" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
-                                      </svg>
-                                    )}
-                                    {cat.value === "product_design" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <rect
-                                          x="3"
-                                          y="3"
-                                          width="18"
-                                          height="18"
-                                          rx="2"
-                                          ry="2"
-                                        />
-                                        <circle cx="9" cy="9" r="2" />
-                                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                                      </svg>
-                                    )}
-                                    {cat.value === "metrics" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <line x1="18" y1="20" x2="18" y2="10" />
-                                        <line x1="12" y1="20" x2="12" y2="4" />
-                                        <line x1="6" y1="20" x2="6" y2="14" />
-                                      </svg>
-                                    )}
-                                    {cat.value === "product_strategy" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <circle cx="12" cy="12" r="10" />
-                                        <path d="m9 12 2 2 4-4" />
-                                      </svg>
-                                    )}
-                                    {cat.value === "guesstimates" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <circle cx="12" cy="12" r="10" />
-                                        <path d="M12 6v6l4 2" />
-                                      </svg>
-                                    )}
-                                    {cat.value === "behavioral" && (
-                                      <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                        <circle cx="12" cy="7" r="4" />
-                                      </svg>
-                                    )}
-                                  </div>
-                                  <h4>{cat.label}</h4>
-                                </button>
-                              ))
-                            )}
-                          </>
-                        )}
-                      </div>
+                          ) : (
+                            availableCategories.map((cat) => (
+                              <button
+                                key={cat.value}
+                                className={`${styles.categoryCard} ${
+                                  category === cat.value ? styles.selected : ""
+                                }`}
+                                onClick={() => setCategory(cat.value)}
+                              >
+                                <div className={styles.categoryIcon}>
+                                  {cat.value === "root_cause_analysis" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <circle cx="11" cy="11" r="8" />
+                                      <path d="m21 21-4.35-4.35" />
+                                    </svg>
+                                  )}
+                                  {cat.value === "product_improvement" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
+                                    </svg>
+                                  )}
+                                  {cat.value === "product_design" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <rect
+                                        x="3"
+                                        y="3"
+                                        width="18"
+                                        height="18"
+                                        rx="2"
+                                        ry="2"
+                                      />
+                                      <circle cx="9" cy="9" r="2" />
+                                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                    </svg>
+                                  )}
+                                  {cat.value === "metrics" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <line x1="18" y1="20" x2="18" y2="10" />
+                                      <line x1="12" y1="20" x2="12" y2="4" />
+                                      <line x1="6" y1="20" x2="6" y2="14" />
+                                    </svg>
+                                  )}
+                                  {cat.value === "product_strategy" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <circle cx="12" cy="12" r="10" />
+                                      <path d="m9 12 2 2 4-4" />
+                                    </svg>
+                                  )}
+                                  {cat.value === "guesstimates" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <circle cx="12" cy="12" r="10" />
+                                      <path d="M12 6v6l4 2" />
+                                    </svg>
+                                  )}
+                                  {cat.value === "behavioral" && (
+                                    <svg
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    >
+                                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                      <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                  )}
+                                </div>
+                                <h4>{cat.label}</h4>
+                              </button>
+                            ))
+                          )}
+                        </>
+                      )}
                     </div>
-
-                    <button
-                      className={`btn btn-primary btn-xl ${styles.startInterviewButton}`}
-                      onClick={handleStartInterview}
-                      disabled={loading}
-                    >
-                      {loading ? "Starting..." : "Start Interview"}
-                    </button>
                   </div>
+
+                  <button
+                    className={`btn btn-primary btn-xl ${styles.startInterviewButton}`}
+                    onClick={handleStartInterview}
+                    disabled={loading}
+                  >
+                    {loading ? "Starting..." : "Start Interview"}
+                  </button>
                 </div>
               </div>
             ) : (

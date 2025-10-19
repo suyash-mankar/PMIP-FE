@@ -51,8 +51,8 @@ export const getGoogleAuthUrl = () => {
 };
 
 // Interview APIs
-export const startInterview = (level, category = null) => {
-  return apiClient.post("/api/start-interview", { level, category });
+export const startInterview = (category = null) => {
+  return apiClient.post("/api/start-interview", { category });
 };
 
 export const getCategories = () => {
