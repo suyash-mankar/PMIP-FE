@@ -59,10 +59,17 @@ export const getCategories = () => {
   return apiClient.get("/api/categories");
 };
 
-export const submitAnswer = (sessionId, answer) => {
+export const submitAnswer = (
+  questionId,
+  answerText,
+  sessionId = null,
+  timeTaken = null
+) => {
   return apiClient.post("/api/submit-answer", {
-    questionId: sessionId,
-    answerText: answer,
+    questionId,
+    answerText,
+    sessionId,
+    timeTaken,
   });
 };
 

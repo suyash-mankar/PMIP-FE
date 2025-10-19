@@ -10,6 +10,8 @@ import {
   textToSpeech,
 } from "../../api/client";
 import VoiceInput from "../../components/VoiceInput/VoiceInput";
+import Timer from "../../components/Timer/Timer";
+import { useTimer } from "../../hooks/useTimer";
 import styles from "./Interview.module.scss";
 
 // Text-to-Speech Hook using OpenAI TTS
@@ -395,8 +397,19 @@ function Interview() {
   const [loadingDetailedScore, setLoadingDetailedScore] = useState(false);
   const [isRecordingVoice, setIsRecordingVoice] = useState(false);
 
+  // Timer states
+  const [showTimer, setShowTimer] = useState(false);
+  const [questionAppeared, setQuestionAppeared] = useState(false);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Initialize timer (only active when question has appeared and showTimer is enabled)
+  const {
+    seconds,
+    formatTime,
+    reset: resetTimer,
+  } = useTimer(questionAppeared && showTimer);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -478,6 +491,10 @@ function Interview() {
       setQuestionId(Number(questionIdFromResponse));
       setQuestion(interviewQuestion);
 
+      // Reset timer for new question
+      resetTimer();
+      setQuestionAppeared(false); // Reset for new question
+
       // Add question after a brief delay for natural feel
       setTimeout(() => {
         setMessages((prev) => [
@@ -490,6 +507,7 @@ function Interview() {
         ]);
         setLoadingFirstQuestion(false);
         setConversationMode(true); // Enable conversation mode
+        setQuestionAppeared(true); // Start timer now that question is visible
 
         // Add to question history
         setQuestionHistory((prev) => [
@@ -596,6 +614,9 @@ function Interview() {
       return;
     }
 
+    // Stop timer immediately
+    setQuestionAppeared(false);
+
     setSubmitting(true);
     setError("");
     setConversationMode(false);
@@ -612,8 +633,13 @@ function Interview() {
     setAnswer("");
 
     try {
-      // Submit answer
-      const submitResponse = await submitAnswer(questionId, currentAnswer);
+      // Submit answer with time taken (if timer is enabled)
+      const submitResponse = await submitAnswer(
+        questionId,
+        currentAnswer,
+        sessionId,
+        showTimer ? seconds : null
+      );
       console.log("Submit answer response:", submitResponse.data);
 
       const sessionIdFromSubmit =
@@ -895,6 +921,9 @@ function Interview() {
       return;
     }
 
+    // Stop timer immediately
+    setQuestionAppeared(false);
+
     // Exit answer mode
     setAnswerMode(false);
 
@@ -915,7 +944,12 @@ function Interview() {
     setScoring(false);
 
     try {
-      const response = await submitAnswer(questionId, finalAnswerDraft);
+      const response = await submitAnswer(
+        questionId,
+        finalAnswerDraft,
+        sessionId,
+        showTimer ? seconds : null
+      );
 
       setMessages((prev) => [
         ...prev,
@@ -1016,6 +1050,9 @@ function Interview() {
   };
 
   const handleNextQuestion = async () => {
+    // Stop timer immediately
+    setQuestionAppeared(false);
+
     setLoading(true);
     setError("");
     setScores(null);
@@ -1063,6 +1100,10 @@ function Interview() {
       setQuestionId(Number(questionIdFromResponse));
       setQuestion(interviewQuestion);
 
+      // Reset timer for new question
+      resetTimer();
+      setQuestionAppeared(false); // Reset for new question
+
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
@@ -1073,6 +1114,7 @@ function Interview() {
           },
         ]);
         setConversationMode(true);
+        setQuestionAppeared(true); // Start timer now that question is visible
 
         // Add to question history
         setQuestionHistory((prev) => [
@@ -1411,6 +1453,41 @@ Take your time and be thorough!`}
                     </div>
                   </div>
 
+                  {/* Timer Toggle */}
+                  <div className={styles.timerToggleWrapper}>
+                    <label className={styles.timerToggle}>
+                      <input
+                        type="checkbox"
+                        checked={showTimer}
+                        onChange={(e) => setShowTimer(e.target.checked)}
+                        className={styles.timerCheckbox}
+                      />
+                      <svg
+                        className={styles.timerIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M12 6v6l4 2"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      <span className={styles.timerLabel}>
+                        Show elapsed time
+                      </span>
+                    </label>
+                  </div>
+
                   <button
                     className={`btn btn-primary btn-xl ${styles.startInterviewButton}`}
                     onClick={handleStartInterview}
@@ -1440,6 +1517,10 @@ Take your time and be thorough!`}
                           </option>
                         ))}
                       </select>
+
+                      {/* Timer Display */}
+                      {showTimer && <Timer formatTime={formatTime} />}
+
                       <button
                         className={styles.nextQuestionHeaderBtn}
                         onClick={handleNextQuestion}

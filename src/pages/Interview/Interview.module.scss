@@ -733,9 +733,74 @@
   }
 }
 
+// Timer Toggle - Subtle Design
+.timerToggleWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: $spacing-lg;
+  margin-bottom: $spacing-sm;
+}
+
+.timerToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.04);
+    border-color: rgba(99, 102, 241, 0.2);
+
+    .timerIcon {
+      color: rgba(99, 102, 241, 0.8);
+    }
+
+    .timerLabel {
+      color: $dark-text-primary;
+    }
+  }
+}
+
+.timerCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: $primary-color;
+  flex-shrink: 0;
+
+  &:checked + .timerIcon {
+    color: $primary-color;
+  }
+
+  &:checked ~ .timerLabel {
+    color: $dark-text-primary;
+  }
+}
+
+.timerIcon {
+  width: 16px;
+  height: 16px;
+  color: $dark-text-muted;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.timerLabel {
+  font-size: $font-size-sm;
+  color: $dark-text-secondary;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
 // Start Interview Button
 .startInterviewButton {
-  margin-top: $spacing-lg !important;
+  margin-top: 0 !important;
   background: linear-gradient(
     135deg,
     $primary-color 0%,
