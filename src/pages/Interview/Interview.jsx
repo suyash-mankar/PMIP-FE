@@ -7,9 +7,82 @@ import {
   askClarification,
   getCategories,
   getModelAnswer,
+  textToSpeech,
 } from "../../api/client";
 import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import styles from "./Interview.module.scss";
+
+// Text-to-Speech Hook using OpenAI TTS
+function useSpeech(text) {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const audioRef = useRef(null);
+  const audioContextRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup: stop any playing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  const toggleSpeak = async () => {
+    // If currently speaking, stop it
+    if (isSpeaking) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      setIsSpeaking(false);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Call backend API to get speech audio
+      const response = await textToSpeech(text, "nova");
+
+      // Create audio blob from response
+      const audioBlob = new Blob([response.data], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      // Create and play audio
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.onplay = () => {
+        setIsSpeaking(true);
+        setIsLoading(false);
+      };
+
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        setIsLoading(false);
+        console.error("Audio playback error");
+      };
+
+      await audio.play();
+    } catch (error) {
+      console.error("Text-to-speech error:", error);
+      setIsSpeaking(false);
+      setIsLoading(false);
+    }
+  };
+
+  return { isSpeaking, isLoading, toggleSpeak };
+}
 
 function Interview() {
   // Helper function to render category icon
@@ -1237,54 +1310,160 @@ Take your time and be thorough!`}
                 )}
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
-                    {messages.map((msg, index) => (
-                      <div
-                        key={index}
-                        className={`${styles.message} ${
-                          msg.sender === "user"
-                            ? styles.messageUser
-                            : styles.messageAI
-                        }`}
-                      >
-                        <div className={styles.messageContent}>
-                          {msg.sender === "ai" && (
-                            <div className={styles.messageAvatar}>AI</div>
-                          )}
-                          {msg.sender === "user" && (
-                            <div className={styles.messageAvatarUser}>You</div>
-                          )}
-                          <div className={styles.messageText}>
-                            {msg.isScore ? (
-                              <div className={styles.scoreDisplay}>
-                                {renderScoreMarkdown(
-                                  msg.message,
-                                  msg.scoreData,
-                                  showDetailedFeedback,
-                                  toggleDetailedFeedback,
-                                  loadingDetailedScore,
-                                  detailedScore
+                    {messages.map((msg, index) => {
+                      const MessageWithSpeaker = () => {
+                        const { isSpeaking, isLoading, toggleSpeak } =
+                          useSpeech(msg.message);
+
+                        return (
+                          <div
+                            key={index}
+                            className={`${styles.message} ${
+                              msg.sender === "user"
+                                ? styles.messageUser
+                                : styles.messageAI
+                            }`}
+                          >
+                            <div className={styles.messageContent}>
+                              {msg.sender === "ai" && (
+                                <div className={styles.messageAvatar}>AI</div>
+                              )}
+                              {msg.sender === "user" && (
+                                <div className={styles.messageAvatarUser}>
+                                  You
+                                </div>
+                              )}
+                              <div className={styles.messageText}>
+                                {msg.isScore ? (
+                                  <div className={styles.scoreDisplay}>
+                                    {renderScoreMarkdown(
+                                      msg.message,
+                                      msg.scoreData,
+                                      showDetailedFeedback,
+                                      toggleDetailedFeedback,
+                                      loadingDetailedScore,
+                                      detailedScore
+                                    )}
+                                  </div>
+                                ) : msg.isModelAnswer ? (
+                                  <div className={styles.modelAnswerDisplay}>
+                                    <div className={styles.modelAnswerHeader}>
+                                      💎{" "}
+                                      <strong>
+                                        Perfect 10/10 Model Answer
+                                      </strong>
+                                    </div>
+                                    <div className={styles.modelAnswerContent}>
+                                      {renderModelAnswerMarkdown(msg.message)}
+                                    </div>
+                                  </div>
+                                ) : msg.sender === "ai" ? (
+                                  <div className={styles.clarificationDisplay}>
+                                    {renderModelAnswerMarkdown(msg.message)}
+                                  </div>
+                                ) : (
+                                  msg.message
                                 )}
                               </div>
-                            ) : msg.isModelAnswer ? (
-                              <div className={styles.modelAnswerDisplay}>
-                                <div className={styles.modelAnswerHeader}>
-                                  💎 <strong>Perfect 10/10 Model Answer</strong>
-                                </div>
-                                <div className={styles.modelAnswerContent}>
-                                  {renderModelAnswerMarkdown(msg.message)}
-                                </div>
-                              </div>
-                            ) : msg.sender === "ai" ? (
-                              <div className={styles.clarificationDisplay}>
-                                {renderModelAnswerMarkdown(msg.message)}
-                              </div>
-                            ) : (
-                              msg.message
-                            )}
+                              {msg.sender === "ai" && !msg.isScore && (
+                                <button
+                                  onClick={toggleSpeak}
+                                  className={`${styles.speakerBtn} ${
+                                    isSpeaking ? styles.speaking : ""
+                                  } ${isLoading ? styles.loading : ""}`}
+                                  title={
+                                    isLoading
+                                      ? "Loading audio..."
+                                      : isSpeaking
+                                      ? "Stop speaking"
+                                      : "Read aloud"
+                                  }
+                                  aria-label={
+                                    isLoading
+                                      ? "Loading audio..."
+                                      : isSpeaking
+                                      ? "Stop speaking"
+                                      : "Read aloud"
+                                  }
+                                  disabled={isLoading}
+                                >
+                                  {isLoading ? (
+                                    <svg
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className={styles.spinner}
+                                    >
+                                      <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                        strokeDasharray="31.4 31.4"
+                                        strokeDashoffset="0"
+                                      />
+                                    </svg>
+                                  ) : isSpeaking ? (
+                                    <svg
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M11 5L6 9H2V15H6L11 19V5Z"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                      <path
+                                        d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                      <path
+                                        d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M11 5L6 9H2V15H6L11 19V5Z"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                      <path
+                                        d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  )}
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
+                        );
+                      };
+
+                      return <MessageWithSpeaker key={index} />;
+                    })}
 
                     {(submitting ||
                       scoring ||

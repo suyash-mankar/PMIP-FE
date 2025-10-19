@@ -129,6 +129,17 @@ export const transcribeAudio = (audioBlob) => {
   });
 };
 
+// Text to speech
+export const textToSpeech = (text, voice = "nova") => {
+  return apiClient.post(
+    "/api/voice/speak",
+    { text, voice },
+    {
+      responseType: "arraybuffer", // Important: receive audio as binary data
+    }
+  );
+};
+
 // Progress/Stats APIs
 export const getDashboardStats = () => {
   return apiClient.get("/api/progress/dashboard");
