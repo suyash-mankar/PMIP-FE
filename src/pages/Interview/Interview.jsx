@@ -8,6 +8,7 @@ import {
   getCategories,
   getModelAnswer,
 } from "../../api/client";
+import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import styles from "./Interview.module.scss";
 
 function Interview() {
@@ -40,6 +41,7 @@ function Interview() {
   const [showDetailedFeedback, setShowDetailedFeedback] = useState(false);
   const [detailedScore, setDetailedScore] = useState(null);
   const [loadingDetailedScore, setLoadingDetailedScore] = useState(false);
+  const [isRecordingVoice, setIsRecordingVoice] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -805,12 +807,14 @@ function Interview() {
                 <div className={styles.questionText}>{question}</div>
               </div>
 
-              {/* Large Textarea */}
-              <textarea
-                className={styles.answerTextarea}
-                value={finalAnswerDraft}
-                onChange={(e) => setFinalAnswerDraft(e.target.value)}
-                placeholder={`Write your comprehensive answer here... 
+              {/* Large Textarea with Voice Input */}
+              <div className={styles.finalAnswerContainer}>
+                <div className={styles.finalAnswerInputWrapper}>
+                  <textarea
+                    className={styles.answerTextarea}
+                    value={finalAnswerDraft}
+                    onChange={(e) => setFinalAnswerDraft(e.target.value)}
+                    placeholder={`Write your comprehensive answer here... 
 
 Use this space to structure your response like you would in a real interview:
 • Clarify the problem
@@ -820,8 +824,22 @@ Use this space to structure your response like you would in a real interview:
 • Address risks and trade-offs
 
 Take your time and be thorough!`}
-                disabled={submitting || scoring}
-              />
+                    disabled={submitting || scoring}
+                  />
+
+                  <div className={styles.finalAnswerActions}>
+                    <VoiceInput
+                      onTranscript={(text) => {
+                        setFinalAnswerDraft((prev) => {
+                          const newText = prev ? prev + " " + text : text;
+                          return newText;
+                        });
+                      }}
+                      disabled={!answerMode || submitting || scoring}
+                    />
+                  </div>
+                </div>
+              </div>
 
               {/* Character/Word Count */}
               <div className={styles.answerStats}>
@@ -1352,57 +1370,96 @@ Take your time and be thorough!`}
                   {/* Clean Write Final Answer Button - Integrated in input area */}
                   <div className={styles.inputAreaWithButton}>
                     <div className={styles.inputContainer}>
-                      <textarea
-                        ref={inputRef}
-                        className={styles.input}
-                        value={answer}
-                        onChange={(e) => {
-                          setAnswer(e.target.value);
-                          // Auto-resize only when user is typing and input is not disabled
-                          if (!submitting && !scoring && !askingClarification) {
-                            e.target.style.height = "auto";
-                            e.target.style.height =
-                              Math.min(e.target.scrollHeight, 200) + "px";
+                      {!isRecordingVoice && (
+                        <textarea
+                          ref={inputRef}
+                          className={styles.input}
+                          value={answer}
+                          onChange={(e) => {
+                            setAnswer(e.target.value);
+                            // Auto-resize only when user is typing and input is not disabled
+                            if (
+                              !submitting &&
+                              !scoring &&
+                              !askingClarification
+                            ) {
+                              e.target.style.height = "auto";
+                              e.target.style.height =
+                                Math.min(e.target.scrollHeight, 200) + "px";
+                            }
+                          }}
+                          onKeyPress={handleKeyPress}
+                          placeholder={
+                            conversationMode
+                              ? "Ask clarifying questions or type your answer..."
+                              : "Type your answer here..."
                           }
-                        }}
-                        onKeyPress={handleKeyPress}
-                        placeholder={
-                          conversationMode
-                            ? "Ask clarifying questions or type your answer..."
-                            : "Type your answer here..."
-                        }
-                        disabled={submitting || scoring || askingClarification}
-                        rows={1}
-                      />
-                      <button
-                        className={styles.sendBtn}
-                        onClick={
-                          conversationMode
-                            ? handleAskClarification
-                            : handleSubmitAnswer
-                        }
-                        disabled={
-                          submitting ||
-                          scoring ||
-                          askingClarification ||
-                          !answer.trim()
-                        }
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
+                          disabled={
+                            submitting || scoring || askingClarification
+                          }
+                          rows={1}
+                        />
+                      )}
+                      <div className={styles.inputActions}>
+                        <VoiceInput
+                          onTranscript={(text) => {
+                            setAnswer((prev) => {
+                              const newText = prev ? prev + " " + text : text;
+                              // Auto-resize after adding voice text
+                              setTimeout(() => {
+                                if (inputRef.current) {
+                                  inputRef.current.style.height = "auto";
+                                  inputRef.current.style.height =
+                                    Math.min(
+                                      inputRef.current.scrollHeight,
+                                      200
+                                    ) + "px";
+                                }
+                              }, 0);
+                              return newText;
+                            });
+                          }}
+                          onRecordingChange={(recording) => {
+                            setIsRecordingVoice(recording);
+                          }}
+                          disabled={
+                            !conversationMode ||
+                            submitting ||
+                            scoring ||
+                            askingClarification
+                          }
+                        />
+                        <button
+                          className={styles.sendBtn}
+                          onClick={
+                            conversationMode
+                              ? handleAskClarification
+                              : handleSubmitAnswer
+                          }
+                          disabled={
+                            submitting ||
+                            scoring ||
+                            askingClarification ||
+                            isRecordingVoice ||
+                            !answer.trim()
+                          }
                         >
-                          <path
-                            d="M7 11L12 6L17 11M12 18V7"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M7 11L12 6L17 11M12 18V7"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
 
                     {/* Write Final Answer Button - Now positioned to the right */}

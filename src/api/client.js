@@ -118,4 +118,15 @@ export const getSubscriptionStatus = () => {
   return apiClient.get("/api/payment/subscription-status");
 };
 
+// Voice transcription
+export const transcribeAudio = (audioBlob) => {
+  const formData = new FormData();
+  formData.append("audio", audioBlob, "audio.webm");
+  return apiClient.post("/api/voice/transcribe", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export default apiClient;
