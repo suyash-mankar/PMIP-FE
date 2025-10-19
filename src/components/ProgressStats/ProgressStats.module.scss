@@ -2,8 +2,8 @@
 
 .progressStats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: $spacing-lg;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: $spacing-md;
   margin-bottom: $spacing-xl;
 }
 
@@ -13,8 +13,14 @@
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(139, 92, 246, 0.08) 100%
+  );
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
   opacity: 0;
   transform: translateY(20px);
 
@@ -23,75 +29,59 @@
   }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    border-color: rgba(99, 102, 241, 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.2) 0%,
+      rgba(139, 92, 246, 0.12) 100%
+    );
   }
 
   .icon {
-    font-size: 2.5rem;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: $radius-md;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.2) 0%,
+      rgba(139, 92, 246, 0.15) 100%
+    );
+    color: $primary-color;
+    flex-shrink: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.4));
+    }
   }
 
   .content {
     flex: 1;
+    min-width: 0; // Prevents flex overflow issues
   }
 
   .value {
-    font-size: $font-size-3xl;
+    font-size: $font-size-2xl;
     font-weight: 700;
     margin-bottom: $spacing-xs;
+    background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .label {
-    font-size: $font-size-sm;
-    font-weight: 500;
-  }
-
-  // Color variants with gradients
-  &.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-
-    .value,
-    .label {
-      color: white;
-    }
-  }
-
-  &.success {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-
-    .value,
-    .label {
-      color: white;
-    }
-  }
-
-  &.info {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-
-    .value,
-    .label {
-      color: white;
-    }
-  }
-
-  &.warning {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    color: white;
-
-    .value,
-    .label {
-      color: white;
-    }
+    font-size: $font-size-xs;
+    font-weight: 600;
+    color: $dark-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 }
 
@@ -102,20 +92,37 @@
   }
 }
 
+@media (max-width: $breakpoint-md) {
+  .progressStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: $breakpoint-sm) {
   .progressStats {
     grid-template-columns: 1fr;
+    gap: $spacing-sm;
   }
 
   .statCard {
+    padding: $spacing-md;
+
     .icon {
-      font-size: 2rem;
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
     }
 
     .value {
-      font-size: $font-size-2xl;
+      font-size: $font-size-xl;
+    }
+
+    .label {
+      font-size: 0.625rem; // Even smaller on mobile
     }
   }
 }
