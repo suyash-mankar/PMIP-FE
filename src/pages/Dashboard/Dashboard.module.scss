@@ -218,3 +218,115 @@
     }
   }
 }
+
+// Practice Sessions Styles
+.sessionsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: $spacing-lg;
+}
+
+.sessionCard {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.08) 0%,
+    rgba(99, 102, 241, 0.05) 100%
+  );
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+  }
+}
+
+.sessionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.sessionDate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: $font-size-sm;
+  color: $dark-text-secondary;
+  font-weight: 500;
+
+  svg {
+    color: $primary-color;
+  }
+}
+
+.sessionScore {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  color: $primary-color;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sessionStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.sessionStat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: $font-size-sm;
+  color: $dark-text-secondary;
+  font-weight: 500;
+
+  svg {
+    color: rgba(139, 92, 246, 0.7);
+  }
+}
+
+.sessionCategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.categoryBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: $radius-full;
+  font-size: 12px;
+  font-weight: 600;
+  color: #c4b5fd;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.4);
+  }
+}
+
+.showMore {
+  text-align: center;
+  margin-top: $spacing-lg;
+
+  p {
+    font-size: $font-size-sm;
+    color: $dark-text-secondary;
+    font-style: italic;
+  }
+}

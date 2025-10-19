@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   startInterview,
   submitAnswer,
@@ -8,6 +9,8 @@ import {
   getCategories,
   getModelAnswer,
   textToSpeech,
+  startPracticeSession,
+  endPracticeSession,
 } from "../../api/client";
 import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import Timer from "../../components/Timer/Timer";
@@ -367,12 +370,16 @@ function Interview() {
     );
   };
 
+  const navigate = useNavigate();
   const [category, setCategory] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [questionId, setQuestionId] = useState(null);
-  const [sessionId, setSessionId] = useState(null);
+  const [sessionId, setSessionId] = useState(null); // Individual answer ID (renamed from old usage)
+  const [practiceSessionId, setPracticeSessionId] = useState(null); // Practice session ID
+  const [sessionStartTime, setSessionStartTime] = useState(null); // Track session start time
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
+  const [sessionSummary, setSessionSummary] = useState(null); // For session summary modal
   const [answer, setAnswer] = useState("");
   const [scores, setScores] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -458,7 +465,7 @@ function Interview() {
     // Add welcome message
     const welcomeMessage = {
       sender: "ai",
-      message: `Great! Let's begin your PM interview. I'll ask you a question, and you can take your time to provide a thoughtful answer. Ready?`,
+      message: `Great! Let's begin your PM interview session. I'll ask you questions, and you can take your time to provide thoughtful answers. Ready?`,
       timestamp: new Date().toISOString(),
     };
 
@@ -468,6 +475,14 @@ function Interview() {
     setLoadingFirstQuestion(true);
 
     try {
+      // First, start a practice session
+      const sessionResponse = await startPracticeSession();
+      const newSessionId = sessionResponse.data.sessionId;
+      setPracticeSessionId(newSessionId);
+      setSessionStartTime(Date.now()); // Track start time
+      console.log("Practice session started:", newSessionId);
+
+      // Then get the first question
       const response = await startInterview(category);
       console.log("Start interview response:", response.data);
 
@@ -637,15 +652,16 @@ function Interview() {
       const submitResponse = await submitAnswer(
         questionId,
         currentAnswer,
-        sessionId,
+        practiceSessionId,
+        sessionId, // answerId for updates
         showTimer ? seconds : null
       );
       console.log("Submit answer response:", submitResponse.data);
 
-      const sessionIdFromSubmit =
-        submitResponse.data.sessionId || submitResponse.data.id;
-      if (sessionIdFromSubmit) {
-        setSessionId(sessionIdFromSubmit);
+      const answerIdFromSubmit =
+        submitResponse.data.answerId || submitResponse.data.id;
+      if (answerIdFromSubmit) {
+        setSessionId(answerIdFromSubmit); // Store answerId in sessionId state
       }
 
       // Add acknowledgment message
@@ -947,7 +963,8 @@ function Interview() {
       const response = await submitAnswer(
         questionId,
         finalAnswerDraft,
-        sessionId,
+        practiceSessionId,
+        sessionId, // answerId for updates
         showTimer ? seconds : null
       );
 
@@ -964,15 +981,15 @@ function Interview() {
       // Clear the draft
       setFinalAnswerDraft("");
 
-      // Get sessionId from submit response
-      const newSessionId = response.data.sessionId;
-      if (newSessionId) {
-        setSessionId(newSessionId);
+      // Get answerId from submit response
+      const newAnswerId = response.data.answerId || response.data.id;
+      if (newAnswerId) {
+        setSessionId(newAnswerId); // Store answerId in sessionId state
 
-        // Trigger scoring with the new sessionId
-        await handleScore(newSessionId);
+        // Trigger scoring with the new answerId
+        await handleScore(newAnswerId);
       } else {
-        setError("No session ID returned from submit answer");
+        setError("No answer ID returned from submit answer");
       }
     } catch (err) {
       console.error("Submit error:", err);
@@ -1139,6 +1156,81 @@ function Interview() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEndSession = async () => {
+    if (!practiceSessionId) {
+      setError("No active session to end");
+      return;
+    }
+
+    // Stop timer immediately
+    setQuestionAppeared(false);
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await endPracticeSession(practiceSessionId);
+      const summary = response.data.summary;
+
+      // Calculate actual session duration from our tracked time
+      const actualDuration = sessionStartTime
+        ? Math.floor((Date.now() - sessionStartTime) / 1000)
+        : summary.duration;
+
+      // Enhance summary with calculated duration
+      const enhancedSummary = {
+        ...summary,
+        duration: actualDuration,
+      };
+
+      console.log("Session ended:", enhancedSummary);
+      setSessionSummary(enhancedSummary);
+
+      // Reset interview state
+      setInterviewStarted(false);
+      setPracticeSessionId(null);
+      setSessionStartTime(null);
+      setQuestionId(null);
+      setSessionId(null);
+      setQuestion("");
+      setMessages([]);
+      setAnswer("");
+      setScores(null);
+      setConversationMode(false);
+      setQuestionHistory([]);
+    } catch (err) {
+      console.error("End session error:", err);
+      setError(
+        err.response?.data?.error ||
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to end session. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closeSessionSummary = () => {
+    setSessionSummary(null);
+    navigate("/dashboard");
+  };
+
+  const formatDuration = (seconds) => {
+    if (!seconds) return "0s";
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${secs}s`;
+    } else {
+      return `${secs}s`;
     }
   };
 
@@ -1494,7 +1586,7 @@ Take your time and be thorough!`}
                     onClick={handleStartInterview}
                     disabled={loading}
                   >
-                    {loading ? "Starting..." : "Start Interview"}
+                    {loading ? "Starting..." : "Start Session"}
                   </button>
                 </div>
               </div>
@@ -1542,6 +1634,34 @@ Take your time and be thorough!`}
                           <polyline points="6 17 11 12 6 7"></polyline>
                         </svg>
                         Next Question
+                      </button>
+
+                      <button
+                        className={styles.endSessionBtn}
+                        onClick={handleEndSession}
+                        disabled={loading || submitting || scoring}
+                        title="End practice session"
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect
+                            x="3"
+                            y="3"
+                            width="18"
+                            height="18"
+                            rx="2"
+                            ry="2"
+                          ></rect>
+                        </svg>
+                        End Session
                       </button>
                     </div>
                   </div>
@@ -1744,6 +1864,139 @@ Take your time and be thorough!`}
             )}
           </div>
         </>
+      )}
+
+      {/* Session Summary Modal */}
+      {sessionSummary && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.summaryModal}>
+            <div className={styles.summaryHeader}>
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <h2>Session Complete!</h2>
+              <p>Great work! Here's your session summary</p>
+            </div>
+
+            <div className={styles.summaryStats}>
+              <div className={styles.summaryStatCard}>
+                <div className={styles.statIcon}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 11l3 3L22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                  </svg>
+                </div>
+                <div className={styles.statContent}>
+                  <div className={styles.statLabel}>Questions Solved</div>
+                  <div className={styles.statValue}>
+                    {sessionSummary.questionsCount}
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.summaryStatCard}>
+                <div className={styles.statIcon}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                </div>
+                <div className={styles.statContent}>
+                  <div className={styles.statLabel}>Time Spent</div>
+                  <div className={styles.statValue}>
+                    {formatDuration(sessionSummary.duration)}
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.summaryStatCard}>
+                <div className={styles.statIcon}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                </div>
+                <div className={styles.statContent}>
+                  <div className={styles.statLabel}>Overall Score</div>
+                  <div className={styles.statValue}>
+                    {sessionSummary.overallScore
+                      ? `${sessionSummary.overallScore}/10`
+                      : "N/A"}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {sessionSummary.categoriesBreakdown && (
+              <div className={styles.categoriesSection}>
+                <h3>Categories Practiced</h3>
+                <div className={styles.categoriesList}>
+                  {Object.entries(sessionSummary.categoriesBreakdown).map(
+                    ([category, count]) => (
+                      <div key={category} className={styles.categoryBadge}>
+                        <span className={styles.categoryName}>{category}</span>
+                        <span className={styles.categoryCount}>×{count}</span>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className={styles.summaryActions}>
+              <button
+                className={styles.viewDashboardBtn}
+                onClick={closeSessionSummary}
+              >
+                View Dashboard
+              </button>
+              <button
+                className={styles.startNewSessionBtn}
+                onClick={() => {
+                  setSessionSummary(null);
+                  // Don't navigate away, allow user to start a new session
+                }}
+              >
+                Start New Session
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

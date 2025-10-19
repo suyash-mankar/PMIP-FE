@@ -4,6 +4,7 @@ import {
   getDashboardStats,
   getParameterStats,
   getCategoryStats,
+  getUserSessions,
 } from "../../api/client";
 import ProgressStats from "../../components/ProgressStats/ProgressStats";
 import CategoryProgress from "../../components/CategoryProgress/CategoryProgress";
@@ -15,6 +16,7 @@ function Dashboard() {
   const [dashboardStats, setDashboardStats] = useState(null);
   const [parameterStats, setParameterStats] = useState(null);
   const [categoryStats, setCategoryStats] = useState([]);
+  const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -26,21 +28,53 @@ function Dashboard() {
     setLoading(true);
     setError("");
     try {
-      const [dashboardResponse, parameterResponse, categoryResponse] =
-        await Promise.all([
-          getDashboardStats(),
-          getParameterStats(),
-          getCategoryStats(),
-        ]);
+      const [
+        dashboardResponse,
+        parameterResponse,
+        categoryResponse,
+        sessionsResponse,
+      ] = await Promise.all([
+        getDashboardStats(),
+        getParameterStats(),
+        getCategoryStats(),
+        getUserSessions(),
+      ]);
 
       setDashboardStats(dashboardResponse.data);
       setParameterStats(parameterResponse.data);
       setCategoryStats(categoryResponse.data.categories || []);
+      setSessions(sessionsResponse.data.sessions || []);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
       setError("Failed to load dashboard data. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatDuration = (seconds) => {
+    if (!seconds) return "0s";
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${secs}s`;
+    } else {
+      return `${secs}s`;
     }
   };
 
@@ -82,6 +116,123 @@ function Dashboard() {
             <section className={styles.section}>
               <ProgressStats stats={dashboardStats} />
             </section>
+
+            {/* Practice Sessions */}
+            {sessions && sessions.length > 0 && (
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>
+                  Recent Practice Sessions
+                </h2>
+                <p className={styles.sectionSubtitle}>
+                  Review your completed practice sessions
+                </p>
+                <div className={styles.sessionsList}>
+                  {sessions.slice(0, 5).map((session) => (
+                    <div key={session.sessionId} className={styles.sessionCard}>
+                      <div className={styles.sessionHeader}>
+                        <div className={styles.sessionDate}>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                          </svg>
+                          {formatDate(session.startedAt)}
+                        </div>
+                        <div className={styles.sessionScore}>
+                          {session.overallScore
+                            ? `${session.overallScore}/10`
+                            : "N/A"}
+                        </div>
+                      </div>
+                      <div className={styles.sessionStats}>
+                        <div className={styles.sessionStat}>
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                          </svg>
+                          {session.questionsCount} questions
+                        </div>
+                        <div className={styles.sessionStat}>
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                            <path d="M22 12A10 10 0 0 0 12 2v10z" />
+                          </svg>
+                          {
+                            Object.keys(session.categoriesBreakdown || {})
+                              .length
+                          }{" "}
+                          categories
+                        </div>
+                        {session.duration && (
+                          <div className={styles.sessionStat}>
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                              <path d="M12 6v6l4 2" />
+                            </svg>
+                            {formatDuration(session.duration)}
+                          </div>
+                        )}
+                      </div>
+                      {session.categoriesBreakdown && (
+                        <div className={styles.sessionCategories}>
+                          {Object.entries(session.categoriesBreakdown)
+                            .slice(0, 3)
+                            .map(([category, count]) => (
+                              <span
+                                key={category}
+                                className={styles.categoryBadge}
+                              >
+                                {category} ×{count}
+                              </span>
+                            ))}
+                          {Object.keys(session.categoriesBreakdown).length >
+                            3 && (
+                            <span className={styles.categoryBadge}>
+                              +
+                              {Object.keys(session.categoriesBreakdown).length -
+                                3}{" "}
+                              more
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {sessions.length > 5 && (
+                  <div className={styles.showMore}>
+                    <p>Showing 5 of {sessions.length} sessions</p>
+                  </div>
+                )}
+              </section>
+            )}
 
             {/* Parameter Breakdown */}
             {parameterStats && parameterStats.parameters && (

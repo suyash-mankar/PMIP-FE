@@ -62,26 +62,28 @@ export const getCategories = () => {
 export const submitAnswer = (
   questionId,
   answerText,
-  sessionId = null,
+  practiceSessionId,
+  answerId = null,
   timeTaken = null
 ) => {
   return apiClient.post("/api/submit-answer", {
     questionId,
     answerText,
-    sessionId,
+    practiceSessionId,
+    answerId,
     timeTaken,
   });
 };
 
-export const scoreAnswer = (sessionId) => {
+export const scoreAnswer = (answerId) => {
   return apiClient.post("/api/score", {
-    sessionId: sessionId,
+    answerId: answerId,
   });
 };
 
-export const scoreAnswerSummarised = (sessionId) => {
+export const scoreAnswerSummarised = (answerId) => {
   return apiClient.post("/api/score-summarised", {
-    sessionId: sessionId,
+    answerId: answerId,
   });
 };
 
@@ -170,6 +172,23 @@ export const getProgressHistory = (filters = {}, page = 1, limit = 20) => {
 
 export const getCategoryStats = () => {
   return apiClient.get("/api/progress/categories");
+};
+
+export const getUserSessions = () => {
+  return apiClient.get("/api/progress/sessions");
+};
+
+// Practice Session Management APIs
+export const startPracticeSession = () => {
+  return apiClient.post("/api/session/start");
+};
+
+export const endPracticeSession = (sessionId) => {
+  return apiClient.post("/api/session/end", { sessionId });
+};
+
+export const getCurrentPracticeSession = () => {
+  return apiClient.get("/api/session/current");
 };
 
 export default apiClient;
