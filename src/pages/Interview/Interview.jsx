@@ -1057,6 +1057,7 @@ function Interview() {
     setError("");
     setScores(null);
     setAnswer("");
+    setSessionId(null); // Clear session ID for new question
     setConversationMode(false);
     setModelAnswer(null);
     setAnswerMode(false);
@@ -1067,8 +1068,8 @@ function Interview() {
     setLoadingDetailedScore(false);
     setLoadingModelAnswer(false);
 
-    setMessages((prev) => [
-      ...prev,
+    // Clear messages for new question - start fresh conversation
+    setMessages([
       {
         sender: "ai",
         message: "Great! Let's move on to your next question...",
