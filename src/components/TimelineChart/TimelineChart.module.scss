@@ -1,0 +1,116 @@
+@import "../../styles/variables";
+
+.timelineChart {
+  background: $dark-bg-secondary;
+  border: 1px solid $dark-border-light;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.controls {
+  display: flex;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.controlGroup {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $dark-text-secondary;
+  }
+}
+
+.select {
+  padding: $spacing-xs $spacing-md;
+  border: 1px solid $dark-border-light;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  background: $dark-bg-tertiary;
+  color: $dark-text-primary;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: $primary-color;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+}
+
+.customTooltip {
+  background: rgba(0, 0, 0, 0.9);
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid $dark-border-light;
+
+  .date {
+    color: white;
+    font-weight: 600;
+    margin: 0 0 $spacing-xs 0;
+    font-size: $font-size-sm;
+  }
+
+  .score {
+    color: $primary-color;
+    margin: 0 0 $spacing-xs 0;
+    font-weight: 600;
+    font-size: $font-size-sm;
+  }
+
+  .count {
+    color: #ccc;
+    margin: 0;
+    font-size: $font-size-xs;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: $dark-text-secondary;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: $dark-text-secondary;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .timelineChart {
+    padding: $spacing-md;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .controlGroup {
+    width: 100%;
+
+    .select {
+      flex: 1;
+    }
+  }
+}

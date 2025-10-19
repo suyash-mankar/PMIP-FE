@@ -129,4 +129,29 @@ export const transcribeAudio = (audioBlob) => {
   });
 };
 
+// Progress/Stats APIs
+export const getDashboardStats = () => {
+  return apiClient.get("/api/progress/dashboard");
+};
+
+export const getParameterStats = () => {
+  return apiClient.get("/api/progress/parameters");
+};
+
+export const getTimelineData = (period = "day", days = 30) => {
+  return apiClient.get("/api/progress/timeline", {
+    params: { period, days },
+  });
+};
+
+export const getProgressHistory = (filters = {}, page = 1, limit = 20) => {
+  return apiClient.get("/api/progress/history", {
+    params: { ...filters, page, limit },
+  });
+};
+
+export const getCategoryStats = () => {
+  return apiClient.get("/api/progress/categories");
+};
+
 export default apiClient;

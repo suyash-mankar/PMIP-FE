@@ -1,0 +1,89 @@
+@import "../../styles/variables";
+
+.parameterChart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 400px;
+  padding: $spacing-lg;
+  background: $dark-bg-secondary;
+  border: 1px solid $dark-border-light;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.customTooltip {
+  background: rgba(0, 0, 0, 0.9);
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid $dark-border-light;
+
+  .label {
+    color: white;
+    font-weight: 600;
+    margin: 0 0 $spacing-xs 0;
+    font-size: $font-size-sm;
+  }
+
+  .value {
+    color: $primary-color;
+    margin: 0;
+    font-weight: 500;
+    font-size: $font-size-sm;
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  justify-content: center;
+  margin-top: $spacing-md;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: $font-size-sm;
+}
+
+.legendLabel {
+  color: $dark-text-secondary;
+  font-weight: 500;
+}
+
+.legendValue {
+  color: $dark-text-primary;
+  font-weight: 700;
+  padding: $spacing-xs $spacing-sm;
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: $radius-sm;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: $dark-text-secondary;
+  background: $dark-bg-secondary;
+  border: 1px solid $dark-border-light;
+  border-radius: $radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .parameterChart {
+    height: 350px;
+    padding: $spacing-md;
+  }
+
+  .legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-xs;
+  }
+}
