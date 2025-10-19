@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   getDashboardStats,
   getParameterStats,
@@ -12,17 +12,13 @@ import TimelineChart from "../../components/TimelineChart/TimelineChart";
 import styles from "./Dashboard.module.scss";
 
 function Dashboard() {
-  const [userEmail, setUserEmail] = useState("");
   const [dashboardStats, setDashboardStats] = useState(null);
   const [parameterStats, setParameterStats] = useState(null);
   const [categoryStats, setCategoryStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const email = localStorage.getItem("user_email");
-    setUserEmail(email || "user@example.com");
     fetchAllData();
   }, []);
 
@@ -48,12 +44,6 @@ function Dashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("jwt_token");
-    localStorage.removeItem("user_email");
-    navigate("/auth/login");
-  };
-
   if (loading) {
     return (
       <div className={styles.dashboardPage}>
@@ -71,20 +61,10 @@ function Dashboard() {
     <div className={styles.dashboardPage}>
       <div className="container">
         <div className={styles.header}>
-          <div>
-            <h1 className={styles.pageTitle}>Your Progress Dashboard</h1>
-            <p className={styles.subtitle}>
-              Track your performance and improve your PM interview skills
-            </p>
-          </div>
-          <div className={styles.actions}>
-            <Link to="/interview" className="btn btn-primary">
-              Start Interview
-            </Link>
-            <button onClick={handleLogout} className="btn btn-secondary">
-              Logout
-            </button>
-          </div>
+          <h1 className={styles.pageTitle}>Your Progress Dashboard</h1>
+          <p className={styles.subtitle}>
+            Track your performance and improve your PM interview skills
+          </p>
         </div>
 
         {error && (

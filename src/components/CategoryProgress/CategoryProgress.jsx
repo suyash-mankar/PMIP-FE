@@ -27,8 +27,6 @@ function CategoryProgress({ categories }) {
   return (
     <div className={styles.categoryProgress}>
       {categories.map((cat, index) => {
-        const percentage =
-          cat.solved > 0 ? (cat.solved / cat.totalAvailable) * 100 : 0;
         const scoreColor =
           cat.averageScore >= 7
             ? "excellent"
@@ -62,31 +60,20 @@ function CategoryProgress({ categories }) {
 
             <div className={styles.stats}>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Solved:</span>
-                <span className={styles.statValue}>
-                  {cat.solved}/{cat.totalAvailable}
-                </span>
+                <span className={styles.statLabel}>Questions Solved:</span>
+                <span className={styles.statValue}>{cat.solved}</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Viewed:</span>
+                <span className={styles.statLabel}>Questions Viewed:</span>
                 <span className={styles.statValue}>{cat.viewed}</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statLabel}>Remaining:</span>
-                <span className={styles.statValue}>{cat.unsolved}</span>
+            </div>
+
+            {cat.solved > 0 && (
+              <div className={styles.activityIndicator}>
+                ✓ {cat.solved} question{cat.solved !== 1 ? "s" : ""} completed
               </div>
-            </div>
-
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${percentage}%` }}
-              />
-            </div>
-
-            <div className={styles.progressLabel}>
-              {percentage.toFixed(0)}% Complete
-            </div>
+            )}
           </div>
         );
       })}
@@ -98,10 +85,8 @@ CategoryProgress.propTypes = {
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       category: PropTypes.string.isRequired,
-      totalAvailable: PropTypes.number.isRequired,
       solved: PropTypes.number.isRequired,
       viewed: PropTypes.number.isRequired,
-      unsolved: PropTypes.number.isRequired,
       averageScore: PropTypes.number,
     })
   ).isRequired,

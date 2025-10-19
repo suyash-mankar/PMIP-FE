@@ -7,35 +7,38 @@
 .tableWrapper {
   overflow-x: auto;
   border-radius: $radius-lg;
-  box-shadow: $shadow-md;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: $dark-bg-secondary;
+  position: relative;
 }
 
 .table {
   width: 100%;
-  background: $bg-primary;
+  background: $dark-bg-secondary;
   border-collapse: collapse;
 
   thead {
-    background: $bg-tertiary;
+    background: rgba(99, 102, 241, 0.08);
+    border-bottom: 2px solid rgba(99, 102, 241, 0.2);
 
     th {
-      padding: $spacing-md;
+      padding: $spacing-md $spacing-lg;
       text-align: left;
-      font-weight: 600;
-      color: $text-primary;
+      font-weight: 700;
+      color: $dark-text-primary;
       font-size: $font-size-sm;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid $border-color;
-      transition: background-color 0.2s ease;
+      border-bottom: 1px solid $dark-border-light;
+      transition: all 0.2s ease;
 
       &:hover {
-        background-color: $bg-secondary;
+        background-color: rgba(99, 102, 241, 0.05);
       }
 
       &:last-child {
@@ -44,8 +47,8 @@
     }
 
     td {
-      padding: $spacing-md;
-      color: $text-secondary;
+      padding: $spacing-md $spacing-lg;
+      color: $dark-text-secondary;
       font-size: $font-size-sm;
 
       @media (max-width: $breakpoint-sm) {
@@ -58,44 +61,113 @@
 
 .date {
   white-space: nowrap;
-  font-weight: 500;
-  color: $text-primary;
+  font-weight: 600;
+  color: $dark-text-primary;
 }
 
 .question {
-  max-width: 300px;
+  max-width: 350px;
+  color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-md) {
+    max-width: 200px;
+  }
+}
+
+.questionText {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  cursor: help;
+
+  &:hover .questionTooltip {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.questionTooltip {
+  display: none;
+  opacity: 0;
+  position: fixed;
+  z-index: 9999;
+  background: $dark-bg-primary;
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  white-space: normal;
+  max-width: 500px;
+  min-width: 300px;
+  color: $dark-text-primary;
+  font-weight: 400;
+  line-height: 1.6;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  font-size: $font-size-sm;
+
+  @media (max-width: $breakpoint-md) {
+    max-width: 320px;
+    min-width: 250px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category {
+  white-space: nowrap;
+}
+
+.categoryBadge {
+  display: inline-block;
+  padding: $spacing-xs $spacing-md;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: $radius-full;
+  color: #a78bfa;
+  font-weight: 600;
+  font-size: $font-size-xs;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.2) 0%,
+      rgba(139, 92, 246, 0.15) 100%
+    );
+    border-color: rgba(99, 102, 241, 0.5);
+  }
+}
+
+.company {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(139, 92, 246, 0.9);
+  font-weight: 500;
 
   @media (max-width: $breakpoint-md) {
     max-width: 150px;
   }
-}
-
-.difficulty {
-  white-space: nowrap;
-}
-
-.badge {
-  display: inline-block;
-  padding: $spacing-xs $spacing-sm;
-  border-radius: $radius-sm;
-  font-size: $font-size-xs;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.badgeEntry {
-  background-color: rgba($success-color, 0.1);
-  color: $success-color;
-}
-
-.badgeMid {
-  background-color: rgba($warning-color, 0.1);
-  color: $warning-color;
-}
-
-.badgeSenior {
-  background-color: rgba($error-color, 0.1);
-  color: $error-color;
 }
 
 .score {
@@ -126,36 +198,16 @@
   color: $error-color;
 }
 
-.viewBtn {
-  background: $primary-color;
-  color: white;
-  border: none;
-  padding: $spacing-xs $spacing-md;
-  border-radius: $radius-sm;
-  font-size: $font-size-sm;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background: $primary-hover;
-  }
-
-  &:focus {
-    outline: 2px solid $primary-color;
-    outline-offset: 2px;
-  }
-}
-
 .emptyState {
   text-align: center;
   padding: $spacing-3xl $spacing-lg;
-  background: $bg-primary;
+  background: $dark-bg-secondary;
   border-radius: $radius-lg;
-  box-shadow: $shadow-md;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid $dark-border-light;
 
   p {
-    color: $text-secondary;
+    color: $dark-text-secondary;
     margin-bottom: $spacing-lg;
     font-size: $font-size-lg;
   }

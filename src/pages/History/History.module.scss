@@ -61,47 +61,80 @@
 
 .statsContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: $spacing-lg;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: $spacing-md;
   margin-bottom: $spacing-xl;
 }
 
 .statCard {
-  background: $dark-bg-secondary;
-  padding: $spacing-xl;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(139, 92, 246, 0.05) 100%
+  );
+  padding: $spacing-lg $spacing-md;
   border-radius: $radius-lg;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
   text-align: center;
-  border: 1px solid $dark-border-light;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+}
+
+.statIcon {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto $spacing-sm;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    color: $primary-color;
+    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
+  }
 }
 
 .statValue {
-  font-size: $font-size-4xl;
+  font-size: $font-size-2xl;
   font-weight: 700;
-  color: $primary-color;
-  margin-bottom: $spacing-sm;
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: $spacing-xs;
 }
 
 .statLabel {
   color: $dark-text-secondary;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.75px;
 }
 
-.filters {
+.filtersContainer {
   background: $dark-bg-secondary;
-  padding: $spacing-lg;
-  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  border-radius: $radius-xl;
   margin-bottom: $spacing-xl;
   border: 1px solid $dark-border-light;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.filterRow {
+.filtersGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: $spacing-md;
-  margin-bottom: $spacing-md;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: $spacing-lg;
+  align-items: end;
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (max-width: $breakpoint-sm) {
     grid-template-columns: 1fr;
@@ -112,76 +145,80 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
-
-  label {
-    font-size: $font-size-sm;
-    font-weight: 600;
-    color: $dark-text-secondary;
-  }
-
-  select,
-  input {
-    padding: $spacing-sm $spacing-md;
-    border: 1px solid $dark-border-light;
-    border-radius: $radius-sm;
-    background: $dark-bg-tertiary;
-    color: $dark-text-primary;
-    font-size: $font-size-sm;
-    transition: border-color 0.2s ease;
-
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-    }
-  }
 }
 
-.searchRow {
-  display: flex;
-  gap: $spacing-md;
-  align-items: center;
+.searchGroup {
+  grid-column: span 2;
 
   @media (max-width: $breakpoint-sm) {
-    flex-direction: column;
+    grid-column: span 1;
   }
 }
 
-.searchInput {
-  flex: 1;
+.clearBtnGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.filterLabel {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $dark-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: $spacing-xs;
+}
+
+.filterInput {
+  width: 100%;
   padding: $spacing-sm $spacing-md;
   border: 1px solid $dark-border-light;
-  border-radius: $radius-sm;
+  border-radius: $radius-md;
   background: $dark-bg-tertiary;
   color: $dark-text-primary;
   font-size: $font-size-base;
+  transition: all 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
   }
 
-  @media (max-width: $breakpoint-sm) {
-    width: 100%;
+  &::placeholder {
+    color: $dark-text-secondary;
+  }
+
+  &:hover {
+    border-color: rgba(99, 102, 241, 0.3);
   }
 }
 
 .clearBtn {
+  width: 100%;
   padding: $spacing-sm $spacing-lg;
-  background: $dark-bg-tertiary;
-  color: $dark-text-primary;
-  border: 1px solid $dark-border-light;
-  border-radius: $radius-sm;
-  font-weight: 600;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: $radius-md;
+  font-weight: 700;
+  font-size: $font-size-sm;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 
   &:hover {
-    background: $dark-bg-primary;
-    border-color: $primary-color;
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
   }
 
-  @media (max-width: $breakpoint-sm) {
-    width: 100%;
+  &:active {
+    transform: translateY(0);
   }
 }
 

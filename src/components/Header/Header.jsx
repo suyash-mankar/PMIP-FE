@@ -69,6 +69,22 @@ function Header() {
         >
           {isLoggedIn ? (
             <>
+              <Link
+                to="/dashboard"
+                className={`${styles.navLink} ${
+                  location.pathname === "/dashboard" ? styles.active : ""
+                }`}
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/pricing"
+                className={`${styles.navLink} ${
+                  location.pathname === "/pricing" ? styles.active : ""
+                }`}
+              >
+                Pricing
+              </Link>
               {!isOnInterviewPage && (
                 <Link
                   to="/interview"
@@ -108,27 +124,6 @@ function Header() {
                 </button>
                 {profileDropdownOpen && (
                   <div className={styles.dropdown}>
-                    <Link
-                      to="/history"
-                      className={styles.dropdownLink}
-                      onClick={() => setProfileDropdownOpen(false)}
-                    >
-                      History
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      className={styles.dropdownLink}
-                      onClick={() => setProfileDropdownOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                    <Link
-                      to="/pricing"
-                      className={styles.dropdownLink}
-                      onClick={() => setProfileDropdownOpen(false)}
-                    >
-                      Pricing
-                    </Link>
                     <button
                       onClick={handleLogout}
                       className={styles.dropdownLogoutBtn}

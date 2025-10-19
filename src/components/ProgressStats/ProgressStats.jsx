@@ -27,9 +27,9 @@ function ProgressStats({ stats }) {
       color: "success",
     },
     {
-      label: "Questions Remaining",
-      value: stats.questionsRemaining || 0,
-      icon: "📝",
+      label: "Questions Viewed",
+      value: stats.totalViewed || 0,
+      icon: "👁️",
       color: "info",
     },
     {
@@ -64,8 +64,8 @@ function ProgressStats({ stats }) {
 ProgressStats.propTypes = {
   stats: PropTypes.shape({
     totalScored: PropTypes.number,
+    totalViewed: PropTypes.number,
     overallAverageScore: PropTypes.number,
-    questionsRemaining: PropTypes.number,
     recentActivity: PropTypes.shape({
       last7Days: PropTypes.number,
     }),

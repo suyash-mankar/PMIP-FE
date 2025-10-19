@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import styles from "./SessionList.module.scss";
 
 function SessionList({ sessions }) {
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      x: rect.left,
+      y: rect.bottom + 8,
+    });
+  };
   if (!sessions || sessions.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -15,18 +25,30 @@ function SessionList({ sessions }) {
 
   const calculateOverallScore = (scores) => {
     if (!scores) return 0;
+
+    // If there's a totalScore or overall score, use that
+    if (scores.totalScore !== undefined) return scores.totalScore;
+    if (scores.overall !== undefined) return scores.overall;
+
+    // Otherwise calculate weighted average
     const {
       structure = 0,
       metrics = 0,
       prioritization = 0,
       userEmpathy = 0,
-      user_empathy = userEmpathy, // Fallback for old format
+      user_empathy = userEmpathy,
       communication = 0,
     } = scores;
     const empathyScore = userEmpathy || user_empathy;
-    return Math.round(
-      (structure + metrics + prioritization + empathyScore + communication) / 5
-    );
+
+    // Weighted average: prioritization 25%, others 20%, communication 15%
+    return (
+      structure * 0.2 +
+      metrics * 0.2 +
+      prioritization * 0.25 +
+      empathyScore * 0.2 +
+      communication * 0.15
+    ).toFixed(1);
   };
 
   const getScoreColor = (score) => {
@@ -36,13 +58,27 @@ function SessionList({ sessions }) {
     return styles.scorePoor;
   };
 
-  const formatDifficulty = (level) => {
-    const difficultyMap = {
-      junior: { label: "Entry", class: "Entry" },
-      mid: { label: "Mid", class: "Mid" },
-      senior: { label: "Senior", class: "Senior" },
-    };
-    return difficultyMap[level] || { label: "N/A", class: "" };
+  const formatCategory = (category) => {
+    if (!category) return "N/A";
+    return category
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const formatCompanies = (companies) => {
+    if (!companies || companies.length === 0) return "—";
+    if (typeof companies === "string") {
+      try {
+        companies = JSON.parse(companies);
+      } catch {
+        return companies;
+      }
+    }
+    if (Array.isArray(companies)) {
+      return companies.slice(0, 3).join(", ");
+    }
+    return "—";
   };
 
   return (
@@ -53,9 +89,9 @@ function SessionList({ sessions }) {
             <tr>
               <th>Date</th>
               <th>Question</th>
-              <th>Difficulty</th>
+              <th>Category</th>
+              <th>Company</th>
               <th>Score</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -64,33 +100,36 @@ function SessionList({ sessions }) {
               return (
                 <tr key={session.id}>
                   <td className={styles.date}>
-                    {new Date(
-                      session.created_at || session.date
-                    ).toLocaleDateString()}
+                    {new Date(session.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </td>
                   <td className={styles.question}>
-                    {session.question
-                      ? session.question.length > 80
-                        ? session.question.substring(0, 80) + "..."
-                        : session.question
-                      : "N/A"}
-                  </td>
-                  <td className={styles.difficulty}>
                     <span
-                      className={`${styles.badge} ${
-                        session.difficulty
-                          ? styles[
-                              `badge${
-                                formatDifficulty(session.difficulty).class
-                              }`
-                            ]
-                          : ""
-                      }`}
+                      className={styles.questionText}
+                      onMouseEnter={handleMouseEnter}
                     >
-                      {session.difficulty
-                        ? formatDifficulty(session.difficulty).label
-                        : "N/A"}
+                      {session.questionText || "N/A"}
+                      <span
+                        className={styles.questionTooltip}
+                        style={{
+                          left: `${tooltipPosition.x}px`,
+                          top: `${tooltipPosition.y}px`,
+                        }}
+                      >
+                        {session.questionText || "N/A"}
+                      </span>
                     </span>
+                  </td>
+                  <td className={styles.category}>
+                    <span className={styles.categoryBadge}>
+                      {formatCategory(session.category)}
+                    </span>
+                  </td>
+                  <td className={styles.company}>
+                    {formatCompanies(session.company)}
                   </td>
                   <td>
                     <span
@@ -100,19 +139,6 @@ function SessionList({ sessions }) {
                     >
                       {overallScore}/10
                     </span>
-                  </td>
-                  <td>
-                    <button
-                      className={styles.viewBtn}
-                      onClick={() => {
-                        // This could open a modal or navigate to a detail page
-                        alert(
-                          `Session ID: ${session.id}\nScore: ${overallScore}/10`
-                        );
-                      }}
-                    >
-                      View
-                    </button>
                   </td>
                 </tr>
               );

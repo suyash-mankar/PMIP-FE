@@ -7,12 +7,8 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   margin-bottom: $spacing-xl;
-  flex-wrap: wrap;
-  gap: $spacing-md;
 }
 
 .pageTitle {
@@ -30,24 +26,6 @@
   font-size: $font-size-base;
   color: $dark-text-secondary;
   margin: 0;
-}
-
-.actions {
-  display: flex;
-  gap: $spacing-md;
-  align-items: center;
-
-  .btn {
-    white-space: nowrap;
-  }
-
-  @media (max-width: $breakpoint-sm) {
-    width: 100%;
-
-    .btn {
-      flex: 1;
-    }
-  }
 }
 
 .section {
@@ -154,11 +132,6 @@
 @media (max-width: $breakpoint-sm) {
   .dashboardPage {
     padding: $spacing-md;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .quickLinks {
