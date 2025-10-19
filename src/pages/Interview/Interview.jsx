@@ -12,6 +12,130 @@ import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import styles from "./Interview.module.scss";
 
 function Interview() {
+  // Helper function to render category icon
+  const renderCategoryIcon = (categoryValue) => {
+    const normalizedCategory = categoryValue.toLowerCase().replace(/\s+/g, "_");
+    console.log(
+      "Rendering icon for category:",
+      categoryValue,
+      "-> normalized:",
+      normalizedCategory
+    );
+
+    const iconProps = {
+      width: "28",
+      height: "28",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+    };
+
+    // Search icon - RCA
+    if (
+      normalizedCategory.includes("root_cause") ||
+      normalizedCategory.includes("rca")
+    ) {
+      return (
+        <svg {...iconProps}>
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+      );
+    }
+
+    // Lightning - Improvement
+    if (normalizedCategory.includes("improvement")) {
+      return (
+        <svg {...iconProps}>
+          <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
+        </svg>
+      );
+    }
+
+    // Store - Design
+    if (normalizedCategory.includes("design")) {
+      return (
+        <svg {...iconProps}>
+          <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+          <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
+          <path d="M2 7h20" />
+          <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7" />
+        </svg>
+      );
+    }
+
+    // Bar chart - Metrics
+    if (normalizedCategory.includes("metric")) {
+      return (
+        <svg {...iconProps}>
+          <line x1="12" y1="20" x2="12" y2="10" />
+          <line x1="18" y1="20" x2="18" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="16" />
+        </svg>
+      );
+    }
+
+    // Target - Strategy
+    if (normalizedCategory.includes("strategy")) {
+      return (
+        <svg {...iconProps}>
+          <path d="M12 2v20M2 12h20" />
+          <path d="m19 19-7-7 7-7M5 5l7 7-7 7" />
+        </svg>
+      );
+    }
+
+    // Pie chart - Guesstimates
+    if (normalizedCategory.includes("guesstimate")) {
+      return (
+        <svg {...iconProps}>
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+          <path d="M22 12A10 10 0 0 0 12 2v10z" />
+        </svg>
+      );
+    }
+
+    // Users - Behavioral
+    if (normalizedCategory.includes("behav")) {
+      return (
+        <svg {...iconProps}>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      );
+    }
+
+    // Server - Tech
+    if (normalizedCategory.includes("tech")) {
+      return (
+        <svg {...iconProps}>
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+          <path d="M8 10h.01" />
+          <path d="M12 10h.01" />
+          <path d="M16 10h.01" />
+        </svg>
+      );
+    }
+
+    // Default - Document
+    return (
+      <svg {...iconProps}>
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M10 9H8" />
+        <path d="M16 13H8" />
+        <path d="M16 17H8" />
+      </svg>
+    );
+  };
+
   const [category, setCategory] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [questionId, setQuestionId] = useState(null);
@@ -59,6 +183,7 @@ function Interview() {
       setLoadingCategories(true);
       try {
         const response = await getCategories();
+        console.log("Categories received:", response.data.categories);
         setAvailableCategories(response.data.categories);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -982,16 +1107,20 @@ Take your time and be thorough!`}
                       >
                         <div className={styles.categoryIcon}>
                           <svg
-                            width="20"
-                            height="20"
+                            width="28"
+                            height="28"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           >
-                            <circle cx="12" cy="12" r="10" />
-                            <circle cx="12" cy="12" r="6" />
-                            <circle cx="12" cy="12" r="2" />
+                            <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22" />
+                            <path d="m18 2 4 4-4 4" />
+                            <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2" />
+                            <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8c-.7-1.1-2-1.8-3.3-1.8H2" />
+                            <path d="m18 14 4 4-4 4" />
                           </svg>
                         </div>
                         <h4>Random Mix</h4>
@@ -1007,16 +1136,19 @@ Take your time and be thorough!`}
                         >
                           <div className={styles.categoryIcon}>
                             <svg
-                              width="20"
-                              height="20"
+                              width="28"
+                              height="28"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
                               strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             >
-                              <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" />
-                              <path d="M9 11V9a3 3 0 0 1 6 0v2" />
-                              <path d="M12 16v-2" />
+                              <rect x="3" y="3" width="7" height="7" />
+                              <rect x="14" y="3" width="7" height="7" />
+                              <rect x="14" y="14" width="7" height="7" />
+                              <rect x="3" y="14" width="7" height="7" />
                             </svg>
                           </div>
                           <h4>Select Category</h4>
@@ -1039,105 +1171,7 @@ Take your time and be thorough!`}
                                 onClick={() => setCategory(cat.value)}
                               >
                                 <div className={styles.categoryIcon}>
-                                  {cat.value === "root_cause_analysis" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <circle cx="11" cy="11" r="8" />
-                                      <path d="m21 21-4.35-4.35" />
-                                    </svg>
-                                  )}
-                                  {cat.value === "product_improvement" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
-                                    </svg>
-                                  )}
-                                  {cat.value === "product_design" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <rect
-                                        x="3"
-                                        y="3"
-                                        width="18"
-                                        height="18"
-                                        rx="2"
-                                        ry="2"
-                                      />
-                                      <circle cx="9" cy="9" r="2" />
-                                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                                    </svg>
-                                  )}
-                                  {cat.value === "metrics" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <line x1="18" y1="20" x2="18" y2="10" />
-                                      <line x1="12" y1="20" x2="12" y2="4" />
-                                      <line x1="6" y1="20" x2="6" y2="14" />
-                                    </svg>
-                                  )}
-                                  {cat.value === "product_strategy" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <circle cx="12" cy="12" r="10" />
-                                      <path d="m9 12 2 2 4-4" />
-                                    </svg>
-                                  )}
-                                  {cat.value === "guesstimates" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <circle cx="12" cy="12" r="10" />
-                                      <path d="M12 6v6l4 2" />
-                                    </svg>
-                                  )}
-                                  {cat.value === "behavioral" && (
-                                    <svg
-                                      width="20"
-                                      height="20"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                    >
-                                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                      <circle cx="12" cy="7" r="4" />
-                                    </svg>
-                                  )}
+                                  {renderCategoryIcon(cat.value)}
                                 </div>
                                 <h4>{cat.label}</h4>
                               </button>
@@ -1160,6 +1194,26 @@ Take your time and be thorough!`}
             ) : (
               /* Chat Messages - ChatGPT Style */
               <div className={styles.mainContent}>
+                {/* Category Selector Header - Show during interview */}
+                {interviewStarted && (
+                  <div className={styles.categoryHeader}>
+                    <div className={styles.categoryHeaderContent}>
+                      <span className={styles.categoryLabel}>Category:</span>
+                      <select
+                        className={styles.categoryDropdown}
+                        value={category || ""}
+                        onChange={(e) => setCategory(e.target.value || null)}
+                      >
+                        <option value="">Random Mix (All Categories)</option>
+                        {availableCategories.map((cat) => (
+                          <option key={cat.value} value={cat.value}>
+                            {cat.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
                 <div className={styles.messagesContainer}>
                   <div className={styles.messagesInner}>
                     {messages.map((msg, index) => (
