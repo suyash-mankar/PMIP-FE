@@ -245,12 +245,12 @@
 
 .heroCTA {
   display: flex;
+  flex-direction: column;
   gap: $spacing-md;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: $spacing-xl;
 
   @media (max-width: $breakpoint-sm) {
-    flex-direction: column;
     gap: $spacing-sm;
   }
 }
@@ -309,6 +309,33 @@
     position: relative !important;
     z-index: 10 !important;
     color: white !important;
+  }
+}
+
+.ctaNoCreditCard {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  color: $success-color;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  margin: -$spacing-sm 0 $spacing-xs 0;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.ctaSecondary {
+  color: $dark-text-secondary;
+  font-size: $font-size-sm;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-color;
+    text-decoration: none;
   }
 }
 
