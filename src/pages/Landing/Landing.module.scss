@@ -1125,17 +1125,30 @@
 
 .pricingGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: $spacing-xl;
   margin-top: $spacing-2xl;
-  max-width: 900px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
+  align-items: start;
 
   @media (max-width: $breakpoint-md) {
     grid-template-columns: 1fr;
     gap: $spacing-lg;
   }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.pricingSectionSubtitle {
+  font-size: $font-size-lg;
+  color: $dark-text-secondary;
+  line-height: 1.6;
 }
 
 .pricingCard {
@@ -1146,17 +1159,8 @@
   text-align: center;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  animation: cardPulse 4s ease-in-out infinite;
-
-  &:nth-child(1) {
-    animation-delay: 0s;
-  }
-  &:nth-child(2) {
-    animation-delay: 0.5s;
-  }
-  &:nth-child(3) {
-    animation-delay: 1s;
-  }
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-8px) scale(1.03);
@@ -1173,6 +1177,42 @@
       transform: scale(1);
     }
   }
+
+  &.compactCard {
+    padding: $spacing-xl;
+
+    .pricingTitle {
+      font-size: $font-size-xl;
+      margin-bottom: $spacing-md;
+    }
+
+    .pricingPrice {
+      margin-bottom: $spacing-md;
+    }
+
+    .price {
+      font-size: $font-size-3xl;
+    }
+
+    .pricingDescription {
+      font-size: $font-size-base;
+      margin-bottom: $spacing-lg;
+    }
+
+    .pricingFeatures {
+      margin-bottom: $spacing-lg;
+
+      li {
+        padding: $spacing-sm 0;
+        font-size: $font-size-base;
+        padding-left: $spacing-xl;
+
+        &::before {
+          left: $spacing-xs;
+        }
+      }
+    }
+  }
 }
 
 .popularBadge {
@@ -1186,6 +1226,52 @@
   border-radius: 20px;
   font-size: $font-size-sm;
   font-weight: 600;
+}
+
+.trialBadge {
+  position: absolute;
+  top: -12px;
+  right: $spacing-md;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: $success-color;
+  padding: $spacing-xs $spacing-md;
+  border-radius: 20px;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  backdrop-filter: blur(10px);
+}
+
+.trialBadgeIcon {
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.trialDisclaimer {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: $font-size-sm;
+  color: $dark-text-secondary;
+  line-height: 1.6;
+  text-align: center;
+  font-weight: 500;
+}
+
+.noSignupNote {
+  margin-top: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
+  text-align: center;
+  font-style: italic;
 }
 
 .pricingTitle {
@@ -1211,6 +1297,43 @@
   margin-left: $spacing-xs;
 }
 
+.freeTrialPrice {
+  font-size: $font-size-4xl;
+  font-weight: 700;
+  background: linear-gradient(135deg, $success-color, #10b981);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  line-height: 1.2;
+}
+
+.thenPrice {
+  font-size: $font-size-sm;
+  color: $dark-text-muted;
+  display: block;
+  margin-top: $spacing-xs;
+}
+
+.noCreditCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  margin: $spacing-md 0;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  color: $success-color;
+  font-size: $font-size-sm;
+  font-weight: 600;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
 .pricingDescription {
   color: $dark-text-secondary;
   margin-bottom: $spacing-lg;
@@ -1222,6 +1345,7 @@
   padding: 0;
   margin: 0 0 $spacing-xl 0;
   text-align: left;
+  flex: 1;
 
   li {
     padding: $spacing-sm 0;
@@ -1244,6 +1368,54 @@
   color: $dark-text-secondary;
   margin-top: $spacing-xl;
   font-size: $font-size-sm;
+}
+
+.whyUpgrade {
+  max-width: 700px;
+  margin: $spacing-2xl auto;
+  padding: $spacing-xl;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.whyUpgradeCard {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: $spacing-xl;
+  text-align: left;
+}
+
+.upgradeTitle {
+  font-size: $font-size-2xl;
+  font-weight: 700;
+  color: $dark-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.upgradeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: $spacing-sm 0;
+    padding-left: $spacing-xl;
+    color: $dark-text-secondary;
+    line-height: 1.6;
+    position: relative;
+    font-size: $font-size-base;
+
+    &::before {
+      content: "✓";
+      position: absolute;
+      left: $spacing-xs;
+      color: $success-color;
+      font-weight: 700;
+      font-size: $font-size-lg;
+    }
+  }
 }
 
 // ===== TESTIMONIALS SECTION =====

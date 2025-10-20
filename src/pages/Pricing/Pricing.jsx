@@ -11,64 +11,42 @@ function Pricing() {
   const plans = [
     {
       id: "free",
-      name: "Free",
+      name: "Free Plan",
       price: "₹0",
-      interval: "forever",
+      interval: "month",
       features: [
-        "3 practice interviews per month",
-        "Basic feedback and scoring",
-        "Entry level questions only",
-        "Community support",
+        "3 mock interviews per month",
+        "Basic summary feedback",
+        "Mixed questions from all categories",
       ],
-      cta: "Current Plan",
+      cta: "Start Free",
       isFree: true,
       highlighted: false,
+      showNoSignup: true,
     },
     {
       id: "pro",
-      name: "Pro",
-      price: "Rs. 499",
+      name: "Pro Plan",
+      price: "₹499",
       interval: "month",
       features: [
-        "Unlimited practice interviews",
-        "Detailed rubric-based feedback",
-        "All difficulty levels (Entry, Mid, Senior)",
-        "Interview history tracking",
-        "Sample answers for every question",
-        "Priority email support",
+        "Unlimited mock interviews",
+        "Detailed rubric-based feedback (6 dimensions + tips)",
+        "Model '10/10' answers for every question",
+        "Choose category (Design, Metrics, RCAs, Strategy, etc.)",
+        "Voice Input & Output",
+        "Progress Dashboard & Analytics",
+        "Priority Support & Updates",
       ],
-      cta: "Upgrade to Pro",
+      cta: "Sign up and try Pro",
       isFree: false,
       highlighted: true,
-    },
-    {
-      id: "enterprise",
-      name: "Enterprise",
-      price: "Custom",
-      interval: "",
-      features: [
-        "Everything in Pro",
-        "Custom question sets",
-        "Team analytics",
-        "Dedicated support",
-        "API access",
-        "Custom integrations",
-      ],
-      cta: "Contact Sales",
-      isEnterprise: true,
-      highlighted: false,
     },
   ];
 
   const handleCheckout = async (plan) => {
     if (plan.isFree) {
-      alert("This is the free plan - just sign up to get started!");
-      return;
-    }
-
-    if (plan.isEnterprise) {
-      window.location.href =
-        "mailto:enterprise@pminterviewpractice.com?subject=Enterprise Plan Inquiry";
+      navigate("/auth/register");
       return;
     }
 
@@ -143,10 +121,12 @@ function Pricing() {
     <div className={styles.pricingPage}>
       <div className="container">
         <div className={styles.header}>
-          <h1 className={styles.pageTitle}>Simple, Transparent Pricing</h1>
-          <p className={styles.subtitle}>
-            Choose the plan that&apos;s right for you. Upgrade or downgrade
-            anytime. All prices in INR (₹).
+          <h1 className={styles.pageTitle}>Simple, Transparent Plans</h1>
+          <p className={styles.pricingSubtitle}>
+            Start Free. Upgrade When You&apos;re Ready.
+            <br />
+            Practice real Product Management interviews with AI — get instant
+            feedback, learn from model answers, and track your progress.
           </p>
         </div>
 
@@ -174,14 +154,44 @@ function Pricing() {
               <div className={styles.planHeader}>
                 <h3 className={styles.planName}>{plan.name}</h3>
                 <div className={styles.planPrice}>
-                  <span className={styles.priceAmount}>{plan.price}</span>
-                  {plan.interval && (
-                    <span className={styles.priceInterval}>
-                      /{plan.interval}
-                    </span>
+                  {plan.highlighted ? (
+                    <>
+                      <span className={styles.freeTrialPrice}>
+                        Free for 48 hrs
+                      </span>
+                      <span className={styles.thenPrice}>
+                        then {plan.price}/{plan.interval}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className={styles.priceAmount}>{plan.price}</span>
+                      {plan.interval && (
+                        <span className={styles.priceInterval}>
+                          /{plan.interval}
+                        </span>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
+
+              {plan.highlighted && (
+                <div className={styles.noCreditCard}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  No credit card required
+                </div>
+              )}
 
               <ul className={styles.featureList}>
                 {plan.features.map((feature, index) => (
@@ -202,8 +212,34 @@ function Pricing() {
               >
                 {loading ? "Loading..." : plan.cta}
               </button>
+
+              {plan.showNoSignup && (
+                <p className={styles.noSignupNote}>no signup needed</p>
+              )}
+
+              {plan.highlighted && (
+                <p className={styles.trialDisclaimer}>
+                  Signup and get full Pro access free for 48 hours. After trial,
+                  automatically switch to Free plan (3 mocks/month) — no
+                  charges.
+                </p>
+              )}
             </div>
           ))}
+        </div>
+
+        <div className={styles.whyUpgrade}>
+          <h2 className={styles.upgradeTitle}>Why Upgrade to Pro</h2>
+          <ul className={styles.upgradeList}>
+            <li>
+              Focus your prep on specific skills (Design, Metrics, RCAs,
+              Strategy)
+            </li>
+            <li>Get detailed, hiring-manager-style feedback on every answer</li>
+            <li>Learn from perfect &quot;10/10&quot; responses</li>
+            <li>Track your progress and improve faster</li>
+            <li>Practice unlimited interviews — anytime, anywhere</li>
+          </ul>
         </div>
 
         <div className={styles.trustBadges}>
@@ -249,9 +285,9 @@ function Pricing() {
             <div className={styles.faqItem}>
               <h3 className={styles.faqQuestion}>Is there a free trial?</h3>
               <p className={styles.faqAnswer}>
-                The free plan gives you a taste of our platform with 3
-                interviews per month. Upgrade anytime to unlock unlimited
-                interviews.
+                Yes! You get a 1-Day Free Pro Trial with full access to all Pro
+                features. After 24 hours, you&apos;ll automatically continue on
+                the Free Plan (3 mocks/month) — no credit card required.
               </p>
             </div>
             <div className={styles.faqItem}>

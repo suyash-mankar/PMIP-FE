@@ -556,12 +556,12 @@ function Landing() {
       >
         <div className="container">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
-              Simple pricing. No surprises.
-            </h2>
-            <p className={styles.sectionSubtitle}>
-              Start free. Upgrade only when you're ready for unlimited practice.
-              All prices in INR (₹).
+            <h2 className={styles.sectionTitle}>Simple, Transparent Plans</h2>
+            <p className={styles.pricingSectionSubtitle}>
+              Start Free. Upgrade When You're Ready.
+              <br />
+              Practice real Product Management interviews with AI — get instant
+              feedback, learn from model answers, and track your progress.
             </p>
           </div>
           <div
@@ -569,39 +569,73 @@ function Landing() {
               isVisible.pricing ? styles.visible : ""
             }`}
           >
-            <div className={styles.pricingCard}>
-              <h3 className={styles.pricingTitle}>Free Plan</h3>
-              <div className={styles.pricingPrice}>
-                <span className={styles.price}>$0</span>
-                <span className={styles.period}>/month</span>
+            <div className={styles.leftColumn}>
+              <div className={styles.whyUpgradeCard}>
+                <h3 className={styles.upgradeTitle}>Why Upgrade to Pro</h3>
+                <ul className={styles.upgradeList}>
+                  <li>
+                    Focus your prep on specific skills (Design, Metrics, RCAs,
+                    Strategy)
+                  </li>
+                  <li>
+                    Get detailed, hiring-manager-style feedback on every answer
+                  </li>
+                  <li>Learn from perfect "10/10" responses</li>
+                  <li>Track your progress and improve faster</li>
+                  <li>Practice unlimited interviews — anytime, anywhere</li>
+                </ul>
               </div>
-              <p className={styles.pricingDescription}>Try basic practice</p>
-              <ul className={styles.pricingFeatures}>
-                <li>3 mock interviews per month</li>
-                <li>Basic feedback</li>
-                <li>Access to all categories</li>
-              </ul>
-              <Link
-                to={isLoggedIn ? "/interview" : "/auth/register"}
-                className="btn btn-secondary btn-lg"
-              >
-                Start Free
-              </Link>
+
+              <div className={`${styles.pricingCard} ${styles.compactCard}`}>
+                <h3 className={styles.pricingTitle}>Free Plan</h3>
+                <div className={styles.pricingPrice}>
+                  <span className={styles.price}>₹0</span>
+                  <span className={styles.period}>/month</span>
+                </div>
+                <ul className={styles.pricingFeatures}>
+                  <li>3 mock interviews per month</li>
+                  <li>Basic summary feedback</li>
+                  <li>Mixed questions from all categories</li>
+                </ul>
+                <Link
+                  to={isLoggedIn ? "/interview" : "/auth/register"}
+                  className="btn btn-secondary btn-lg"
+                >
+                  Start Free
+                </Link>
+                <p className={styles.noSignupNote}>no signup needed</p>
+              </div>
             </div>
 
             <div className={`${styles.pricingCard} ${styles.popular}`}>
               <div className={styles.popularBadge}>Most Popular</div>
               <h3 className={styles.pricingTitle}>Pro Plan</h3>
               <div className={styles.pricingPrice}>
-                <span className={styles.price}>Rs. 499</span>
-                <span className={styles.period}>/month</span>
+                <span className={styles.freeTrialPrice}>Free for 48 hrs</span>
+                <span className={styles.thenPrice}>then ₹499/month</span>
               </div>
-              <p className={styles.pricingDescription}>For serious PM prep</p>
+              <div className={styles.noCreditCard}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                No credit card required for free trial
+              </div>
               <ul className={styles.pricingFeatures}>
-                <li>Unlimited practice sessions</li>
-                <li>Full feedback & 10/10 answers</li>
-                <li>Progress dashboard</li>
-                <li>Priority support</li>
+                <li>Unlimited mock interviews</li>
+                <li>Detailed rubric-based feedback (6 dimensions + tips)</li>
+                <li>Model "10/10" answers for every question</li>
+                <li>Choose category (Design, Metrics, RCAs, Strategy, etc.)</li>
+                <li>Voice Input & Output</li>
+                <li>Progress Dashboard & Analytics</li>
+                <li>Priority Support & Updates</li>
               </ul>
               <button
                 onClick={handleGoProClick}
@@ -609,13 +643,18 @@ function Landing() {
                 disabled={loading}
                 style={{ width: "100%" }}
               >
-                {loading ? "Loading..." : "Go Pro"}
+                {loading ? "Loading..." : "Sign up and Try Pro"}
               </button>
+              <p className={styles.trialDisclaimer}>
+                Signup and get full Pro access free for 48 hours. After trial,
+                automatically switch to Free plan (3 mocks/month) — no charges.
+              </p>
             </div>
           </div>
-          <p className={styles.pricingNote}>
-            💳 No credit card required for free plan. Cancel anytime.
-          </p>
+
+          {/* <p className={styles.pricingNote}>
+            No credit card required. Cancel anytime.
+          </p> */}
         </div>
       </section>
 

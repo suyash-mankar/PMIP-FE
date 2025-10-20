@@ -135,12 +135,22 @@ function Header() {
               </div>
             </>
           ) : (
-            <Link
-              to="/auth/login"
-              className={`btn btn-primary ${styles.authBtn}`}
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                to="/pricing"
+                className={`${styles.navLink} ${
+                  location.pathname === "/pricing" ? styles.active : ""
+                }`}
+              >
+                Pricing
+              </Link>
+              <Link
+                to="/auth/login"
+                className={`btn btn-primary ${styles.authBtn}`}
+              >
+                Login
+              </Link>
+            </>
           )}
         </nav>
       </div>
