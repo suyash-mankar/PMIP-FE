@@ -1576,7 +1576,7 @@ Take your time and be thorough!`}
                         />
                       </svg>
                       <span className={styles.timerLabel}>
-                        Show elapsed time
+                        Record your answer timing
                       </span>
                     </label>
                   </div>

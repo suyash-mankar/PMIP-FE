@@ -12,151 +12,223 @@ function Privacy() {
 
         <div className={styles.policyContent}>
           <section className={styles.section}>
+            <h2>1. Introduction</h2>
             <p>
-              This privacy policy sets out how SUYASH MANKAR uses and protects
-              any information that you give SUYASH MANKAR when you visit their
-              website and/or agree to purchase from them.
+              PM Interview Pro ("we", "us", or "our") is committed to protecting
+              your privacy. This Privacy Policy explains how we collect, use,
+              disclose, and safeguard your information when you use our
+              AI-powered interview practice platform.
+            </p>
+            <p>
+              By using PM Interview Pro, you agree to the collection and use of
+              information in accordance with this policy. If you do not agree
+              with our policies and practices, please do not use our service.
             </p>
           </section>
 
           <section className={styles.section}>
-            <p>
-              SUYASH MANKAR is committed to ensuring that your privacy is
-              protected. Should we ask you to provide certain information by
-              which you can be identified when using this website, and then you
-              can be assured that it will only be used in accordance with this
-              privacy statement.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <p>
-              SUYASH MANKAR may change this policy from time to time by updating
-              this page. You should check this page from time to time to ensure
-              that you adhere to these changes.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2>We may collect the following information:</h2>
+            <h2>2. Information We Collect</h2>
+            <h3>Personal Information</h3>
+            <p>When you register for an account, we may collect:</p>
             <ul>
-              <li>Name</li>
-              <li>Contact information including email address</li>
+              <li>Name and email address</li>
+              <li>Authentication information (password or OAuth tokens)</li>
               <li>
-                Demographic information such as postcode, preferences and
-                interests, if required
+                Payment information (processed securely through our payment
+                provider)
+              </li>
+              <li>Profile information you choose to provide</li>
+            </ul>
+
+            <h3>Usage Information</h3>
+            <p>When you use our service, we automatically collect:</p>
+            <ul>
+              <li>Interview responses and answers you provide</li>
+              <li>Practice session data and progress metrics</li>
+              <li>Device information, browser type, and IP address</li>
+              <li>Usage patterns and interaction with our platform</li>
+              <li>Cookies and similar tracking technologies</li>
+            </ul>
+          </section>
+
+          <section className={styles.section}>
+            <h2>3. How We Use Your Information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+              <li>
+                Provide, maintain, and improve our AI-powered interview practice
+                service
+              </li>
+              <li>Generate personalized feedback and model answers</li>
+              <li>Track your progress and display analytics</li>
+              <li>Process payments and manage subscriptions</li>
+              <li>Send you service-related notifications and updates</li>
+              <li>Respond to your support requests and inquiries</li>
+              <li>Improve our AI models and platform features</li>
+              <li>
+                Detect, prevent, and address technical issues or fraudulent
+                activity
               </li>
               <li>
-                Other information relevant to customer surveys and/or offers
+                Send promotional emails about new features or offers (with your
+                consent)
               </li>
             </ul>
           </section>
 
           <section className={styles.section}>
-            <h2>What we do with the information we gather</h2>
+            <h2>4. How We Share Your Information</h2>
             <p>
-              We require this information to understand your needs and provide
-              you with a better service, and in particular for the following
-              reasons:
+              We do not sell your personal information. We may share your
+              information in the following circumstances:
             </p>
             <ul>
-              <li>Internal record keeping.</li>
               <li>
-                We may use the information to improve our products and services.
+                <strong>Service Providers:</strong> We work with third-party
+                service providers (OpenAI for AI processing, payment processors,
+                hosting providers) who help us operate our platform. These
+                providers have access to your information only to perform
+                specific tasks on our behalf.
               </li>
               <li>
-                We may periodically send promotional emails about new products,
-                special offers or other information which we think you may find
-                interesting using the email address which you have provided.
+                <strong>Legal Requirements:</strong> We may disclose your
+                information if required by law, court order, or governmental
+                regulation.
               </li>
               <li>
-                From time to time, we may also use your information to contact
-                you for market research purposes. We may contact you by email,
-                phone, fax or mail. We may use the information to customise the
-                website according to your interests.
+                <strong>Business Transfers:</strong> In the event of a merger,
+                acquisition, or sale of assets, your information may be
+                transferred to the new entity.
+              </li>
+              <li>
+                <strong>With Your Consent:</strong> We may share your
+                information for any other purpose with your explicit consent.
               </li>
             </ul>
           </section>
 
           <section className={styles.section}>
+            <h2>5. AI Processing and OpenAI</h2>
             <p>
-              We are committed to ensuring that your information is secure. In
-              order to prevent unauthorised access or disclosure we have put in
-              suitable measures.
+              PM Interview Pro uses OpenAI's API to generate feedback, model
+              answers, and conduct AI-powered interviews. Your interview
+              responses are sent to OpenAI for processing. OpenAI's use of data
+              is governed by their data usage policies. We recommend reviewing
+              OpenAI's privacy policy for more information.
             </p>
           </section>
 
           <section className={styles.section}>
-            <h2>How we use cookies</h2>
+            <h2>6. Data Security</h2>
             <p>
-              A cookie is a small file which asks permission to be placed on
-              your computer's hard drive. Once you agree, the file is added and
-              the cookie helps analyze web traffic or lets you know when you
-              visit a particular site. Cookies allow web applications to respond
-              to you as an individual. The web application can tailor its
-              operations to your needs, likes and dislikes by gathering and
-              remembering information about your preferences.
-            </p>
-            <p>
-              We use traffic log cookies to identify which pages are being used.
-              This helps us analyze data about webpage traffic and improve our
-              website in order to tailor it to customer needs. We only use this
-              information for statistical analysis purposes and then the data is
-              removed from the system.
-            </p>
-            <p>
-              Overall, cookies help us provide you with a better website, by
-              enabling us to monitor which pages you find useful and which you
-              do not. A cookie in no way gives us access to your computer or any
-              information about you, other than the data you choose to share
-              with us.
-            </p>
-            <p>
-              You can choose to accept or decline cookies. Most web browsers
-              automatically accept cookies, but you can usually modify your
-              browser setting to decline cookies if you prefer. This may prevent
-              you from taking full advantage of the website.
+              We implement appropriate technical and organizational security
+              measures to protect your personal information from unauthorized
+              access, disclosure, alteration, or destruction. However, no method
+              of transmission over the internet or electronic storage is 100%
+              secure, and we cannot guarantee absolute security.
             </p>
           </section>
 
           <section className={styles.section}>
-            <h2>Controlling your personal information</h2>
+            <h2>7. Cookies and Tracking Technologies</h2>
             <p>
-              You may choose to restrict the collection or use of your personal
-              information in the following ways:
+              We use cookies and similar tracking technologies to track activity
+              on our service and store certain information. Cookies help us:
             </p>
             <ul>
+              <li>Remember your login status and preferences</li>
+              <li>Analyze user behavior to improve our service</li>
+              <li>Provide personalized content and features</li>
+            </ul>
+            <p>
+              You can instruct your browser to refuse all cookies or indicate
+              when a cookie is being sent. However, if you do not accept
+              cookies, you may not be able to use some features of our service.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>8. Data Retention</h2>
+            <p>
+              We retain your personal information for as long as necessary to
+              provide our services and fulfill the purposes outlined in this
+              Privacy Policy. When you delete your account, we will delete or
+              anonymize your personal information, except where we are required
+              to retain it for legal or legitimate business purposes.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>9. Your Rights and Choices</h2>
+            <p>You have the right to:</p>
+            <ul>
               <li>
-                whenever you are asked to fill in a form on the website, look
-                for the box that you can click to indicate that you do not want
-                the information to be used by anybody for direct marketing
-                purposes
+                <strong>Access:</strong> Request access to the personal
+                information we hold about you
               </li>
               <li>
-                if you have previously agreed to us using your personal
-                information for direct marketing purposes, you may change your
-                mind at any time by writing to or emailing us at{" "}
-                <a href="mailto:pminterviewpracticemain@gmail.com">
-                  pminterviewpracticemain@gmail.com
-                </a>
+                <strong>Correction:</strong> Request correction of inaccurate or
+                incomplete information
+              </li>
+              <li>
+                <strong>Deletion:</strong> Request deletion of your personal
+                information
+              </li>
+              <li>
+                <strong>Opt-out:</strong> Unsubscribe from promotional emails at
+                any time
+              </li>
+              <li>
+                <strong>Data Portability:</strong> Request a copy of your data
+                in a portable format
               </li>
             </ul>
             <p>
-              We will not sell, distribute or lease your personal information to
-              third parties unless we have your permission or are required by
-              law to do so. We may use your personal information to send you
-              promotional information about third parties which we think you may
-              find interesting if you tell us that you wish this to happen.
-            </p>
-            <p>
-              If you believe that any information we are holding on you is
-              incorrect or incomplete, please write to #365, Sector 7, HSR
-              Layout Bengaluru KARNATAKA 560102 . or contact us at 9994489681 or{" "}
+              To exercise any of these rights, please contact us at{" "}
               <a href="mailto:pminterviewpracticemain@gmail.com">
                 pminterviewpracticemain@gmail.com
-              </a>{" "}
-              as soon as possible. We will promptly correct any information
-              found to be incorrect.
+              </a>
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>10. Children's Privacy</h2>
+            <p>
+              PM Interview Pro is not intended for users under the age of 18. We
+              do not knowingly collect personal information from children. If
+              you believe we have collected information from a child, please
+              contact us immediately.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>11. International Data Transfers</h2>
+            <p>
+              Your information may be transferred to and processed in countries
+              other than your country of residence. These countries may have
+              different data protection laws. By using our service, you consent
+              to the transfer of your information to these countries.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>12. Changes to This Privacy Policy</h2>
+            <p>
+              We may update our Privacy Policy from time to time. We will notify
+              you of any changes by updating the "Last updated" date at the top
+              of this policy. We encourage you to review this Privacy Policy
+              periodically for any changes.
+            </p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>13. Contact Us</h2>
+            <p>
+              If you have any questions about this Privacy Policy or our data
+              practices, please contact us at{" "}
+              <a href="mailto:pminterviewpracticemain@gmail.com">
+                pminterviewpracticemain@gmail.com
+              </a>
             </p>
           </section>
         </div>
