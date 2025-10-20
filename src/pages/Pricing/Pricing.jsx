@@ -38,7 +38,7 @@ function Pricing() {
         "Progress Dashboard & Analytics",
         "Priority Support & Updates",
       ],
-      cta: "Sign up and try Pro",
+      cta: "Get Pro Free for 48 hrs",
       isFree: false,
       highlighted: true,
     },
@@ -140,43 +140,88 @@ function Pricing() {
         )}
 
         <div className={styles.plansGrid}>
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`${styles.planCard} ${
-                plan.highlighted ? styles.planHighlighted : ""
-              }`}
-            >
-              {plan.highlighted && (
-                <div className={styles.badge}>Most Popular</div>
-              )}
+          <div className={styles.leftColumn}>
+            <div className={styles.whyUpgradeCard}>
+              <h2 className={styles.upgradeTitle}>Why Upgrade to Pro</h2>
+              <ul className={styles.upgradeList}>
+                <li>
+                  Focus your prep on specific skills (Design, Metrics, RCAs,
+                  Strategy)
+                </li>
+                <li>
+                  Get detailed, hiring-manager-style feedback on every answer
+                </li>
+                <li>Learn from perfect &quot;10/10&quot; responses</li>
+                <li>Track your progress and improve faster</li>
+                <li>Practice unlimited interviews — anytime, anywhere</li>
+              </ul>
+            </div>
 
-              <div className={styles.planHeader}>
-                <h3 className={styles.planName}>{plan.name}</h3>
-                <div className={styles.planPrice}>
-                  {plan.highlighted ? (
-                    <>
-                      <span className={styles.freeTrialPrice}>
-                        Free for 48 hrs
-                      </span>
-                      <span className={styles.thenPrice}>
-                        then {plan.price}/{plan.interval}
-                      </span>
-                    </>
-                  ) : (
-                    <>
+            {plans
+              .filter((plan) => plan.isFree)
+              .map((plan) => (
+                <div
+                  key={plan.id}
+                  className={`${styles.planCard} ${styles.compactCard}`}
+                >
+                  <div className={styles.planHeader}>
+                    <h3 className={styles.planName}>{plan.name}</h3>
+                    <div className={styles.planPrice}>
                       <span className={styles.priceAmount}>{plan.price}</span>
                       {plan.interval && (
                         <span className={styles.priceInterval}>
                           /{plan.interval}
                         </span>
                       )}
-                    </>
+                    </div>
+                  </div>
+
+                  <ul className={styles.featureList}>
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className={styles.feature}>
+                        <span className={styles.checkmark}>✓</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    className="btn btn-outline btn-lg"
+                    style={{ width: "100%" }}
+                    onClick={() => handleCheckout(plan)}
+                    disabled={loading}
+                  >
+                    {loading ? "Loading..." : plan.cta}
+                  </button>
+
+                  {plan.showNoSignup && (
+                    <p className={styles.noSignupNote}>no signup needed</p>
                   )}
                 </div>
-              </div>
+              ))}
+          </div>
 
-              {plan.highlighted && (
+          {plans
+            .filter((plan) => plan.highlighted)
+            .map((plan) => (
+              <div
+                key={plan.id}
+                className={`${styles.planCard} ${styles.planHighlighted}`}
+              >
+                <div className={styles.badge}>Most Popular</div>
+
+                <div className={styles.planHeader}>
+                  <h3 className={styles.planName}>{plan.name}</h3>
+                  <div className={styles.planPrice}>
+                    <span className={styles.freeTrialPrice}>
+                      Free for 48 hrs
+                    </span>
+                    <span className={styles.thenPrice}>
+                      then {plan.price}/{plan.interval}
+                    </span>
+                  </div>
+                </div>
+
                 <div className={styles.noCreditCard}>
                   <svg
                     width="16"
@@ -189,57 +234,34 @@ function Pricing() {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  No credit card required
+                  No credit card required for free trial
                 </div>
-              )}
 
-              <ul className={styles.featureList}>
-                {plan.features.map((feature, index) => (
-                  <li key={index} className={styles.feature}>
-                    <span className={styles.checkmark}>✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+                <ul className={styles.featureList}>
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className={styles.feature}>
+                      <span className={styles.checkmark}>✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
 
-              <button
-                className={`btn ${
-                  plan.highlighted ? "btn-primary" : "btn-outline"
-                } btn-lg`}
-                style={{ width: "100%" }}
-                onClick={() => handleCheckout(plan)}
-                disabled={loading}
-              >
-                {loading ? "Loading..." : plan.cta}
-              </button>
+                <button
+                  className="btn btn-primary btn-lg"
+                  style={{ width: "100%" }}
+                  onClick={() => handleCheckout(plan)}
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : plan.cta}
+                </button>
 
-              {plan.showNoSignup && (
-                <p className={styles.noSignupNote}>no signup needed</p>
-              )}
-
-              {plan.highlighted && (
                 <p className={styles.trialDisclaimer}>
                   Signup and get full Pro access free for 48 hours. After trial,
                   automatically switch to Free plan (3 mocks/month) — no
                   charges.
                 </p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className={styles.whyUpgrade}>
-          <h2 className={styles.upgradeTitle}>Why Upgrade to Pro</h2>
-          <ul className={styles.upgradeList}>
-            <li>
-              Focus your prep on specific skills (Design, Metrics, RCAs,
-              Strategy)
-            </li>
-            <li>Get detailed, hiring-manager-style feedback on every answer</li>
-            <li>Learn from perfect &quot;10/10&quot; responses</li>
-            <li>Track your progress and improve faster</li>
-            <li>Practice unlimited interviews — anytime, anywhere</li>
-          </ul>
+              </div>
+            ))}
         </div>
 
         <div className={styles.trustBadges}>
