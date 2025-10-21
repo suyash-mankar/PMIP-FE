@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getDashboardStats,
   getParameterStats,
@@ -13,12 +13,21 @@ import TimelineChart from "../../components/TimelineChart/TimelineChart";
 import styles from "./Dashboard.module.scss";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [dashboardStats, setDashboardStats] = useState(null);
   const [parameterStats, setParameterStats] = useState(null);
   const [categoryStats, setCategoryStats] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Auth guard - redirect to login if not authenticated
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/auth/login");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     fetchAllData();

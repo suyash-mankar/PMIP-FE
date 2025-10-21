@@ -25,14 +25,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
-            <Route
-              path="/interview"
-              element={
-                <ProtectedRoute>
-                  <Interview />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/interview" element={<Interview />} />
             <Route
               path="/history"
               element={

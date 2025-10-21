@@ -1,0 +1,56 @@
+@import "../../styles/variables";
+
+.lockedFeature {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    .lockOverlay {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: $primary-color;
+    }
+
+    .lockIcon {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.lockOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  border-radius: $radius-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.lockIcon {
+  color: $primary-color;
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.lockText {
+  color: $dark-text-primary;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.disabledContent {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}

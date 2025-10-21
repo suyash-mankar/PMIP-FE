@@ -14,6 +14,38 @@
     sans-serif;
 }
 
+// Loading Screen
+.loadingScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: $spacing-lg;
+}
+
+.loadingScreenSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: $primary-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loadingText {
+  font-size: $font-size-lg;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 // Left Sidebar - Question History (ChatGPT Style)
 .sidebar {
   width: 320px;
@@ -717,6 +749,35 @@
     }
   }
 
+  &.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: rgba(156, 163, 175, 0.3);
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: rgba(156, 163, 175, 0.3);
+      background: linear-gradient(
+        135deg,
+        rgba(30, 31, 42, 0.8) 0%,
+        rgba(40, 41, 56, 0.6) 100%
+      );
+
+      &::before,
+      &::after {
+        opacity: 0;
+      }
+
+      .categoryIcon {
+        transform: none;
+        svg {
+          filter: none;
+        }
+      }
+    }
+  }
+
   &.selected {
     border-color: $primary-color;
     background: linear-gradient(
@@ -782,6 +843,92 @@
   }
 }
 
+// Lock Badge for Disabled Features - BRIGHT & ATTENTION-GRABBING
+.lockBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  border: 2px solid #22c55e;
+  border-radius: 8px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4),
+    0 0 20px rgba(16, 185, 129, 0.2);
+
+  &:hover {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border-color: #34d399;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.6),
+      0 0 30px rgba(16, 185, 129, 0.4);
+
+    .lockTooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  svg {
+    color: #ffffff;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+
+.proBadgeText {
+  font-size: 12px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  line-height: 1;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+  filter: brightness(1.2);
+}
+
+// Custom Tooltip for PRO Badge
+.lockTooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border: 2px solid #10b981;
+  border-radius: 8px;
+  padding: 10px 14px;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.3);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 16px;
+    width: 10px;
+    height: 10px;
+    background: #1f2937;
+    border-left: 2px solid #10b981;
+    border-top: 2px solid #10b981;
+    transform: rotate(45deg);
+  }
+}
+
 // Timer Toggle - Subtle Design
 .timerToggleWrapper {
   display: flex;
@@ -811,6 +958,25 @@
 
     .timerLabel {
       color: $dark-text-primary;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: rgba(156, 163, 175, 0.2);
+
+    &:hover {
+      background: transparent;
+      border-color: rgba(156, 163, 175, 0.2);
+
+      .timerIcon {
+        color: $dark-text-muted;
+      }
+
+      .timerLabel {
+        color: $dark-text-muted;
+      }
     }
   }
 }
@@ -1303,6 +1469,9 @@
   cursor: pointer;
   transition: all 0.2s;
   margin-right: $spacing-sm;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover:not(:disabled) {
     background: rgba(168, 85, 247, 0.2);
@@ -1459,6 +1628,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: translateY(-1px);
@@ -1481,6 +1653,54 @@
   &:hover {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+// Locked Button Styles (for PRO features)
+.lockedButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer !important;
+  opacity: 1 !important;
+
+  svg {
+    color: #10b981;
+    filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+  }
+
+  &:hover {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+  }
+}
+
+.proTag {
+  display: inline-block;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-left: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6), 0 2px 4px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.2);
+  animation: proGlow 2s ease-in-out infinite;
+}
+
+@keyframes proGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6), 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.8), 0 2px 6px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -2736,5 +2956,184 @@ button[class*="sendBtn"] {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// Usage Status Indicator - Moved to inline with banner
+.usageStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  border: 1px solid;
+  white-space: nowrap;
+
+  &.statusPro {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #10b981;
+  }
+
+  &.statusTrial {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: #6366f1;
+  }
+
+  &.statusFree {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+    color: #f59e0b;
+  }
+
+  &.statusAnonymous {
+    background: rgba(156, 163, 175, 0.15);
+    border-color: rgba(156, 163, 175, 0.4);
+    color: #d1d5db;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+
+// Pro Features Banner - Redesigned
+.proFeaturesBanner {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.08) 0%,
+    rgba(5, 150, 105, 0.06) 100%
+  );
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  border-radius: 0;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(16, 185, 129, 0.3),
+      transparent
+    );
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
+
+.bannerIcon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+  filter: drop-shadow(0 2px 6px rgba(16, 185, 129, 0.4));
+
+  @media (max-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+.bannerText {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  strong {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    font-size: 13px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+
+    strong {
+      font-size: 14px;
+    }
+  }
+}
+
+.bannerCTA {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  }
+
+  &:active {
+    transform: translateY(0) scale(1);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 13px;
   }
 }

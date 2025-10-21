@@ -11,10 +11,13 @@ import {
   textToSpeech,
   startPracticeSession,
   endPracticeSession,
+  trackQuestionUsage,
 } from "../../api/client";
 import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import Timer from "../../components/Timer/Timer";
 import { useTimer } from "../../hooks/useTimer";
+import usageTracker from "../../services/usageTracker";
+import UpgradeModal from "../../components/UpgradeModal/UpgradeModal";
 import styles from "./Interview.module.scss";
 
 // Text-to-Speech Hook using OpenAI TTS
@@ -100,6 +103,8 @@ const MessageWithSpeaker = memo(
     toggleDetailedFeedback,
     loadingDetailedScore,
     detailedScore,
+    userStatus,
+    handleFeatureLockClick,
   }) => {
     const { isSpeaking, isLoading, toggleSpeak } = useSpeech(msg.message);
 
@@ -125,7 +130,9 @@ const MessageWithSpeaker = memo(
                   showDetailedFeedback,
                   toggleDetailedFeedback,
                   loadingDetailedScore,
-                  detailedScore
+                  detailedScore,
+                  userStatus,
+                  handleFeatureLockClick
                 )}
               </div>
             ) : msg.isModelAnswer ? (
@@ -145,98 +152,100 @@ const MessageWithSpeaker = memo(
               msg.message
             )}
           </div>
-          {msg.sender === "ai" && !msg.isScore && (
-            <button
-              onClick={toggleSpeak}
-              className={`${styles.speakerBtn} ${
-                isSpeaking ? styles.speaking : ""
-              } ${isLoading ? styles.loading : ""}`}
-              title={
-                isLoading
-                  ? "Loading audio..."
-                  : isSpeaking
-                  ? "Stop speaking"
-                  : "Read aloud"
-              }
-              aria-label={
-                isLoading
-                  ? "Loading audio..."
-                  : isSpeaking
-                  ? "Stop speaking"
-                  : "Read aloud"
-              }
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.spinner}
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeDasharray="31.4 31.4"
-                    strokeDashoffset="0"
-                  />
-                </svg>
-              ) : isSpeaking ? (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11 5L6 9H2V15H6L11 19V5Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11 5L6 9H2V15H6L11 19V5Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              )}
-            </button>
-          )}
+          {msg.sender === "ai" &&
+            !msg.isScore &&
+            !userStatus?.isLocked?.voice && (
+              <button
+                onClick={toggleSpeak}
+                className={`${styles.speakerBtn} ${
+                  isSpeaking ? styles.speaking : ""
+                } ${isLoading ? styles.loading : ""}`}
+                title={
+                  isLoading
+                    ? "Loading audio..."
+                    : isSpeaking
+                    ? "Stop speaking"
+                    : "Read aloud"
+                }
+                aria-label={
+                  isLoading
+                    ? "Loading audio..."
+                    : isSpeaking
+                    ? "Stop speaking"
+                    : "Read aloud"
+                }
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={styles.spinner}
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray="31.4 31.4"
+                      strokeDashoffset="0"
+                    />
+                  </svg>
+                ) : isSpeaking ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11 5L6 9H2V15H6L11 19V5Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11 5L6 9H2V15H6L11 19V5Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </button>
+            )}
         </div>
       </div>
     );
@@ -246,6 +255,8 @@ const MessageWithSpeaker = memo(
 MessageWithSpeaker.displayName = "MessageWithSpeaker";
 
 function Interview() {
+  console.log("🎯 Interview component mounted");
+
   // Helper function to render category icon
   const renderCategoryIcon = (categoryValue) => {
     const normalizedCategory = categoryValue.toLowerCase().replace(/\s+/g, "_");
@@ -408,6 +419,13 @@ function Interview() {
   const [showTimer, setShowTimer] = useState(false);
   const [questionAppeared, setQuestionAppeared] = useState(false);
 
+  // Usage tracking states
+  const [userStatus, setUserStatus] = useState(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeReason, setUpgradeReason] = useState("");
+  const [usageLimitChecked, setUsageLimitChecked] = useState(false);
+  const [loadingUserStatus, setLoadingUserStatus] = useState(true);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -425,6 +443,51 @@ function Interview() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Check usage limits on mount
+  useEffect(() => {
+    const checkUsageLimits = async () => {
+      try {
+        console.log("🔍 Checking usage limits...");
+        const status = await usageTracker.checkLimit();
+        console.log("✅ Usage status received:", status);
+        setUserStatus(status);
+        setUsageLimitChecked(true);
+        setLoadingUserStatus(false);
+
+        // Show upgrade modal if trial expired
+        if (status.planType === "pro_trial" && status.trialExpired) {
+          setUpgradeReason("trial_expired");
+          setShowUpgradeModal(true);
+        }
+      } catch (error) {
+        console.error("❌ Error checking usage limits:", error);
+        console.error("Error details:", error.response?.data || error.message);
+        console.warn("⚠️ Using fallback anonymous status due to API error");
+        setUsageLimitChecked(true);
+        setLoadingUserStatus(false);
+
+        // Set a default anonymous status on error (allow the page to load)
+        setUserStatus({
+          isAuthenticated: false,
+          planType: "anonymous",
+          canPractice: true,
+          questionsUsed: 0,
+          questionsRemaining: 3,
+          questionsLimit: 3,
+          limitMessage: "3 of 3 free questions remaining",
+          isLocked: {
+            category: true,
+            voice: true,
+            timer: true,
+            dashboard: true,
+            history: true,
+          },
+        });
+      }
+    };
+    checkUsageLimits();
+  }, []);
 
   // Fetch available categories in the background on component mount
   useEffect(() => {
@@ -456,6 +519,26 @@ function Interview() {
   }, [submitting, scoring, askingClarification, interviewStarted]);
 
   const handleStartInterview = async () => {
+    // Check usage limits before starting
+    if (!usageLimitChecked || !userStatus) {
+      try {
+        const status = await usageTracker.checkLimit();
+        setUserStatus(status);
+
+        if (!status.canPractice) {
+          setUpgradeReason("limit_reached");
+          setShowUpgradeModal(true);
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking usage limits:", error);
+      }
+    } else if (!userStatus.canPractice) {
+      setUpgradeReason("limit_reached");
+      setShowUpgradeModal(true);
+      return;
+    }
+
     setLoading(true);
     setError("");
     setScores(null);
@@ -475,12 +558,17 @@ function Interview() {
     setLoadingFirstQuestion(true);
 
     try {
-      // First, start a practice session
-      const sessionResponse = await startPracticeSession();
-      const newSessionId = sessionResponse.data.sessionId;
-      setPracticeSessionId(newSessionId);
-      setSessionStartTime(Date.now()); // Track start time
-      console.log("Practice session started:", newSessionId);
+      // Start a practice session (only for authenticated users)
+      const isAuthenticated = !!localStorage.getItem("jwt_token");
+      if (isAuthenticated) {
+        const sessionResponse = await startPracticeSession();
+        const newSessionId = sessionResponse.data.sessionId;
+        setPracticeSessionId(newSessionId);
+        setSessionStartTime(Date.now()); // Track start time
+        console.log("Practice session started:", newSessionId);
+      } else {
+        console.log("Anonymous user - skipping practice session creation");
+      }
 
       // Then get the first question
       const response = await startInterview(category);
@@ -663,6 +751,45 @@ function Interview() {
       if (answerIdFromSubmit) {
         setSessionId(answerIdFromSubmit); // Store answerId in sessionId state
       }
+
+      // Track usage immediately after successful answer submission
+      // This happens before scoring, so it always executes even if scoring fails
+      console.log("🚀 STARTING USAGE TRACKING...");
+      try {
+        console.log("🔑 Getting fingerprint...");
+        const fingerprint = await usageTracker.ensureFingerprint();
+        console.log(
+          "📊 Tracking question usage with fingerprint:",
+          fingerprint
+        );
+
+        console.log("📡 Calling trackQuestionUsage API...");
+        const trackResponse = await trackQuestionUsage(fingerprint);
+        console.log("📥 Raw track response:", trackResponse);
+        const updatedStatus = trackResponse.data.status;
+
+        console.log("✅ Updated usage status after tracking:", updatedStatus);
+        console.log("📝 Previous userStatus:", userStatus);
+        console.log("📝 New userStatus being set:", updatedStatus);
+        setUserStatus(updatedStatus);
+        console.log("✅ setUserStatus called successfully");
+
+        // Show upgrade modal if limit reached
+        if (!updatedStatus.canPractice) {
+          console.log("⚠️ Limit reached! Showing upgrade modal...");
+          setUpgradeReason("limit_reached");
+          setShowUpgradeModal(true);
+        }
+      } catch (trackingError) {
+        console.error("❌ ERROR IN TRACKING BLOCK!");
+        console.error("❌ Error tracking usage:", trackingError);
+        console.error(
+          "Error details:",
+          trackingError.response?.data || trackingError.message
+        );
+        console.error("Full error object:", trackingError);
+      }
+      console.log("🏁 USAGE TRACKING BLOCK COMPLETED");
 
       // Add acknowledgment message
       setMessages((prev) => [
@@ -986,6 +1113,41 @@ function Interview() {
       if (newAnswerId) {
         setSessionId(newAnswerId); // Store answerId in sessionId state
 
+        // Track usage immediately after successful answer submission
+        console.log("🚀 STARTING USAGE TRACKING (Final Answer)...");
+        try {
+          console.log("🔑 Getting fingerprint...");
+          const fingerprint = await usageTracker.ensureFingerprint();
+          console.log(
+            "📊 Tracking question usage with fingerprint:",
+            fingerprint
+          );
+
+          console.log("📡 Calling trackQuestionUsage API...");
+          const trackResponse = await trackQuestionUsage(fingerprint);
+          console.log("📥 Raw track response:", trackResponse);
+          const updatedStatus = trackResponse.data.status;
+
+          console.log("✅ Updated usage status after tracking:", updatedStatus);
+          setUserStatus(updatedStatus);
+          console.log("✅ setUserStatus called successfully");
+
+          // Show upgrade modal if limit reached
+          if (!updatedStatus.canPractice) {
+            console.log("⚠️ Limit reached! Showing upgrade modal...");
+            setUpgradeReason("limit_reached");
+            setShowUpgradeModal(true);
+          }
+        } catch (trackingError) {
+          console.error("❌ ERROR IN TRACKING BLOCK!");
+          console.error("❌ Error tracking usage:", trackingError);
+          console.error(
+            "Error details:",
+            trackingError.response?.data || trackingError.message
+          );
+        }
+        console.log("🏁 USAGE TRACKING BLOCK COMPLETED");
+
         // Trigger scoring with the new answerId
         await handleScore(newAnswerId);
       } else {
@@ -1067,6 +1229,16 @@ function Interview() {
   };
 
   const handleNextQuestion = async () => {
+    // Check usage limit before allowing next question
+    if (userStatus && !userStatus.canPractice) {
+      console.log("⚠️ Cannot proceed to next question - limit reached");
+      setUpgradeReason("limit_reached");
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    console.log("🔄 Moving to next question. Current status:", userStatus);
+
     // Stop timer immediately
     setQuestionAppeared(false);
 
@@ -1095,6 +1267,30 @@ function Interview() {
     ]);
 
     try {
+      // Refresh usage status before loading next question
+      try {
+        const fingerprint = await usageTracker.ensureFingerprint();
+        const updatedStatus = await usageTracker.checkLimit();
+        console.log(
+          "✅ Refreshed usage status before next question:",
+          updatedStatus
+        );
+        setUserStatus(updatedStatus);
+
+        // Double-check if user can still practice
+        if (!updatedStatus.canPractice) {
+          console.log(
+            "⚠️ Limit reached during refresh! Showing upgrade modal..."
+          );
+          setUpgradeReason("limit_reached");
+          setShowUpgradeModal(true);
+          setLoading(false);
+          return;
+        }
+      } catch (statusError) {
+        console.error("❌ Error refreshing usage status:", statusError);
+      }
+
       const response = await startInterview(category);
       console.log("Next question response:", response.data);
 
@@ -1172,22 +1368,30 @@ function Interview() {
     setError("");
 
     try {
-      const response = await endPracticeSession(practiceSessionId);
-      const summary = response.data.summary;
+      let enhancedSummary = null;
 
-      // Calculate actual session duration from our tracked time
-      const actualDuration = sessionStartTime
-        ? Math.floor((Date.now() - sessionStartTime) / 1000)
-        : summary.duration;
+      // End practice session (only for authenticated users)
+      const isAuthenticated = !!localStorage.getItem("jwt_token");
+      if (isAuthenticated && practiceSessionId) {
+        const response = await endPracticeSession(practiceSessionId);
+        const summary = response.data.summary;
 
-      // Enhance summary with calculated duration
-      const enhancedSummary = {
-        ...summary,
-        duration: actualDuration,
-      };
+        // Calculate actual session duration from our tracked time
+        const actualDuration = sessionStartTime
+          ? Math.floor((Date.now() - sessionStartTime) / 1000)
+          : summary.duration;
 
-      console.log("Session ended:", enhancedSummary);
-      setSessionSummary(enhancedSummary);
+        // Enhance summary with calculated duration
+        enhancedSummary = {
+          ...summary,
+          duration: actualDuration,
+        };
+
+        console.log("Session ended:", enhancedSummary);
+        setSessionSummary(enhancedSummary);
+      } else {
+        console.log("Anonymous user - skipping session end");
+      }
 
       // Reset interview state
       setInterviewStarted(false);
@@ -1234,8 +1438,70 @@ function Interview() {
     }
   };
 
+  const handleFeatureLockClick = () => {
+    setUpgradeReason("feature_locked");
+    setShowUpgradeModal(true);
+  };
+
+  const renderUsageStatus = () => {
+    if (!userStatus) return null;
+
+    let statusText = "";
+    let statusClass = "";
+
+    console.log("🎯 Rendering usage status with:", {
+      planType: userStatus.planType,
+      questionsUsed: userStatus.questionsUsed,
+      questionsRemaining: userStatus.questionsRemaining,
+      canPractice: userStatus.canPractice,
+    });
+
+    if (userStatus.planType === "pro_paid") {
+      statusText = "Pro plan active";
+      statusClass = styles.statusPro;
+    } else if (userStatus.planType === "pro_trial") {
+      const hoursRemaining = Math.ceil(userStatus.trialHoursRemaining || 0);
+      statusText = `Pro trial: ${hoursRemaining}h remaining`;
+      statusClass = styles.statusTrial;
+    } else if (userStatus.planType === "free") {
+      statusText = `${userStatus.questionsRemaining} questions left this month`;
+      statusClass = styles.statusFree;
+    } else if (userStatus.planType === "anonymous") {
+      statusText = `${userStatus.questionsRemaining} of 3 free questions remaining`;
+      statusClass = styles.statusAnonymous;
+    }
+
+    return (
+      <div className={`${styles.usageStatus} ${statusClass}`}>{statusText}</div>
+    );
+  };
+
+  // Show loading screen while checking user status
+  if (loadingUserStatus) {
+    console.log("🔄 Still loading user status...");
+    return (
+      <div className={styles.interviewPage}>
+        <div className={styles.loadingScreen}>
+          <div className={styles.loadingScreenSpinner}></div>
+          <p className={styles.loadingText}>Initializing interview...</p>
+        </div>
+      </div>
+    );
+  }
+
+  console.log(
+    "✅ User status loaded, rendering interview page. UserStatus:",
+    userStatus
+  );
+
   return (
     <div className={styles.interviewPage}>
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        reason={upgradeReason}
+        userStatus={userStatus}
+      />
       {answerMode ? (
         // Full-Screen Answer Writing Mode
         <div className={styles.answerWritingMode}>
@@ -1309,17 +1575,19 @@ Take your time and be thorough!`}
                     disabled={submitting || scoring}
                   />
 
-                  <div className={styles.finalAnswerActions}>
-                    <VoiceInput
-                      onTranscript={(text) => {
-                        setFinalAnswerDraft((prev) => {
-                          const newText = prev ? prev + " " + text : text;
-                          return newText;
-                        });
-                      }}
-                      disabled={!answerMode || submitting || scoring}
-                    />
-                  </div>
+                  {!userStatus?.isLocked?.voice && (
+                    <div className={styles.finalAnswerActions}>
+                      <VoiceInput
+                        onTranscript={(text) => {
+                          setFinalAnswerDraft((prev) => {
+                            const newText = prev ? prev + " " + text : text;
+                            return newText;
+                          });
+                        }}
+                        disabled={!answerMode || submitting || scoring}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1468,6 +1736,7 @@ Take your time and be thorough!`}
                             : ""
                         }`}
                         onClick={handleRandomMixClick}
+                        disabled={userStatus?.isLocked?.category}
                       >
                         <div className={styles.categoryIcon}>
                           <svg
@@ -1495,9 +1764,42 @@ Take your time and be thorough!`}
                         <button
                           className={`${styles.categoryCard} ${
                             showCategoryOptions ? styles.selected : ""
+                          } ${
+                            userStatus?.isLocked?.category ? styles.locked : ""
                           }`}
-                          onClick={handleSelectCategoryClick}
+                          onClick={
+                            userStatus?.isLocked?.category
+                              ? handleFeatureLockClick
+                              : handleSelectCategoryClick
+                          }
+                          disabled={userStatus?.isLocked?.category}
                         >
+                          {userStatus?.isLocked?.category && (
+                            <div className={styles.lockBadge}>
+                              <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                              >
+                                <rect
+                                  x="3"
+                                  y="11"
+                                  width="18"
+                                  height="11"
+                                  rx="2"
+                                  ry="2"
+                                />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                              </svg>
+                              <span className={styles.proBadgeText}>PRO</span>
+                              <div className={styles.lockTooltip}>
+                                Signup and unlock PRO features
+                              </div>
+                            </div>
+                          )}
                           <div className={styles.categoryIcon}>
                             <svg
                               width="28"
@@ -1533,6 +1835,7 @@ Take your time and be thorough!`}
                                   category === cat.value ? styles.selected : ""
                                 }`}
                                 onClick={() => setCategory(cat.value)}
+                                disabled={userStatus?.isLocked?.category}
                               >
                                 <div className={styles.categoryIcon}>
                                   {renderCategoryIcon(cat.value)}
@@ -1548,12 +1851,17 @@ Take your time and be thorough!`}
 
                   {/* Timer Toggle */}
                   <div className={styles.timerToggleWrapper}>
-                    <label className={styles.timerToggle}>
+                    <label
+                      className={`${styles.timerToggle} ${
+                        userStatus?.isLocked?.timer ? styles.disabled : ""
+                      }`}
+                    >
                       <input
                         type="checkbox"
                         checked={showTimer}
                         onChange={(e) => setShowTimer(e.target.checked)}
                         className={styles.timerCheckbox}
+                        disabled={userStatus?.isLocked?.timer}
                       />
                       <svg
                         className={styles.timerIcon}
@@ -1593,8 +1901,61 @@ Take your time and be thorough!`}
             ) : (
               /* Chat Messages - ChatGPT Style */
               <div className={styles.mainContent}>
-                {/* Category Selector Header - Show during interview */}
-                {interviewStarted && (
+                {/* Pro Features Banner - Show for anonymous/free users */}
+                {(userStatus?.planType === "anonymous" ||
+                  userStatus?.planType === "free") && (
+                  <div
+                    className={styles.proFeaturesBanner}
+                    key={`banner-${userStatus?.questionsUsed}-${userStatus?.questionsRemaining}`}
+                  >
+                    <div className={styles.bannerContent}>
+                      <svg
+                        className={styles.bannerIcon}
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <rect
+                          x="3"
+                          y="11"
+                          width="18"
+                          height="11"
+                          rx="2"
+                          ry="2"
+                        />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                      <span className={styles.bannerText}>
+                        {renderUsageStatus()}
+                        <strong>Unlock PRO features</strong>
+                        <span style={{ opacity: 0.7 }}>
+                          Category selection • Voice I/O • Model answers •
+                          Detailed feedback
+                        </span>
+                      </span>
+                      <button
+                        className={styles.bannerCTA}
+                        onClick={() => navigate("/auth/register")}
+                      >
+                        Start Free Trial →
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Show usage status for Pro users */}
+                {(userStatus?.planType === "pro_paid" ||
+                  userStatus?.planType === "pro_trial") && (
+                  <div style={{ marginBottom: "20px" }}>
+                    {renderUsageStatus()}
+                  </div>
+                )}
+
+                {/* Category Selector Header - Only show for Pro users */}
+                {interviewStarted && !userStatus?.isLocked?.category && (
                   <div className={styles.categoryHeader}>
                     <div className={styles.categoryHeaderContent}>
                       <span className={styles.categoryLabel}>Category:</span>
@@ -1679,6 +2040,8 @@ Take your time and be thorough!`}
                         toggleDetailedFeedback={toggleDetailedFeedback}
                         loadingDetailedScore={loadingDetailedScore}
                         detailedScore={detailedScore}
+                        userStatus={userStatus}
+                        handleFeatureLockClick={handleFeatureLockClick}
                       />
                     ))}
 
@@ -1712,13 +2075,57 @@ Take your time and be thorough!`}
                     ) && (
                       <div className={styles.actionButtons}>
                         <button
-                          className={styles.modelAnswerBtn}
-                          onClick={handleShowModelAnswer}
-                          disabled={loadingModelAnswer}
+                          className={`${styles.modelAnswerBtn} ${
+                            userStatus?.isLocked?.category ||
+                            !userStatus?.isAuthenticated
+                              ? styles.lockedButton
+                              : ""
+                          }`}
+                          onClick={
+                            userStatus?.isLocked?.category ||
+                            !userStatus?.isAuthenticated
+                              ? handleFeatureLockClick
+                              : handleShowModelAnswer
+                          }
+                          disabled={
+                            loadingModelAnswer &&
+                            userStatus?.isAuthenticated &&
+                            !userStatus?.isLocked?.category
+                          }
                         >
-                          {loadingModelAnswer
-                            ? "Loading..."
-                            : "💎 Show Model Answer"}
+                          {userStatus?.isLocked?.category ||
+                          !userStatus?.isAuthenticated ? (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                style={{ marginRight: "6px" }}
+                              >
+                                <rect
+                                  x="3"
+                                  y="11"
+                                  width="18"
+                                  height="11"
+                                  rx="2"
+                                  ry="2"
+                                />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                              </svg>
+                              <span className={styles.proTag}>PRO</span>
+                              Show Model Answer
+                            </>
+                          ) : loadingModelAnswer ? (
+                            "Loading..."
+                          ) : (
+                            "💎 Show Model Answer"
+                          )}
                         </button>
                         <button
                           className={styles.nextQuestionBtn}
@@ -1779,34 +2186,36 @@ Take your time and be thorough!`}
                         />
                       )}
                       <div className={styles.inputActions}>
-                        <VoiceInput
-                          onTranscript={(text) => {
-                            setAnswer((prev) => {
-                              const newText = prev ? prev + " " + text : text;
-                              // Auto-resize after adding voice text
-                              setTimeout(() => {
-                                if (inputRef.current) {
-                                  inputRef.current.style.height = "auto";
-                                  inputRef.current.style.height =
-                                    Math.min(
-                                      inputRef.current.scrollHeight,
-                                      200
-                                    ) + "px";
-                                }
-                              }, 0);
-                              return newText;
-                            });
-                          }}
-                          onRecordingChange={(recording) => {
-                            setIsRecordingVoice(recording);
-                          }}
-                          disabled={
-                            !conversationMode ||
-                            submitting ||
-                            scoring ||
-                            askingClarification
-                          }
-                        />
+                        {!userStatus?.isLocked?.voice && (
+                          <VoiceInput
+                            onTranscript={(text) => {
+                              setAnswer((prev) => {
+                                const newText = prev ? prev + " " + text : text;
+                                // Auto-resize after adding voice text
+                                setTimeout(() => {
+                                  if (inputRef.current) {
+                                    inputRef.current.style.height = "auto";
+                                    inputRef.current.style.height =
+                                      Math.min(
+                                        inputRef.current.scrollHeight,
+                                        200
+                                      ) + "px";
+                                  }
+                                }, 0);
+                                return newText;
+                              });
+                            }}
+                            onRecordingChange={(recording) => {
+                              setIsRecordingVoice(recording);
+                            }}
+                            disabled={
+                              !conversationMode ||
+                              submitting ||
+                              scoring ||
+                              askingClarification
+                            }
+                          />
+                        )}
                         <button
                           className={styles.sendBtn}
                           onClick={
@@ -2008,7 +2417,9 @@ function renderScoreMarkdown(
   showDetailedFeedback,
   toggleDetailedFeedback,
   loadingDetailedScore,
-  detailedScore
+  detailedScore,
+  userStatus,
+  handleFeatureLockClick
 ) {
   // Extract overall score from scoreData or text
   // Try multiple possible field names
@@ -2145,10 +2556,41 @@ function renderScoreMarkdown(
 
           {detailedScore && !loadingDetailedScore && (
             <button
-              className={styles.seeDetailedBtn}
-              onClick={() => toggleDetailedFeedback()}
+              className={`${styles.seeDetailedBtn} ${
+                userStatus?.isLocked?.category || !userStatus?.isAuthenticated
+                  ? styles.lockedButton
+                  : ""
+              }`}
+              onClick={
+                userStatus?.isLocked?.category || !userStatus?.isAuthenticated
+                  ? handleFeatureLockClick
+                  : () => toggleDetailedFeedback()
+              }
             >
-              See Detailed Feedback
+              {userStatus?.isLocked?.category ||
+              !userStatus?.isAuthenticated ? (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ marginRight: "6px" }}
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  <span className={styles.proTag}>PRO</span>
+                  See Detailed Feedback
+                </>
+              ) : (
+                "See Detailed Feedback"
+              )}
             </button>
           )}
         </div>

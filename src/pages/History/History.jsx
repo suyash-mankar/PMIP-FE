@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { getProgressHistory, getCategories } from "../../api/client";
 import SessionList from "../../components/SessionList/SessionList";
 import styles from "./History.module.scss";
 
 function History() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [sessions, setSessions] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -27,6 +28,14 @@ function History() {
     endDate: "",
     search: "",
   });
+
+  // Auth guard - redirect to login if not authenticated
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/auth/login");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     fetchCategories();

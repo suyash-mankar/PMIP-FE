@@ -105,6 +105,15 @@ export const getModelAnswer = (questionId) => {
   });
 };
 
+// Usage Tracking APIs
+export const checkUsageLimit = (fingerprint) => {
+  return apiClient.post("/api/check-limit", { fingerprint });
+};
+
+export const trackQuestionUsage = (fingerprint) => {
+  return apiClient.post("/api/track-usage", { fingerprint });
+};
+
 // Session APIs
 export const getSessions = () => {
   return apiClient.get("/api/sessions");
