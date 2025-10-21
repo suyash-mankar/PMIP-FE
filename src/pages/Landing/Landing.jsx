@@ -681,12 +681,11 @@ function Landing() {
       >
         <div className="container">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Simple, Transparent Plans</h2>
+            <h2 className={styles.sectionTitle}>
+              Plans built for how PMs actually prepare.
+            </h2>
             <p className={styles.pricingSectionSubtitle}>
-              Start Free. Upgrade When You're Ready.
-              <br />
-              Practice real Product Management interviews with AI — get instant
-              feedback, learn from model answers, and track your progress.
+              Start free, upgrade when you’re ready to go unlimited.
             </p>
           </div>
           <div
@@ -697,18 +696,52 @@ function Landing() {
             <div className={styles.leftColumn}>
               <div className={styles.whyUpgradeCard}>
                 <h3 className={styles.upgradeTitle}>Why Upgrade to Pro</h3>
-                <ul className={styles.upgradeList}>
-                  <li>
-                    Focus your prep on specific skills (Design, Metrics, RCAs,
-                    Strategy)
-                  </li>
-                  <li>
-                    Get detailed, hiring-manager-style feedback on every answer
-                  </li>
-                  <li>Learn from perfect "10/10" responses</li>
-                  <li>Track your progress and improve faster</li>
-                  <li>Practice unlimited interviews — anytime, anywhere</li>
-                </ul>
+                <div className={styles.upgradeList}>
+                  <div className={styles.upgradeItem}>
+                    <h4 className={styles.upgradeItemTitle}>
+                      Master Every PM Skill
+                    </h4>
+                    <p className={styles.upgradeItemDesc}>
+                      Practice Product Design, Metrics, RCAs, and Strategy with
+                      unlimited AI mocks.
+                    </p>
+                  </div>
+                  <div className={styles.upgradeItem}>
+                    <h4 className={styles.upgradeItemTitle}>
+                      Get Feedback Like a Hiring Manager
+                    </h4>
+                    <p className={styles.upgradeItemDesc}>
+                      Receive detailed, structured feedback that mirrors real PM
+                      interview rubrics.
+                    </p>
+                  </div>
+                  <div className={styles.upgradeItem}>
+                    <h4 className={styles.upgradeItemTitle}>
+                      Learn from Expert-Level Answers
+                    </h4>
+                    <p className={styles.upgradeItemDesc}>
+                      See perfect, benchmark-quality responses for every
+                      question.
+                    </p>
+                  </div>
+                  <div className={styles.upgradeItem}>
+                    <h4 className={styles.upgradeItemTitle}>
+                      Track Growth That Matters
+                    </h4>
+                    <p className={styles.upgradeItemDesc}>
+                      Progress faster with insights into your strengths and weak
+                      spots.
+                    </p>
+                  </div>
+                  <div className={styles.upgradeItem}>
+                    <h4 className={styles.upgradeItemTitle}>
+                      Unlimited Practice, Anytime
+                    </h4>
+                    <p className={styles.upgradeItemDesc}>
+                      No limits. Practice whenever you want — day or night.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className={`${styles.pricingCard} ${styles.compactCard}`}>
@@ -719,16 +752,18 @@ function Landing() {
                 </div>
                 <ul className={styles.pricingFeatures}>
                   <li>3 mock interviews per month</li>
-                  <li>Basic summary feedback</li>
+                  <li>Basic AI feedback summary</li>
                   <li>Mixed questions from all categories</li>
                 </ul>
                 <Link
                   to={isLoggedIn ? "/interview" : "/auth/register"}
                   className="btn btn-secondary btn-lg"
                 >
-                  Start Free
+                  Start Basic Free Plan
                 </Link>
-                <p className={styles.noSignupNote}>no signup needed</p>
+                <p className={styles.noSignupNote}>
+                  Perfect for getting started. No signup needed
+                </p>
               </div>
             </div>
 
@@ -736,7 +771,9 @@ function Landing() {
               <div className={styles.popularBadge}>Most Popular</div>
               <h3 className={styles.pricingTitle}>Pro Plan</h3>
               <div className={styles.pricingPrice}>
-                <span className={styles.freeTrialPrice}>Free for 48 hrs</span>
+                <span className={styles.freeTrialPrice}>
+                  Free 2-Day Pro Trial
+                </span>
                 <span className={styles.thenPrice}>then ₹499/month</span>
               </div>
               <div className={styles.noCreditCard}>
@@ -755,9 +792,14 @@ function Landing() {
               </div>
               <ul className={styles.pricingFeatures}>
                 <li>Unlimited mock interviews</li>
-                <li>Detailed rubric-based feedback (6 dimensions + tips)</li>
-                <li>Model "10/10" answers for every question</li>
-                <li>Choose category (Design, Metrics, RCAs, Strategy, etc.)</li>
+                <li>
+                  Detailed, rubric-based feedback (6 key PM skills + tips)
+                </li>
+                <li>Expert-level model answers for every question</li>
+                <li>
+                  Choose question category (Design, Metrics, RCAs, Strategy,
+                  etc.)
+                </li>
                 <li>Voice Input & Output</li>
                 <li>Progress Dashboard & Analytics</li>
                 <li>Priority Support & Updates</li>
@@ -768,18 +810,19 @@ function Landing() {
                 disabled={loading}
                 style={{ width: "100%" }}
               >
-                {loading ? "Loading..." : "Sign up and Try Pro"}
+                {loading ? "Loading..." : "Start Free 2-Day Pro Trial"}
               </button>
               <p className={styles.trialDisclaimer}>
-                Signup and get full Pro access free for 48 hours. After trial,
-                automatically switch to Free plan (3 mocks/month) — no charges.
+                Start your 2-day free trial — no credit card required. After
+                trial, you’ll automatically move to the Free Plan (3
+                mocks/month). No hidden charges.
               </p>
             </div>
           </div>
 
-          {/* <p className={styles.pricingNote}>
-            No credit card required. Cancel anytime.
-          </p> */}
+          <p className={styles.pricingReassurance}>
+            Thousands of PM aspirants are already preparing smarter with AI.
+          </p>
         </div>
       </section>
 

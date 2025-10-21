@@ -1421,7 +1421,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $spacing-xl;
-  margin-top: $spacing-2xl;
+  margin-top: $spacing-3xl;
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
@@ -1553,8 +1553,8 @@
   margin-top: $spacing-md;
   padding-top: $spacing-md;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: $font-size-sm;
-  color: $dark-text-secondary;
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
   line-height: 1.6;
   text-align: center;
   font-weight: 500;
@@ -1620,7 +1620,7 @@
   border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 8px;
   color: $success-color;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   font-weight: 600;
 
   svg {
@@ -1664,6 +1664,15 @@
   font-size: $font-size-sm;
 }
 
+.pricingReassurance {
+  text-align: center;
+  color: $dark-text-secondary;
+  opacity: 0.6;
+  margin-top: $spacing-2xl;
+  font-size: $font-size-sm;
+  font-style: italic;
+}
+
 .whyUpgrade {
   max-width: 700px;
   margin: $spacing-2xl auto;
@@ -1685,31 +1694,53 @@
   font-size: $font-size-2xl;
   font-weight: 700;
   color: $dark-text-primary;
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-md;
 }
 
 .upgradeList {
-  list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
 
-  li {
-    padding: $spacing-sm 0;
-    padding-left: $spacing-xl;
-    color: $dark-text-secondary;
-    line-height: 1.6;
-    position: relative;
-    font-size: $font-size-base;
+.upgradeItem {
+  padding: 0;
 
-    &::before {
-      content: "✓";
-      position: absolute;
-      left: $spacing-xs;
-      color: $success-color;
-      font-weight: 700;
-      font-size: $font-size-lg;
+  &:hover {
+    .upgradeItemTitle {
+      color: $primary-color;
     }
   }
+}
+
+.upgradeItemTitle {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $dark-text-primary;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: flex-start;
+  transition: color 0.3s ease;
+
+  &::before {
+    content: "✓";
+    display: inline-block;
+    margin-right: $spacing-xs;
+    color: $primary-color;
+    font-weight: 700;
+    font-size: $font-size-sm;
+    flex-shrink: 0;
+  }
+}
+
+.upgradeItemDesc {
+  color: $dark-text-secondary;
+  font-size: $font-size-xs;
+  line-height: 1.4;
+  margin: 0;
+  padding-left: calc(#{$spacing-sm} + #{$spacing-xs});
 }
 
 // ===== TESTIMONIALS SECTION =====
@@ -2104,7 +2135,7 @@
   font-size: $font-size-3xl;
   font-weight: 700;
   color: $dark-text-primary;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
 }
 
 .sectionSubtext {

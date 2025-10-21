@@ -16,7 +16,7 @@ function Pricing() {
       interval: "month",
       features: [
         "3 mock interviews per month",
-        "Basic summary feedback",
+        "Basic AI feedback summary",
         "Mixed questions from all categories",
       ],
       cta: "Start Free",
