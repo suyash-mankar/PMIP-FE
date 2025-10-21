@@ -539,43 +539,122 @@ function Landing() {
         <div className="container">
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
-              Interview practice that actually feels real.
+              How it works — your AI-powered interview journey.
             </h2>
           </div>
           <div
-            className={`${styles.steps} ${
+            className={`${styles.stepsTimeline} ${
               isVisible.howItWorks ? styles.visible : ""
             }`}
           >
-            <div className={`${styles.step} ${styles.stepDelay1}`}>
-              <div className={styles.stepNumber}>01</div>
-              <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Start a Mock Interview</h3>
+            <div className={`${styles.timelineStep} ${styles.stepDelay1}`}>
+              <div className={styles.stepIconCircle}>
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.stepNumber}>01</div>
+                <h3 className={styles.stepTitle}>Start Your Interview</h3>
                 <p className={styles.stepDescription}>
-                  Choose a difficulty (Entry / Mid / Senior) and get your first
-                  AI question.
+                  Pick a category or practice random questions. The AI starts
+                  with a realistic PM scenario from top tech interviews — and
+                  tracks how long you take to respond.
                 </p>
               </div>
             </div>
 
-            <div className={`${styles.step} ${styles.stepDelay2}`}>
-              <div className={styles.stepNumber}>02</div>
-              <div className={styles.stepContent}>
+            <div className={styles.timelineConnector}></div>
+
+            <div className={`${styles.timelineStep} ${styles.stepDelay2}`}>
+              <div className={styles.stepIconCircle}>
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.stepNumber}>02</div>
                 <h3 className={styles.stepTitle}>Answer Naturally</h3>
                 <p className={styles.stepDescription}>
-                  Type or speak your answer — the AI behaves like a real
-                  interviewer.
+                  Speak or type your answer just like in a real interview. Ask
+                  clarifying questions, refine your thoughts, and submit when
+                  ready.
                 </p>
               </div>
             </div>
 
-            <div className={`${styles.step} ${styles.stepDelay3}`}>
-              <div className={styles.stepNumber}>03</div>
-              <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Get Feedback Instantly</h3>
+            <div className={styles.timelineConnector}></div>
+
+            <div className={`${styles.timelineStep} ${styles.stepDelay3}`}>
+              <div className={styles.stepIconCircle}>
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.stepNumber}>03</div>
+                <h3 className={styles.stepTitle}>Get Feedback</h3>
                 <p className={styles.stepDescription}>
-                  Receive detailed scoring, improvement notes, and a 10/10
-                  sample answer within seconds.
+                  Instantly receive scores, performance breakdowns, and
+                  expert-level model answers to help you improve with every
+                  attempt.
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.timelineConnector}></div>
+
+            <div className={`${styles.timelineStep} ${styles.stepDelay4}`}>
+              <div className={styles.stepIconCircle}>
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="12" y1="20" x2="12" y2="10" />
+                  <line x1="18" y1="20" x2="18" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="16" />
+                </svg>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.stepNumber}>04</div>
+                <h3 className={styles.stepTitle}>Track Progress</h3>
+                <p className={styles.stepDescription}>
+                  Monitor your daily and weekly performance in your personal
+                  dashboard — see how your skills evolve over time.
                 </p>
               </div>
             </div>
@@ -585,8 +664,11 @@ function Landing() {
               to={isLoggedIn ? "/interview" : "/auth/register"}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
             >
-              Try Your First Interview Free →
+              Start Your Free 2-Day Pro Trial
             </Link>
+            <p className={styles.ctaSubtext}>
+              No credit card required • Instant access to all features
+            </p>
           </div>
         </div>
       </section>
