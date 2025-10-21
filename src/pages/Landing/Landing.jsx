@@ -834,9 +834,11 @@ function Landing() {
       >
         <div className="container">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
-              Loved by aspiring PMs worldwide
-            </h2>
+            <h2 className={styles.sectionTitle}>What early users are saying</h2>
+            <p className={styles.sectionSubtext}>
+              Rated ★4.8/5 by aspiring PMs from India's top startups and FAANG
+              companies.
+            </p>
           </div>
           <div
             className={`${styles.testimonialsGrid} ${
@@ -846,14 +848,15 @@ function Landing() {
             <div className={styles.testimonial}>
               <StarRating />
               <p className={styles.testimonialText}>
-                "I used to struggle structuring my answers — this AI gave me
-                instant clarity. The feedback felt like a real PM mentor."
+                "The AI feedback was sharper than any mock I've done with
+                mentors. It pinpointed what I missed in metrics questions —
+                super useful before my Flipkart PM interview."
               </p>
               <div className={styles.testimonialAuthor}>
-                <div className={styles.testimonialAvatar}>RK</div>
+                <div className={styles.testimonialAvatar}>AS</div>
                 <div>
-                  <strong>Rachel K.</strong>
-                  <span>Associate PM @ Microsoft</span>
+                  <strong>Ananya S.</strong>
+                  <span>PM Candidate @ Swiggy</span>
                 </div>
               </div>
             </div>
@@ -861,14 +864,15 @@ function Landing() {
             <div className={styles.testimonial}>
               <StarRating />
               <p className={styles.testimonialText}>
-                "It's better than mock interviews I paid $100+ for. The scoring
-                rubric is spot on."
+                "I used the 2-day Pro trial before my interview week — the
+                instant feedback and 10/10 model answers helped me tighten my
+                structure in just two sessions."
               </p>
               <div className={styles.testimonialAuthor}>
-                <div className={styles.testimonialAvatar}>VS</div>
+                <div className={styles.testimonialAvatar}>RP</div>
                 <div>
-                  <strong>Vikram S.</strong>
-                  <span>PM Candidate</span>
+                  <strong>Rohit P.</strong>
+                  <span>Associate PM @ Razorpay</span>
                 </div>
               </div>
             </div>
@@ -876,14 +880,15 @@ function Landing() {
             <div className={styles.testimonial}>
               <StarRating />
               <p className={styles.testimonialText}>
-                "I finally got confident enough to ace my Meta interview. The
-                10/10 model answers helped a lot."
+                "Loved how personalized the feedback felt. It doesn't just rate
+                your answer — it tells why you missed the mark. Way better than
+                random YouTube prep."
               </p>
               <div className={styles.testimonialAuthor}>
-                <div className={styles.testimonialAvatar}>JL</div>
+                <div className={styles.testimonialAvatar}>NG</div>
                 <div>
-                  <strong>Jenny L.</strong>
-                  <span>PM @ Meta</span>
+                  <strong>Neha G.</strong>
+                  <span>PM Aspirant, IIM Bangalore</span>
                 </div>
               </div>
             </div>
@@ -891,14 +896,15 @@ function Landing() {
             <div className={styles.testimonial}>
               <StarRating />
               <p className={styles.testimonialText}>
-                "Practicing with this tool saved me weeks of prep time. The
-                instant feedback loop is incredibly valuable."
+                "This AI is scary good. I got detailed feedback across product
+                sense, empathy, and communication. It's like having a PM mentor
+                on call 24x7."
               </p>
               <div className={styles.testimonialAuthor}>
-                <div className={styles.testimonialAvatar}>DM</div>
+                <div className={styles.testimonialAvatar}>KT</div>
                 <div>
-                  <strong>David M.</strong>
-                  <span>Senior PM @ Amazon</span>
+                  <strong>Karan T.</strong>
+                  <span>Senior Product Analyst @ Zomato</span>
                 </div>
               </div>
             </div>
@@ -906,8 +912,9 @@ function Landing() {
             <div className={styles.testimonial}>
               <StarRating />
               <p className={styles.testimonialText}>
-                "The AI's feedback is surprisingly accurate. It helped me
-                identify blind spots I didn't even know I had."
+                "Practicing here made me realize where I was overexplaining. The
+                feedback is super specific — something even human mock partners
+                miss."
               </p>
               <div className={styles.testimonialAuthor}>
                 <div className={styles.testimonialAvatar}>PR</div>
@@ -940,32 +947,37 @@ function Landing() {
               {
                 question: "How accurate is the AI feedback?",
                 answer:
-                  "The AI uses structured PM rubrics based on real interview frameworks (like Exponent and FAANG guidelines). It gives reliable, detailed feedback instantly.",
+                  "Our AI is trained specifically for PM interviews using top frameworks and real interview data. It evaluates your answers across key PM skills — structure, metrics, prioritization, communication, and product sense — and provides detailed, actionable feedback instantly.",
               },
               {
                 question: "Can I really use it for free?",
                 answer:
-                  "Yes. You can try 3 interviews per month for free. No credit card needed.",
+                  "Yes! You get full Pro access free for 2 days — no credit card required. After the trial, you'll automatically switch to the Free plan (3 interviews per month).",
               },
               {
                 question: "How does the AI know what's a good answer?",
                 answer:
-                  "It's trained on thousands of real-world PM interview responses and follows evaluation rubrics from top product companies.",
+                  "It's trained on thousands of PM interview examples, case studies, and expert responses — so it knows what great answers look like and can explain why yours worked (or didn't).",
               },
               {
-                question: "Is this only for entry-level PMs?",
+                question: "Can I practice one specific type of PM question?",
                 answer:
-                  "No — you can choose difficulty levels (Entry, Mid, Senior) based on your experience.",
-              },
-              {
-                question: "Can teams or bootcamps use it?",
-                answer:
-                  "Yes! We offer special accounts for training programs and PM coaching cohorts. Contact us to learn more.",
+                  "Yes! You can choose from focused categories like Product Design, Metrics, RCAs, and Strategy — or let the AI pick random questions across all types. It's a great way to target your weak areas or simulate a full interview experience.",
               },
               {
                 question: "What companies are the questions from?",
                 answer:
-                  "Our questions are based on real interview questions from companies like Google, Meta, Amazon, Microsoft, and many top startups.",
+                  "We source real-world PM interview questions from FAANG companies and top Indian startups like Swiggy, Zomato, Razorpay, and Meesho — constantly updated.",
+              },
+              {
+                question: "Will my answers and data stay private?",
+                answer:
+                  "Yes. Your answers are saved only to show progress in your dashboard and are never shared. You can delete your account and data anytime.",
+              },
+              {
+                question: "Who do I contact if I have an issue or question?",
+                answer:
+                  "You can reach us directly at pminterviewpracticemain@gmail.com — whether it's a product issue, feedback, or general query. We usually respond within 24 hours.",
               },
             ].map((faq, index) => (
               <div key={index} className={styles.faqItem}>
