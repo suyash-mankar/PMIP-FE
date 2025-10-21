@@ -236,11 +236,19 @@
 }
 
 .heroSubtitle {
-  font-size: $font-size-xl;
+  font-size: 1rem;
   color: $dark-text-secondary;
   margin-bottom: $spacing-2xl;
   font-weight: 500;
   line-height: 1.6;
+
+  p {
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .heroCTA {
@@ -261,7 +269,7 @@
   display: flex !important;
   align-items: center !important;
   gap: $spacing-sm !important;
-  padding: $spacing-md $spacing-xl !important;
+  padding: 0.7rem $spacing-xl !important;
   font-size: $font-size-lg !important;
   font-weight: 600 !important;
   border-radius: 12px !important;
@@ -984,24 +992,10 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  padding: $spacing-2xl;
+  padding: $spacing-xl;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
-  animation: floatCard 6s ease-in-out infinite;
-
-  &:nth-child(1) {
-    animation-delay: 0s;
-  }
-  &:nth-child(2) {
-    animation-delay: 1s;
-  }
-  &:nth-child(3) {
-    animation-delay: 2s;
-  }
-  &:nth-child(4) {
-    animation-delay: 3s;
-  }
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
@@ -1037,36 +1031,36 @@
 }
 
 .benefitIcon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: $spacing-lg;
-  color: $primary-color;
+  margin-bottom: $spacing-md;
   transition: all 0.4s ease;
-  animation: iconFloat 3s ease-in-out infinite;
-
-  &:hover {
-    color: $accent-color;
-    transform: scale(1.2) rotate(10deg);
-  }
+  display: inline-block;
 
   svg {
+    width: 40px;
+    height: 40px;
+    color: $primary-color;
     filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
-    transition: filter 0.3s ease;
+    transition: all 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.5));
   }
 }
 
 .benefitTitle {
-  font-size: $font-size-xl;
+  font-size: $font-size-lg;
   font-weight: 600;
   color: $dark-text-primary;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
   line-height: 1.3;
 }
 
 .benefitDescription {
   color: $dark-text-secondary;
   line-height: 1.6;
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
 }
 
 // ===== HOW IT WORKS SECTION =====
@@ -1834,10 +1828,17 @@
 }
 
 .sectionTitle {
-  font-size: $font-size-4xl;
+  font-size: $font-size-3xl;
   font-weight: 700;
   color: $dark-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.sectionSubtext {
+  font-size: $font-size-lg;
+  color: $dark-text-secondary;
   margin-bottom: $spacing-lg;
+  font-weight: 400;
   line-height: 1.2;
 
   @media (max-width: $breakpoint-sm) {

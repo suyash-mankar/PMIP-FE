@@ -156,17 +156,20 @@ function Landing() {
                   <span className={styles.titleGradient}>AI</span>
                 </span>
               </h1>
-              <p className={styles.heroSubtitle}>
-                Practice with 200+ real PM interview questions from FAANG
-                companies. Get detailed scoring across 6 key areas with instant
-                feedback and model answers.
-              </p>
+              <div className={styles.heroSubtitle}>
+                <p>
+                  Practice real PM interview questions with an AI trained for
+                  Product Management interviews. Get detailed feedback,
+                  expert-level AI answer, and track your progress in a single
+                  dashboard.
+                </p>
+              </div>
               <div className={styles.heroCTA}>
                 <Link
                   to="/auth/register"
                   className={`btn btn-primary btn-xl ${styles.ctaButton}`}
                 >
-                  Sign up and Try Pro
+                  Start Your Free 2-Day Pro Trial
                   <span className={styles.ctaArrow}>→</span>
                 </Link>
                 <p className={styles.ctaNoCreditCard}>
@@ -181,25 +184,31 @@ function Landing() {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  No credit card required • Free for 48 hours
+                  No credit card required • Instant access to all features
                 </p>
                 <Link to="/interview" className={styles.ctaSecondary}>
-                  Start Practicing without signup
+                  Try sample interview without signup
                 </Link>
               </div>
 
               <div className={styles.heroStats}>
                 <div className={styles.statItem}>
-                  <div className={styles.statNumber}>200+</div>
-                  <div className={styles.statLabel}>Real Questions</div>
+                  <div className={styles.statNumber}>5,000+</div>
+                  <div className={styles.statLabel}>
+                    PM interviews used to train the AI
+                  </div>
                 </div>
                 <div className={styles.statItem}>
-                  <div className={styles.statNumber}>6</div>
-                  <div className={styles.statLabel}>PM Categories</div>
+                  <div className={styles.statNumber}>80%</div>
+                  <div className={styles.statLabel}>
+                    Users improve within 3 sessions
+                  </div>
                 </div>
                 <div className={styles.statItem}>
-                  <div className={styles.statNumber}>95%</div>
-                  <div className={styles.statLabel}>Success Rate</div>
+                  <div className={styles.statNumber}>&lt;60 sec</div>
+                  <div className={styles.statLabel}>
+                    To start your first mock interview
+                  </div>
                 </div>
               </div>
             </div>
@@ -323,11 +332,12 @@ function Landing() {
                         <div className={styles.scoreBar}>
                           <div
                             className={styles.scoreProgress}
-                            style={{ width: "80%" }}
+                            style={{ width: "90%" }}
                           ></div>
                         </div>
-                        <div className={styles.score}>8.0</div>
+                        <div className={styles.score}>9.0</div>
                       </div>
+
                       <div className={styles.scoreItem}>
                         <div className={styles.scoreLabel}>Metrics</div>
                         <div className={styles.scoreBar}>
@@ -338,20 +348,21 @@ function Landing() {
                         </div>
                         <div className={styles.score}>7.0</div>
                       </div>
+
                       <div className={styles.scoreItem}>
-                        <div className={styles.scoreLabel}>Communication</div>
+                        <div className={styles.scoreLabel}>Prioritization</div>
                         <div className={styles.scoreBar}>
                           <div
                             className={styles.scoreProgress}
-                            style={{ width: "90%" }}
+                            style={{ width: "80%" }}
                           ></div>
                         </div>
-                        <div className={styles.score}>9.0</div>
+                        <div className={styles.score}>8.0</div>
                       </div>
                     </div>
                     <div className={styles.scorecardFooter}>
                       <div className={styles.improvementTip}>
-                        💡 <strong>Tip:</strong> Great job on communication!
+                        💡 <strong>Tip:</strong> Great job on structure!
                         Consider adding more specific metrics like DAU/MAU
                         ratios.
                       </div>
@@ -405,6 +416,9 @@ function Landing() {
             <h2 className={styles.sectionTitle}>
               Built to make you interview-ready — fast.
             </h2>
+            <p className={styles.sectionSubtext}>
+              Everything you need to prepare smarter, not harder.
+            </p>
           </div>
           <div
             className={`${styles.benefitsGrid} ${
@@ -414,89 +428,101 @@ function Landing() {
             <div className={styles.benefitCard}>
               <div className={styles.benefitIcon}>
                 <svg
-                  width="48"
-                  height="48"
+                  width="40"
+                  height="40"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-              </div>
-              <h3 className={styles.benefitTitle}>Practice Real Scenarios</h3>
-              <p className={styles.benefitDescription}>
-                Answer realistic PM interview questions in Product Design,
-                Metrics, and Strategy.
-              </p>
-            </div>
-
-            <div className={styles.benefitCard}>
-              <div className={styles.benefitIcon}>
-                <svg
-                  width="48"
-                  height="48"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4" />
-                  <path d="M9 11V9a3 3 0 0 1 6 0v2" />
-                  <path d="M12 16v-2" />
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="12" r="6" />
+                  <circle cx="12" cy="12" r="2" />
                 </svg>
               </div>
               <h3 className={styles.benefitTitle}>
-                Get Instant, Honest Feedback
+                Practice Real Interview Scenarios
               </h3>
               <p className={styles.benefitDescription}>
-                AI scores you across key PM skills — structure, prioritization,
-                communication, and product sense.
+                Tackle questions from real PM interviews — Product Design,
+                Strategy, Metrics, and more. The AI adapts to your skill level
+                so every session feels fresh and challenging.
               </p>
             </div>
 
             <div className={styles.benefitCard}>
               <div className={styles.benefitIcon}>
                 <svg
-                  width="48"
-                  height="48"
+                  width="40"
+                  height="40"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <circle cx="12" cy="12" r="5" />
-                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
               </div>
               <h3 className={styles.benefitTitle}>
-                Learn What Top PMs Would Say
+                Get Actionable Feedback Instantly
               </h3>
               <p className={styles.benefitDescription}>
-                See a 10/10 model answer after every response — understand what
-                "great" actually looks like.
+                Receive structured feedback on every answer — with scores across
+                key PM skills like structure, prioritization, and product sense.
               </p>
             </div>
 
             <div className={styles.benefitCard}>
               <div className={styles.benefitIcon}>
                 <svg
-                  width="48"
-                  height="48"
+                  width="40"
+                  height="40"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <path d="M18 20V10" />
-                  <path d="M12 20V4" />
-                  <path d="M6 20v-6" />
+                  <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" />
+                  <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />
                 </svg>
               </div>
-              <h3 className={styles.benefitTitle}>Track Your Progress</h3>
+              <h3 className={styles.benefitTitle}>
+                Learn from Expert-Level Model Answers
+              </h3>
               <p className={styles.benefitDescription}>
-                Watch your scores improve over time and identify where you need
-                to focus.
+                See how top PMs would approach the same question. Compare your
+                answer with a model response and understand what "great"
+                actually looks like.
+              </p>
+            </div>
+
+            <div className={styles.benefitCard}>
+              <div className={styles.benefitIcon}>
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+              </div>
+              <h3 className={styles.benefitTitle}>
+                Track Your Growth Over Time
+              </h3>
+              <p className={styles.benefitDescription}>
+                Your personal dashboard shows progress, trends, and improvement
+                areas — so you know exactly where to focus next.
               </p>
             </div>
           </div>
