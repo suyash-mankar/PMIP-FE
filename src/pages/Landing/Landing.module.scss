@@ -129,6 +129,11 @@
   position: relative;
   overflow: hidden;
 
+  @media (max-width: $breakpoint-sm) {
+    padding: 0.5rem 1rem;
+    margin-bottom: $spacing-lg;
+  }
+
   &::before {
     content: "";
     position: absolute;
@@ -170,6 +175,10 @@
   font-size: $font-size-sm;
   font-weight: 600;
   color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 .heroTitle {
@@ -181,8 +190,13 @@
   flex-direction: column;
   gap: $spacing-xs;
 
-  @media (max-width: $breakpoint-sm) {
+  @media (max-width: $breakpoint-md) {
     font-size: $font-size-4xl;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-3xl;
+    margin-bottom: $spacing-md;
   }
 }
 
@@ -242,6 +256,11 @@
   font-weight: 500;
   line-height: 1.6;
 
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-lg;
+  }
+
   p {
     margin-bottom: 0.5rem;
 
@@ -258,8 +277,13 @@
   align-items: flex-start;
   margin-bottom: $spacing-xl;
 
+  @media (max-width: $breakpoint-lg) {
+    align-items: center;
+  }
+
   @media (max-width: $breakpoint-sm) {
     gap: $spacing-sm;
+    width: 100%;
   }
 }
 
@@ -282,6 +306,13 @@
   transition: all 0.3s ease !important;
   transform: translateY(0) !important;
   z-index: 10 !important;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 0.65rem $spacing-lg !important;
+    font-size: $font-size-base !important;
+    width: 100%;
+    justify-content: center !important;
+  }
 
   &:hover {
     transform: translateY(-2px) !important;
@@ -329,6 +360,12 @@
   font-weight: 500;
   margin: -$spacing-sm 0 $spacing-xs 0;
 
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+    justify-content: center;
+    text-align: center;
+  }
+
   svg {
     flex-shrink: 0;
   }
@@ -340,6 +377,11 @@
   text-decoration: underline;
   transition: all 0.2s ease;
   cursor: pointer;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+    text-align: center;
+  }
 
   &:hover {
     color: $primary-color;
@@ -377,9 +419,17 @@
   padding-top: $spacing-xl;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 
+  @media (max-width: $breakpoint-md) {
+    gap: $spacing-lg;
+    margin-top: $spacing-lg;
+    padding-top: $spacing-lg;
+  }
+
   @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
     gap: $spacing-md;
-    margin-top: $spacing-xl;
+    margin-top: $spacing-lg;
+    padding-top: $spacing-lg;
   }
 }
 
@@ -423,12 +473,20 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xl;
+  }
 }
 
 .statLabel {
   font-size: $font-size-sm;
   color: $dark-text-secondary;
   font-weight: 500;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 // Product Screenshot Styles
@@ -454,6 +512,15 @@
   transition: transform 0.6s ease;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: $breakpoint-md) {
+    transform: rotateY(0deg) rotateX(0deg);
+    max-width: 100%;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    border-radius: 12px;
+  }
 
   &::before {
     content: "";
@@ -601,6 +668,11 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
 
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md $spacing-lg;
+    gap: $spacing-sm;
+  }
+
   &::after {
     content: "";
     position: absolute;
@@ -710,6 +782,11 @@
   max-height: 200px;
   overflow-y: auto;
 
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-sm;
+    max-height: 180px;
+  }
+
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -730,6 +807,11 @@
   gap: $spacing-sm;
   max-width: 85%;
   animation: messageSlideIn 0.3s ease-out;
+
+  @media (max-width: $breakpoint-sm) {
+    max-width: 95%;
+    gap: $spacing-xs;
+  }
 
   &.ai {
     align-self: flex-start;
@@ -772,6 +854,11 @@
       font-size: $font-size-sm;
       line-height: 1.5;
       border: 1px solid rgba(255, 255, 255, 0.1);
+
+      @media (max-width: $breakpoint-sm) {
+        padding: $spacing-sm $spacing-md;
+        font-size: $font-size-xs;
+      }
     }
   }
 
@@ -785,6 +872,11 @@
       font-size: $font-size-sm;
       line-height: 1.5;
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+
+      @media (max-width: $breakpoint-sm) {
+        padding: $spacing-sm $spacing-md;
+        font-size: $font-size-xs;
+      }
     }
   }
 }
@@ -805,6 +897,10 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: $spacing-md;
   position: relative;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-sm;
+  }
 
   &::before {
     content: "";
@@ -925,6 +1021,10 @@
   padding: $spacing-md $spacing-xl;
   background: rgba(255, 255, 255, 0.05);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-sm $spacing-md;
+  }
 }
 
 .inputField {
@@ -974,6 +1074,10 @@
 .benefits {
   padding: $spacing-3xl 0;
   background: $dark-bg-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md;
+  }
 }
 
 .benefitsGrid {
@@ -996,6 +1100,11 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-lg;
+    border-radius: 12px;
+  }
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
@@ -1055,12 +1164,20 @@
   color: $dark-text-primary;
   margin-bottom: $spacing-sm;
   line-height: 1.3;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+  }
 }
 
 .benefitDescription {
   color: $dark-text-secondary;
   line-height: 1.6;
   font-size: $font-size-sm;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 // ===== HOW IT WORKS SECTION =====
@@ -1071,6 +1188,10 @@
     $dark-bg-primary 0%,
     $dark-bg-secondary 100%
   );
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md;
+  }
 }
 
 .howItWorksCTA {
@@ -1288,12 +1409,20 @@
   color: $dark-text-primary;
   margin-bottom: $spacing-sm;
   line-height: 1.3;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+  }
 }
 
 .stepDescription {
   color: $dark-text-secondary;
   line-height: 1.5;
   font-size: $font-size-sm;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 .timelineConnector {
@@ -1415,6 +1544,10 @@
 .pricing {
   padding: $spacing-3xl 0;
   background: $dark-bg-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md;
+  }
 }
 
 .pricingGrid {
@@ -1455,6 +1588,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-lg;
+    border-radius: 12px;
+  }
 
   &:hover {
     transform: translateY(-8px) scale(1.03);
@@ -1500,6 +1638,11 @@
         padding: $spacing-sm 0;
         font-size: $font-size-base;
         padding-left: $spacing-xl;
+
+        @media (max-width: $breakpoint-sm) {
+          padding: $spacing-xs 0 $spacing-xs $spacing-xl;
+          font-size: $font-size-xs;
+        }
 
         &::before {
           left: $spacing-xs;
@@ -1573,6 +1716,10 @@
   font-weight: 600;
   color: $dark-text-primary;
   margin-bottom: $spacing-md;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-lg;
+  }
 }
 
 .pricingPrice {
@@ -1583,6 +1730,10 @@
   font-size: $font-size-4xl;
   font-weight: 700;
   color: $primary-color;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-3xl;
+  }
 }
 
 .period {
@@ -1600,6 +1751,10 @@
   -webkit-text-fill-color: transparent;
   display: block;
   line-height: 1.2;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-2xl;
+  }
 }
 
 .thenPrice {
@@ -1646,6 +1801,11 @@
     color: $dark-text-secondary;
     position: relative;
     padding-left: $spacing-lg;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-size-xs;
+      padding: $spacing-xs 0 $spacing-xs $spacing-xl;
+    }
 
     &::before {
       content: "✓";
@@ -1695,6 +1855,10 @@
   font-weight: 700;
   color: $dark-text-primary;
   margin-bottom: $spacing-md;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xl;
+  }
 }
 
 .upgradeList {
@@ -1751,6 +1915,10 @@
     $dark-bg-secondary 0%,
     $dark-bg-primary 100%
   );
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md;
+  }
 }
 
 .testimonialsGrid {
@@ -1774,6 +1942,11 @@
   animation: testimonialFloat 5s ease-in-out infinite;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-lg;
+    border-radius: 12px;
+  }
 
   &:nth-child(1) {
     animation-delay: 0s;
@@ -1831,6 +2004,10 @@
   line-height: 1.6;
   margin-bottom: $spacing-lg;
   font-size: $font-size-base;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-sm;
+  }
 }
 
 .testimonialAuthor {
@@ -1872,6 +2049,10 @@
 .faq {
   padding: $spacing-3xl 0;
   background: $dark-bg-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md;
+  }
 }
 
 .faqList {
@@ -1906,6 +2087,11 @@
   align-items: center;
   transition: all 0.3s ease;
 
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-base;
+  }
+
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
@@ -1927,6 +2113,10 @@
 
   &.open {
     max-height: 200px;
+
+    @media (max-width: $breakpoint-sm) {
+      max-height: 300px;
+    }
   }
 
   p {
@@ -1934,6 +2124,11 @@
     color: $dark-text-secondary;
     line-height: 1.6;
     margin: 0;
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-md $spacing-lg;
+      font-size: $font-size-sm;
+    }
   }
 }
 
@@ -1945,6 +2140,10 @@
   color: white;
   text-align: center;
   overflow: hidden;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md;
+  }
 }
 
 .ctaBackground {
@@ -1988,8 +2187,12 @@
   margin-bottom: $spacing-lg;
   color: $dark-text-primary;
 
+  @media (max-width: $breakpoint-md) {
+    font-size: $font-size-3xl;
+  }
+
   @media (max-width: $breakpoint-sm) {
-    font-size: $font-size-4xl;
+    font-size: $font-size-2xl;
   }
 }
 
@@ -1998,6 +2201,11 @@
   color: $dark-text-secondary;
   margin-bottom: $spacing-2xl;
   line-height: 1.6;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+    margin-bottom: $spacing-lg;
+  }
 }
 
 .trustBadges {
@@ -2031,6 +2239,10 @@
   color: $dark-text-secondary;
   padding: $spacing-3xl 0 $spacing-lg;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-md $spacing-lg;
+  }
 }
 
 .footerContent {
@@ -2045,8 +2257,8 @@
   }
 
   @media (max-width: $breakpoint-sm) {
-    grid-template-columns: 1fr;
-    gap: $spacing-lg;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md $spacing-lg;
   }
 }
 
@@ -2056,6 +2268,10 @@
     font-size: $font-size-lg;
     font-weight: 600;
     margin-bottom: $spacing-md;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-size-base;
+    }
   }
 
   ul {
@@ -2083,12 +2299,24 @@
     line-height: 1.6;
     margin-bottom: $spacing-md;
   }
+
+  // Make newsletter column (4th child) span full width on mobile
+  &:nth-child(4) {
+    @media (max-width: $breakpoint-sm) {
+      grid-column: 1 / -1;
+    }
+  }
 }
 
 .newsletterForm {
   display: flex;
   gap: $spacing-sm;
   margin-top: $spacing-md;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
 
   input {
     flex: 1;
@@ -2098,6 +2326,10 @@
     border-radius: 8px;
     color: $dark-text-primary;
     font-size: $font-size-sm;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 100%;
+    }
 
     &::placeholder {
       color: $dark-text-muted;
@@ -2113,6 +2345,10 @@
     white-space: nowrap;
     font-size: $font-size-sm;
     padding: $spacing-sm $spacing-md;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 100%;
+    }
   }
 }
 
@@ -2136,6 +2372,14 @@
   font-weight: 700;
   color: $dark-text-primary;
   margin-bottom: $spacing-sm;
+
+  @media (max-width: $breakpoint-md) {
+    font-size: $font-size-2xl;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xl;
+  }
 }
 
 .sectionSubtext {
@@ -2143,10 +2387,10 @@
   color: $dark-text-secondary;
   margin-bottom: $spacing-lg;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.6;
 
   @media (max-width: $breakpoint-sm) {
-    font-size: $font-size-3xl;
+    font-size: $font-size-base;
   }
 }
 
