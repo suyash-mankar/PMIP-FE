@@ -351,6 +351,15 @@
   font-weight: 600;
 }
 
+.pricingReassurance {
+  text-align: center;
+  font-size: $font-size-base;
+  color: $dark-text-secondary;
+  margin: $spacing-2xl auto;
+  font-style: italic;
+  opacity: 0.8;
+}
+
 .trustBadges {
   display: flex;
   justify-content: center;
@@ -456,29 +465,54 @@
   font-size: $font-size-2xl;
   font-weight: 700;
   color: $dark-text-primary;
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-md;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xl;
+  }
 }
 
 .upgradeList {
-  list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
 
-  li {
-    padding: $spacing-sm 0;
-    padding-left: $spacing-xl;
-    color: $dark-text-secondary;
-    line-height: 1.6;
-    position: relative;
-    font-size: $font-size-base;
+.upgradeItem {
+  padding: 0;
 
-    &::before {
-      content: "✓";
-      position: absolute;
-      left: $spacing-xs;
-      color: $success-color;
-      font-weight: 700;
-      font-size: $font-size-lg;
+  &:hover {
+    .upgradeItemTitle {
+      color: $primary-color;
     }
   }
+}
+
+.upgradeItemTitle {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $dark-text-primary;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: flex-start;
+  transition: color 0.3s ease;
+
+  &::before {
+    content: "✓";
+    display: inline-block;
+    margin-right: $spacing-xs;
+    color: $primary-color;
+    font-weight: 700;
+    font-size: $font-size-sm;
+  }
+}
+
+.upgradeItemDesc {
+  color: $dark-text-secondary;
+  font-size: $font-size-xs;
+  line-height: 1.4;
+  margin: 0;
+  padding-left: calc(#{$spacing-sm} + #{$spacing-xs});
 }

@@ -31,14 +31,14 @@ function Pricing() {
       interval: "month",
       features: [
         "Unlimited mock interviews",
-        "Detailed rubric-based feedback (6 dimensions + tips)",
-        "Model '10/10' answers for every question",
-        "Choose category (Design, Metrics, RCAs, Strategy, etc.)",
+        "Detailed, rubric-based feedback (6 key PM skills + tips)",
+        "Expert-level model answers for every question",
+        "Choose question category (Design, Metrics, RCAs, Strategy, etc.)",
         "Voice Input & Output",
         "Progress Dashboard & Analytics",
         "Priority Support & Updates",
       ],
-      cta: "Get Pro Free for 48 hrs",
+      cta: "Start Free 2-Day Pro Trial",
       isFree: false,
       highlighted: true,
     },
@@ -121,12 +121,11 @@ function Pricing() {
     <div className={styles.pricingPage}>
       <div className="container">
         <div className={styles.header}>
-          <h1 className={styles.pageTitle}>Simple, Transparent Plans</h1>
+          <h1 className={styles.pageTitle}>
+            Plans built for how PMs actually prepare.
+          </h1>
           <p className={styles.pricingSubtitle}>
-            Start Free. Upgrade When You&apos;re Ready.
-            <br />
-            Practice real Product Management interviews with AI — get instant
-            feedback, learn from model answers, and track your progress.
+            Start free, upgrade when you're ready to go unlimited.
           </p>
         </div>
 
@@ -143,18 +142,51 @@ function Pricing() {
           <div className={styles.leftColumn}>
             <div className={styles.whyUpgradeCard}>
               <h2 className={styles.upgradeTitle}>Why Upgrade to Pro</h2>
-              <ul className={styles.upgradeList}>
-                <li>
-                  Focus your prep on specific skills (Design, Metrics, RCAs,
-                  Strategy)
-                </li>
-                <li>
-                  Get detailed, hiring-manager-style feedback on every answer
-                </li>
-                <li>Learn from perfect &quot;10/10&quot; responses</li>
-                <li>Track your progress and improve faster</li>
-                <li>Practice unlimited interviews — anytime, anywhere</li>
-              </ul>
+              <div className={styles.upgradeList}>
+                <div className={styles.upgradeItem}>
+                  <h4 className={styles.upgradeItemTitle}>
+                    Master Every PM Skill
+                  </h4>
+                  <p className={styles.upgradeItemDesc}>
+                    Practice Product Design, Metrics, RCAs, and Strategy with
+                    unlimited AI mocks.
+                  </p>
+                </div>
+                <div className={styles.upgradeItem}>
+                  <h4 className={styles.upgradeItemTitle}>
+                    Get Feedback Like a Hiring Manager
+                  </h4>
+                  <p className={styles.upgradeItemDesc}>
+                    Receive detailed, structured feedback that mirrors real PM
+                    interview rubrics.
+                  </p>
+                </div>
+                <div className={styles.upgradeItem}>
+                  <h4 className={styles.upgradeItemTitle}>
+                    Learn from Expert-Level Answers
+                  </h4>
+                  <p className={styles.upgradeItemDesc}>
+                    See perfect, benchmark-quality responses for every question.
+                  </p>
+                </div>
+                <div className={styles.upgradeItem}>
+                  <h4 className={styles.upgradeItemTitle}>
+                    Track Growth That Matters
+                  </h4>
+                  <p className={styles.upgradeItemDesc}>
+                    Progress faster with insights into your strengths and weak
+                    spots.
+                  </p>
+                </div>
+                <div className={styles.upgradeItem}>
+                  <h4 className={styles.upgradeItemTitle}>
+                    Unlimited Practice, Anytime
+                  </h4>
+                  <p className={styles.upgradeItemDesc}>
+                    No limits. Practice whenever you want — day or night.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {plans
@@ -195,7 +227,9 @@ function Pricing() {
                   </button>
 
                   {plan.showNoSignup && (
-                    <p className={styles.noSignupNote}>no signup needed</p>
+                    <p className={styles.noSignupNote}>
+                      Perfect for getting started. No signup needed
+                    </p>
                   )}
                 </div>
               ))}
@@ -214,7 +248,7 @@ function Pricing() {
                   <h3 className={styles.planName}>{plan.name}</h3>
                   <div className={styles.planPrice}>
                     <span className={styles.freeTrialPrice}>
-                      Free for 48 hrs
+                      Free 2-Day Pro Trial
                     </span>
                     <span className={styles.thenPrice}>
                       then {plan.price}/{plan.interval}
@@ -256,84 +290,99 @@ function Pricing() {
                 </button>
 
                 <p className={styles.trialDisclaimer}>
-                  Signup and get full Pro access free for 48 hours. After trial,
-                  automatically switch to Free plan (3 mocks/month) — no
-                  charges.
+                  Start your 2-day free trial — no credit card required. After
+                  trial, you'll automatically move to the Free Plan (3
+                  mocks/month). No hidden charges.
                 </p>
               </div>
             ))}
         </div>
 
-        <div className={styles.trustBadges}>
-          <div className={styles.trustBadge}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-            </svg>
-            Secure Payment via Razorpay
-          </div>
-          <div className={styles.trustBadge}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
-            </svg>
-            7-Day Money Back Guarantee
-          </div>
-          <div className={styles.trustBadge}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-            </svg>
-            Cancel Anytime
-          </div>
-        </div>
+        <p className={styles.pricingReassurance}>
+          Thousands of PM aspirants are already preparing smarter with AI.
+        </p>
 
         <div className={styles.faq}>
           <h2 className={styles.faqTitle}>Frequently Asked Questions</h2>
           <div className={styles.faqGrid}>
             <div className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>
+                Is there a free trial available?
+              </h3>
+              <p className={styles.faqAnswer}>
+                Yes! You get a 2-day free Pro Trial with full access to all Pro
+                features — no credit card required. After 48 hours, your account
+                automatically moves to the Free Plan (3 mocks/month), so you can
+                keep practicing without interruptions.
+              </p>
+            </div>
+            <div className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>
+                What&apos;s included in the Free Plan?
+              </h3>
+              <p className={styles.faqAnswer}>
+                The Free Plan gives you 3 mock interviews per month, basic
+                feedback, and mixed questions from all PM categories. It&apos;s
+                perfect for getting started before upgrading to Pro.
+              </p>
+            </div>
+            <div className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>
+                What do I get with the Pro Plan?
+              </h3>
+              <p className={styles.faqAnswer}>
+                The Pro Plan unlocks everything — unlimited interviews, detailed
+                rubric-based feedback (6 PM skills), expert-level model answers,
+                voice input/output, progress tracking, and category selection
+                (Design, Metrics, RCAs, Strategy, etc.).
+              </p>
+            </div>
+            <div className={styles.faqItem}>
               <h3 className={styles.faqQuestion}>Can I cancel anytime?</h3>
               <p className={styles.faqAnswer}>
-                Yes! You can cancel your subscription at any time. You&apos;ll
-                continue to have access until the end of your billing period.
+                Yes, absolutely. You can cancel your subscription anytime from
+                your dashboard. You&apos;ll retain access until your billing
+                period ends — no hidden charges or lock-ins.
               </p>
             </div>
             <div className={styles.faqItem}>
               <h3 className={styles.faqQuestion}>
-                What payment methods do you accept?
+                What payment methods do you support?
               </h3>
               <p className={styles.faqAnswer}>
-                We accept all major credit cards, debit cards, UPI, net banking,
-                and wallets through Razorpay, our secure payment processor.
-              </p>
-            </div>
-            <div className={styles.faqItem}>
-              <h3 className={styles.faqQuestion}>Is there a free trial?</h3>
-              <p className={styles.faqAnswer}>
-                Yes! You get a 1-Day Free Pro Trial with full access to all Pro
-                features. After 24 hours, you&apos;ll automatically continue on
-                the Free Plan (3 mocks/month) — no credit card required.
+                We support all major debit/credit cards, UPI, wallets, and net
+                banking through Razorpay — India&apos;s most trusted payment
+                gateway.
               </p>
             </div>
             <div className={styles.faqItem}>
               <h3 className={styles.faqQuestion}>
-                What&apos;s the refund policy?
+                Is my payment information secure?
               </h3>
               <p className={styles.faqAnswer}>
-                We offer a 7-day money-back guarantee for first-time Pro
-                subscribers. See our full <a href="/refund">refund policy</a>{" "}
-                for details.
+                Yes. All transactions are processed securely through Razorpay
+                with bank-level encryption. We don&apos;t store or share your
+                payment details.
               </p>
             </div>
             <div className={styles.faqItem}>
-              <h3 className={styles.faqQuestion}>Why only INR pricing?</h3>
+              <h3 className={styles.faqQuestion}>
+                What&apos;s your refund policy?
+              </h3>
               <p className={styles.faqAnswer}>
-                We're launching in India first! All payments are processed in
-                INR through Razorpay. We'll add more currencies soon.
+                We offer a 7-day money-back guarantee for first-time Pro users.
+                If you&apos;re not satisfied, you can request a refund — no
+                questions asked.
               </p>
             </div>
             <div className={styles.faqItem}>
-              <h3 className={styles.faqQuestion}>Is my payment secure?</h3>
+              <h3 className={styles.faqQuestion}>
+                What happens after my free trial ends?
+              </h3>
               <p className={styles.faqAnswer}>
-                Yes! All payments are processed securely through Razorpay with
-                industry-standard encryption. We never store your card details.
+                Once your 2-day Pro trial ends, you&apos;ll automatically move
+                to the Free Plan (3 mocks/month). You can upgrade to Pro anytime
+                to continue unlimited practice.
               </p>
             </div>
           </div>
