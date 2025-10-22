@@ -1021,25 +1021,23 @@ function Landing() {
         <div className="container">
           <div className={styles.ctaContent}>
             <h2 className={styles.ctaTitle}>
-              Ready to ace your next PM interview?
+              Get Interview Ready - The Smart Way.
             </h2>
             <p className={styles.ctaSubtitle}>
-              Start your first mock interview today — it's free, and you'll get
-              detailed feedback in minutes.
+              Practice real PM interview questions with AI trained for PM
+              interviews. Start free and get expert-level feedback in minutes.
             </p>
             <Link
               to={isLoggedIn ? "/interview" : "/auth/register"}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
             >
-              Start Practicing Free →
+              Start Your Free 2-Day Pro Trial →
             </Link>
             <div className={styles.trustBadges}>
               <span className={styles.trustBadge}>
-                ⭐ 1,000+ users practicing already
+                ⭐ Trusted by 1,000+ PM aspirants
               </span>
-              <span className={styles.trustBadge}>
-                🔒 Secure & private sessions
-              </span>
+              <span className={styles.trustBadge}>🔒 Private & Secure</span>
               <span className={styles.trustBadge}>
                 💳 No credit card required
               </span>
@@ -1057,9 +1055,6 @@ function Landing() {
               <ul>
                 <li>
                   <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/#benefits">Features</Link>
                 </li>
                 <li>
                   <Link to="/pricing">Pricing</Link>
@@ -1081,9 +1076,6 @@ function Landing() {
                 <li>
                   <Link to="/refund">Refund Policy</Link>
                 </li>
-                <li>
-                  <Link to="/shipping">Shipping Policy</Link>
-                </li>
               </ul>
             </div>
             <div className={styles.footerColumn}>
@@ -1093,7 +1085,7 @@ function Landing() {
                   <Link to="/contact">Contact Us</Link>
                 </li>
                 <li>
-                  <a href="mailto:support@pminterviewpractice.com">
+                  <a href="mailto:pminterviewpracticemain@gmail.com">
                     Email Support
                   </a>
                 </li>
@@ -1103,8 +1095,11 @@ function Landing() {
               </ul>
             </div>
             <div className={styles.footerColumn}>
-              <h4>Newsletter</h4>
-              <p>Get interview tips & product updates monthly.</p>
+              <h4>Get smarter with your PM prep.</h4>
+              <p>
+                Join our monthly newsletter for AI tips, new interview
+                questions, and product updates.
+              </p>
               <div className={styles.newsletterForm}>
                 <input type="email" placeholder="Enter your email" />
                 <button className="btn btn-primary">Subscribe</button>
@@ -1112,7 +1107,10 @@ function Landing() {
             </div>
           </div>
           <div className={styles.footerBottom}>
-            <p>© 2025 PM Interview Practice — Built for PMs, powered by AI.</p>
+            <p>
+              © 2025 PM Interview Practice — Built for PMs. Powered by AI.
+              Designed for growth.
+            </p>
           </div>
         </div>
       </footer>
