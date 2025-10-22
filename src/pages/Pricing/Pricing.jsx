@@ -1,13 +1,7 @@
-import { useState } from "react";
-import { createCheckoutSession } from "../../api/client";
-import { useNavigate } from "react-router-dom";
+import { getGoogleAuthUrl } from "../../api/client";
 import styles from "./Pricing.module.scss";
 
 function Pricing() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
   const plans = [
     {
       id: "free",
@@ -19,7 +13,7 @@ function Pricing() {
         "Basic AI feedback summary",
         "Mixed questions from all categories",
       ],
-      cta: "Start Free",
+      cta: "Start Basic Free Plan",
       isFree: true,
       highlighted: false,
       showNoSignup: true,
@@ -44,77 +38,15 @@ function Pricing() {
     },
   ];
 
-  const handleCheckout = async (plan) => {
+  const handleCheckout = (plan) => {
     if (plan.isFree) {
-      navigate("/auth/register");
+      // Allow anyone to try the basic free plan - no signup needed
+      window.location.href = "/interview";
       return;
     }
 
-    setLoading(true);
-    setError("");
-
-    try {
-      // Create checkout session on backend (INR only for India launch)
-      const response = await createCheckoutSession("inr");
-      const {
-        subscriptionId,
-        amount,
-        currency: curr,
-        planName,
-        razorpayKeyId,
-        userEmail,
-        userName,
-      } = response.data;
-
-      // Initialize Razorpay checkout
-      const options = {
-        key: razorpayKeyId,
-        subscription_id: subscriptionId,
-        name: "PM Interview Practice",
-        description: planName,
-        image: "/logo.png", // Your logo
-        prefill: {
-          name: userName,
-          email: userEmail,
-        },
-        theme: {
-          color: "#6366f1", // Your primary color
-        },
-        handler: function (response) {
-          // Payment successful
-          console.log("Payment successful:", response);
-
-          // Redirect to dashboard with success message
-          navigate("/dashboard?payment=success");
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-
-      rzp.on("payment.failed", function (response) {
-        console.error("Payment failed:", response.error);
-        setError(
-          response.error.description ||
-            "Payment failed. Please try again or contact support."
-        );
-        setLoading(false);
-      });
-
-      rzp.open();
-    } catch (err) {
-      console.error("Checkout error:", err);
-      setError(
-        err.response?.data?.error ||
-          err.response?.data?.message ||
-          "Failed to start checkout. Please try again or contact support."
-      );
-      setLoading(false);
-    }
+    // For Pro plan, redirect to Google OAuth for instant signup and free trial
+    window.location.href = getGoogleAuthUrl();
   };
 
   return (
@@ -128,15 +60,6 @@ function Pricing() {
             Start free, upgrade when you're ready to go unlimited.
           </p>
         </div>
-
-        {error && (
-          <div className={styles.errorBox}>
-            {error}
-            <button className={styles.closeError} onClick={() => setError("")}>
-              ×
-            </button>
-          </div>
-        )}
 
         <div className={styles.plansGrid}>
           <div className={styles.leftColumn}>
@@ -221,9 +144,8 @@ function Pricing() {
                     className="btn btn-outline btn-lg"
                     style={{ width: "100%" }}
                     onClick={() => handleCheckout(plan)}
-                    disabled={loading}
                   >
-                    {loading ? "Loading..." : plan.cta}
+                    {plan.cta}
                   </button>
 
                   {plan.showNoSignup && (
@@ -284,9 +206,8 @@ function Pricing() {
                   className="btn btn-primary btn-lg"
                   style={{ width: "100%" }}
                   onClick={() => handleCheckout(plan)}
-                  disabled={loading}
                 >
-                  {loading ? "Loading..." : plan.cta}
+                  {plan.cta}
                 </button>
 
                 <p className={styles.trialDisclaimer}>

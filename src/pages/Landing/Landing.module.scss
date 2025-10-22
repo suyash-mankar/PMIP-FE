@@ -294,12 +294,14 @@
 .ctaButton {
   position: relative;
   overflow: hidden;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: $spacing-sm !important;
   padding: 0.7rem $spacing-xl !important;
   font-size: $font-size-lg !important;
   font-weight: 600 !important;
+  border: none !important;
   border-radius: 12px !important;
   background: linear-gradient(
     135deg,
@@ -310,11 +312,20 @@
   transition: all 0.3s ease !important;
   transform: translateY(0) !important;
   z-index: 10 !important;
+  cursor: pointer !important;
+  color: white !important;
+  text-decoration: none !important;
+  min-width: 400px !important;
+
+  @media (max-width: $breakpoint-md) {
+    min-width: 350px !important;
+  }
 
   @media (max-width: $breakpoint-sm) {
     padding: 0.65rem $spacing-lg !important;
     font-size: $font-size-base !important;
     width: 100%;
+    min-width: auto !important;
     justify-content: center !important;
   }
 

@@ -1,13 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { createCheckoutSession } from "../../api/client";
+import { getGoogleAuthUrl } from "../../api/client";
 import styles from "./Landing.module.scss";
 
 function Landing() {
   const [isVisible, setIsVisible] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
-  const [loading, setLoading] = useState(false);
   const sectionRefs = useRef({});
   const navigate = useNavigate();
 
@@ -47,69 +46,24 @@ function Landing() {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  const handleGoProClick = async (e) => {
+  const handleGoProClick = (e) => {
     e.preventDefault();
 
-    // Check if user is logged in
+    // If not logged in, redirect to Google OAuth for instant signup
     if (!isLoggedIn) {
-      navigate("/auth/login");
+      window.location.href = getGoogleAuthUrl();
       return;
     }
 
-    setLoading(true);
+    // If already logged in, redirect to interview page to start practicing
+    navigate("/interview");
+  };
 
-    try {
-      // Create checkout session on backend (INR only for India launch)
-      const response = await createCheckoutSession("inr");
-      const {
-        subscriptionId,
-        amount,
-        currency: curr,
-        planName,
-        razorpayKeyId,
-        userEmail,
-        userName,
-      } = response.data;
+  const handleFreeClick = (e) => {
+    e.preventDefault();
 
-      // Initialize Razorpay checkout
-      const options = {
-        key: razorpayKeyId,
-        subscription_id: subscriptionId,
-        name: "PM Interview Practice",
-        description: planName,
-        image: "/logo.png",
-        prefill: {
-          name: userName,
-          email: userEmail,
-        },
-        theme: {
-          color: "#6366f1",
-        },
-        handler: function (response) {
-          console.log("Payment successful:", response);
-          navigate("/dashboard?payment=success");
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-
-      rzp.on("payment.failed", function (response) {
-        console.error("Payment failed:", response.error);
-        alert("Payment failed. Please try again.");
-        setLoading(false);
-      });
-
-      rzp.open();
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert("Failed to start checkout. Please try again.");
-      setLoading(false);
-    }
+    // Allow anyone to try the basic free plan - no signup needed
+    navigate("/interview");
   };
 
   // Star Rating Component
@@ -165,13 +119,13 @@ function Landing() {
                 </p>
               </div>
               <div className={styles.heroCTA}>
-                <Link
-                  to="/auth/register"
+                <button
+                  onClick={handleGoProClick}
                   className={`btn btn-primary btn-xl ${styles.ctaButton}`}
                 >
                   Start Your Free 2-Day Pro Trial
                   <span className={styles.ctaArrow}>→</span>
-                </Link>
+                </button>
                 <p className={styles.ctaNoCreditCard}>
                   <svg
                     width="16"
@@ -660,12 +614,12 @@ function Landing() {
             </div>
           </div>
           <div className={styles.howItWorksCTA}>
-            <Link
-              to={isLoggedIn ? "/interview" : "/auth/register"}
+            <button
+              onClick={handleGoProClick}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
             >
               Start Your Free 2-Day Pro Trial
-            </Link>
+            </button>
             <p className={styles.ctaSubtext}>
               No credit card required • Instant access to all features
             </p>
@@ -755,12 +709,13 @@ function Landing() {
                   <li>Basic AI feedback summary</li>
                   <li>Mixed questions from all categories</li>
                 </ul>
-                <Link
-                  to={isLoggedIn ? "/interview" : "/auth/register"}
+                <button
+                  onClick={handleFreeClick}
                   className="btn btn-secondary btn-lg"
+                  style={{ width: "100%" }}
                 >
                   Start Basic Free Plan
-                </Link>
+                </button>
                 <p className={styles.noSignupNote}>
                   Perfect for getting started. No signup needed
                 </p>
@@ -807,10 +762,9 @@ function Landing() {
               <button
                 onClick={handleGoProClick}
                 className="btn btn-primary btn-lg"
-                disabled={loading}
                 style={{ width: "100%" }}
               >
-                {loading ? "Loading..." : "Start Free 2-Day Pro Trial"}
+                Start Free 2-Day Pro Trial
               </button>
               <p className={styles.trialDisclaimer}>
                 Start your 2-day free trial — no credit card required. After
@@ -1027,12 +981,12 @@ function Landing() {
               Practice real PM interview questions with AI trained for PM
               interviews. Start free and get expert-level feedback in minutes.
             </p>
-            <Link
-              to={isLoggedIn ? "/interview" : "/auth/register"}
+            <button
+              onClick={handleGoProClick}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
             >
               Start Your Free 2-Day Pro Trial →
-            </Link>
+            </button>
             <div className={styles.trustBadges}>
               <span className={styles.trustBadge}>
                 ⭐ Trusted by 1,000+ PM aspirants
