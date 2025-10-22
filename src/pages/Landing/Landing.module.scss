@@ -20,6 +20,10 @@
     padding: 6rem $spacing-md 4rem;
     min-height: auto;
   }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 3rem $spacing-md 3rem;
+  }
 }
 
 .heroContent {
@@ -353,7 +357,7 @@
 
 .ctaNoCreditCard {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: $spacing-xs;
   color: $success-color;
   font-size: $font-size-sm;
@@ -364,10 +368,12 @@
     font-size: $font-size-xs;
     justify-content: center;
     text-align: center;
+    margin: $spacing-md 0 $spacing-sm 0;
   }
 
   svg {
     flex-shrink: 0;
+    margin-top: 2px;
   }
 }
 
@@ -1204,7 +1210,7 @@
   font-size: $font-size-sm;
   color: $dark-text-secondary;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: $spacing-xs;
 
@@ -1213,6 +1219,7 @@
     color: $primary-color;
     font-weight: bold;
     font-size: $font-size-base;
+    margin-top: 1px;
   }
 }
 
