@@ -4,11 +4,23 @@
   padding: 4rem $spacing-md 5rem;
   min-height: calc(100vh - 70px);
   background: $dark-bg-primary;
+
+  @media (max-width: $breakpoint-md) {
+    padding: 3rem $spacing-md 3rem;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 2rem $spacing-sm 2rem;
+  }
 }
 
 .header {
   text-align: center;
   margin-bottom: $spacing-3xl;
+
+  @media (max-width: $breakpoint-sm) {
+    margin-bottom: $spacing-2xl;
+  }
 }
 
 .currencySelector {
@@ -86,6 +98,11 @@
   border-left: 4px solid $error-color;
   text-align: center;
   position: relative;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-sm $spacing-xl;
+    font-size: $font-size-sm;
+  }
 }
 
 .closeError {
@@ -121,6 +138,11 @@
   @media (max-width: $breakpoint-md) {
     grid-template-columns: 1fr;
     gap: $spacing-lg;
+    margin-bottom: $spacing-2xl;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    gap: $spacing-md;
   }
 }
 
@@ -146,6 +168,11 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   }
 
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-lg;
+    border-radius: 12px;
+  }
+
   &.compactCard {
     padding: $spacing-xl;
 
@@ -153,6 +180,10 @@
       font-size: $font-size-xl;
       margin-bottom: $spacing-md;
       color: $dark-text-primary;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: $font-size-lg;
+      }
     }
 
     .planPrice {
@@ -162,6 +193,10 @@
     .priceAmount {
       font-size: $font-size-3xl;
       color: $primary-color;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: $font-size-2xl;
+      }
     }
 
     .featureList {
@@ -173,10 +208,19 @@
         padding-left: $spacing-xl;
         color: $dark-text-secondary;
 
+        @media (max-width: $breakpoint-sm) {
+          font-size: $font-size-sm;
+          padding: $spacing-xs 0 $spacing-xs $spacing-lg;
+        }
+
         .checkmark {
           left: $spacing-xs;
         }
       }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-md;
     }
   }
 }
@@ -194,6 +238,10 @@
   &:hover {
     transform: scale(1.05) translateY(-8px);
     box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+
+    @media (max-width: $breakpoint-md) {
+      transform: translateY(-4px);
+    }
   }
 }
 
@@ -208,6 +256,11 @@
   border-radius: 20px;
   font-size: $font-size-sm;
   font-weight: 600;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+  }
 }
 
 .trialBadge {
@@ -246,6 +299,11 @@
   line-height: 1.6;
   text-align: center;
   font-weight: 500;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+    color: #8e8ea0;
+  }
 }
 
 .noSignupNote {
@@ -266,6 +324,10 @@
   font-weight: 600;
   margin-bottom: $spacing-md;
   color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-lg;
+  }
 }
 
 .planPrice {
@@ -276,6 +338,10 @@
   font-size: $font-size-4xl;
   font-weight: 700;
   color: $primary-color;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-3xl;
+  }
 }
 
 .priceInterval {
@@ -300,6 +366,10 @@
   -webkit-text-fill-color: transparent;
   display: block;
   line-height: 1.2;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-2xl;
+  }
 }
 
 .thenPrice {
@@ -307,6 +377,10 @@
   color: $dark-text-secondary;
   display: block;
   margin-top: $spacing-xs;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-sm;
+  }
 }
 
 .noCreditCard {
@@ -327,6 +401,12 @@
   svg {
     flex-shrink: 0;
   }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+    gap: 6px;
+  }
 }
 
 .featureList {
@@ -342,6 +422,11 @@
   color: $dark-text-secondary;
   position: relative;
   padding-left: $spacing-lg;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-sm;
+    padding: $spacing-xs 0 $spacing-xs $spacing-lg;
+  }
 }
 
 .checkmark {
@@ -358,6 +443,11 @@
   margin: $spacing-2xl auto;
   font-style: italic;
   opacity: 0.8;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-sm;
+    margin: $spacing-lg auto;
+  }
 }
 
 .trustBadges {
@@ -393,6 +483,10 @@
   margin: 0 auto;
   padding-top: $spacing-3xl;
   border-top: 1px solid $dark-border-light;
+
+  @media (max-width: $breakpoint-sm) {
+    padding-top: $spacing-2xl;
+  }
 }
 
 .faqTitle {
@@ -410,6 +504,10 @@
 .faqGrid {
   display: grid;
   gap: $spacing-xl;
+
+  @media (max-width: $breakpoint-sm) {
+    gap: $spacing-md;
+  }
 }
 
 .faqItem {
@@ -421,6 +519,11 @@
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+    border-radius: $radius-md;
+  }
 }
 
 .faqQuestion {
@@ -428,6 +531,10 @@
   font-weight: 600;
   margin-bottom: $spacing-sm;
   color: $dark-text-primary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+  }
 }
 
 .faqAnswer {
@@ -441,6 +548,10 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-sm;
   }
 }
 
@@ -459,6 +570,10 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: $spacing-xl;
   text-align: left;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+  }
 }
 
 .upgradeTitle {
@@ -507,6 +622,10 @@
     font-weight: 700;
     font-size: $font-size-sm;
   }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 .upgradeItemDesc {
@@ -515,4 +634,9 @@
   line-height: 1.4;
   margin: 0;
   padding-left: calc(#{$spacing-sm} + #{$spacing-xs});
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
 }
