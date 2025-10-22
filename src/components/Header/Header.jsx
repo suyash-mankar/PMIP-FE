@@ -34,7 +34,12 @@ function Header() {
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("user_email");
     setIsLoggedIn(false);
+    setMobileMenuOpen(false);
     navigate("/auth/login");
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   // Check if we're currently on the interview page
@@ -43,7 +48,7 @@ function Header() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.headerContainer}`}>
-        <Link to="/" className={styles.logo}>
+        <Link to="/" className={styles.logo} onClick={closeMobileMenu}>
           <img
             src="/logo.svg"
             alt="PM Interview Practice Logo"
@@ -74,6 +79,7 @@ function Header() {
                 className={`${styles.navLink} ${
                   location.pathname === "/dashboard" ? styles.active : ""
                 }`}
+                onClick={closeMobileMenu}
               >
                 Dashboard
               </Link>
@@ -82,6 +88,7 @@ function Header() {
                 className={`${styles.navLink} ${
                   location.pathname === "/pricing" ? styles.active : ""
                 }`}
+                onClick={closeMobileMenu}
               >
                 Pricing
               </Link>
@@ -89,6 +96,7 @@ function Header() {
                 <Link
                   to="/interview"
                   className={`btn btn-primary ${styles.startInterviewBtn}`}
+                  onClick={closeMobileMenu}
                 >
                   Start Interview
                 </Link>
@@ -148,12 +156,14 @@ function Header() {
                 className={`${styles.navLink} ${
                   location.pathname === "/pricing" ? styles.active : ""
                 }`}
+                onClick={closeMobileMenu}
               >
                 Pricing
               </Link>
               <Link
                 to="/auth/login"
                 className={`btn btn-primary ${styles.authBtn}`}
+                onClick={closeMobileMenu}
               >
                 Login
               </Link>
