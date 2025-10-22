@@ -93,6 +93,13 @@ function Header() {
                   Start Interview
                 </Link>
               )}
+              {/* Show logout button on mobile, profile dropdown on desktop */}
+              <button
+                onClick={handleLogout}
+                className={`${styles.mobileLogoutBtn}`}
+              >
+                Logout
+              </button>
               <div className={styles.profileDropdown}>
                 <button
                   className={styles.profileBtn}
