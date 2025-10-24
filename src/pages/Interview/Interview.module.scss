@@ -317,174 +317,211 @@
     rgba(30, 31, 42, 0.98) 0%,
     rgba(40, 41, 56, 0.98) 100%
   );
-  border-bottom: 1px solid rgba(99, 102, 241, 0.25);
-  padding: 12px 24px;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(12px);
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  flex-shrink: 0; // Prevent header from shrinking
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .categoryHeaderContent {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  gap: 20px;
+  height: 100%;
+}
+
+// Header Sections
+.headerLeftSection {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding-right: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.headerCenterSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex: 1 1 auto;
+}
+
+.headerRightSection {
+  display: flex;
+  align-items: center;
   gap: 12px;
+  flex: 0 0 auto;
+  padding-left: 20px;
+  margin-left: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.statusBadgeWrapper {
+  display: flex;
+  align-items: center;
+}
+
+// Category Select with Icon
+.categorySelectWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    .categoryIcon {
+      opacity: 1;
+      color: #c7d2fe;
+    }
+
+    .categoryDropdown {
+      color: #e5e7eb;
+    }
+  }
+}
+
+.categoryIcon {
+  color: #9ca3af;
+  opacity: 0.7;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  transition: all 0.2s ease;
 }
 
 .categoryLabel {
-  font-size: 14px;
-  font-weight: 600;
-  color: #9ca3af;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  display: none; // Remove the "Category:" label for cleaner look
 }
 
 .categoryDropdown {
-  background: linear-gradient(
-    135deg,
-    rgba(99, 102, 241, 0.2) 0%,
-    rgba(139, 92, 246, 0.15) 100%
-  );
-  border: 1.5px solid rgba(99, 102, 241, 0.4);
-  border-radius: 10px;
-  padding: 10px 20px;
-  color: #e5e7eb;
-  font-size: 14px;
-  font-weight: 600;
-  min-width: 240px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0;
   cursor: pointer;
   transition: all 0.2s ease;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23a5b4fc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 16px center;
-  padding-right: 48px;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+  background-position: right center;
+  background-size: 10px;
+  padding-right: 18px;
+  min-width: 140px;
+  letter-spacing: 0.2px;
 
   &:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(99, 102, 241, 0.25) 0%,
-      rgba(139, 92, 246, 0.2) 100%
-    );
-    border-color: rgba(99, 102, 241, 0.6);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-    transform: translateY(-1px);
+    color: #e5e7eb;
+  }
+
+  &:focus {
+    outline: none;
+    color: #e5e7eb;
+  }
+
+  option {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 10px;
   }
 }
 
 .nextQuestionHeaderBtn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: linear-gradient(
-    135deg,
-    rgba(139, 92, 246, 0.2) 0%,
-    rgba(99, 102, 241, 0.15) 100%
-  );
-  border: 1.5px solid rgba(139, 92, 246, 0.4);
-  border-radius: 10px;
-  color: #e5e7eb;
-  font-size: 14px;
-  font-weight: 600;
+  gap: 6px;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+  white-space: nowrap;
 
   svg {
     width: 16px;
     height: 16px;
     transition: transform 0.2s ease;
+    opacity: 0.7;
   }
 
   &:hover:not(:disabled) {
-    background: linear-gradient(
-      135deg,
-      rgba(139, 92, 246, 0.25) 0%,
-      rgba(99, 102, 241, 0.2) 100%
-    );
-    border-color: rgba(139, 92, 246, 0.6);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
-    transform: translateY(-1px);
+    color: #c7d2fe;
 
     svg {
       transform: translateX(2px);
+      opacity: 1;
     }
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 
   &:focus {
     outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
   }
+}
 
-  option {
-    background: #2c2d3a;
-    color: #e5e7eb;
-    padding: 12px;
-    font-weight: 500;
-
-    &:hover {
-      background: #383a4a;
-    }
+.buttonText {
+  @media (max-width: $breakpoint-sm) {
+    display: none;
   }
 }
 
 .endSessionBtn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.2) 0%,
-    rgba(220, 38, 38, 0.15) 100%
-  );
-  border: 1.5px solid rgba(239, 68, 68, 0.4);
-  border-radius: 10px;
-  color: #fecaca;
-  font-size: 14px;
-  font-weight: 600;
+  gap: 6px;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+  white-space: nowrap;
 
   svg {
     width: 16px;
     height: 16px;
     transition: transform 0.2s ease;
+    opacity: 0.8;
   }
 
   &:hover:not(:disabled) {
-    background: linear-gradient(
-      135deg,
-      rgba(239, 68, 68, 0.25) 0%,
-      rgba(220, 38, 38, 0.2) 100%
-    );
-    border-color: rgba(239, 68, 68, 0.6);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-    transform: translateY(-1px);
-    color: #fef2f2;
+    color: #f87171;
+
+    svg {
+      opacity: 1;
+    }
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 
   &:focus {
     outline: none;
-    border-color: #ef4444;
-    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
   }
 }
 
@@ -2629,30 +2666,59 @@ button[class*="sendBtn"] {
   }
 
   .categoryHeaderContent {
-    gap: 8px;
+    gap: 12px;
     width: 100%;
   }
 
-  .categoryLabel {
-    font-size: 12px;
+  .headerLeftSection {
+    flex: 0 0 auto;
+    padding-right: 12px;
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .headerCenterSection {
+    flex: 1 1 auto;
+    gap: 16px;
+    justify-content: flex-start;
+  }
+
+  .headerRightSection {
+    flex: 0 0 auto;
+    gap: 8px;
+    padding-left: 12px;
+    margin-left: auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .categorySelectWrapper {
+    gap: 5px;
   }
 
   .categoryDropdown {
-    flex: 1;
-    min-width: 0;
-    font-size: 13px;
-    padding: 8px 40px 8px 12px;
+    font-size: 12px;
+    min-width: 90px;
+    padding-right: 16px;
   }
 
-  .nextQuestionHeaderBtn {
-    padding: 8px 12px;
-    font-size: 13px;
-    white-space: nowrap;
+  .categoryIcon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .nextQuestionHeaderBtn,
+  .endSessionBtn {
+    padding: 6px;
+    font-size: 12px;
+    gap: 4px;
 
     svg {
-      width: 14px;
-      height: 14px;
+      width: 15px;
+      height: 15px;
     }
+  }
+
+  .usageStatus {
+    font-size: 11px;
   }
 }
 
@@ -2959,45 +3025,38 @@ button[class*="sendBtn"] {
   }
 }
 
-// Usage Status Indicator - Moved to inline with banner
+// Usage Status Indicator - Text-based design
 .usageStatus {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 0;
+  border-radius: 0;
   font-size: 13px;
-  font-weight: 600;
-  backdrop-filter: blur(8px);
-  border: 1px solid;
+  font-weight: 500;
+  backdrop-filter: none;
+  border: none;
+  background: transparent;
   white-space: nowrap;
+  letter-spacing: 0.2px;
 
   &.statusPro {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: rgba(16, 185, 129, 0.4);
-    color: #10b981;
+    color: #34d399;
   }
 
   &.statusTrial {
-    background: rgba(99, 102, 241, 0.15);
-    border-color: rgba(99, 102, 241, 0.4);
-    color: #6366f1;
+    color: #a5b4fc;
   }
 
   &.statusFree {
-    background: rgba(245, 158, 11, 0.15);
-    border-color: rgba(245, 158, 11, 0.4);
-    color: #f59e0b;
+    color: #fbbf24;
   }
 
   &.statusAnonymous {
-    background: rgba(156, 163, 175, 0.15);
-    border-color: rgba(156, 163, 175, 0.4);
-    color: #d1d5db;
+    color: #9ca3af;
   }
 
   @media (max-width: $breakpoint-sm) {
-    font-size: 11px;
-    padding: 4px 10px;
+    font-size: 12px;
   }
 }
 

@@ -1946,84 +1946,112 @@ Take your time and be thorough!`}
                   </div>
                 )}
 
-                {/* Show usage status for Pro users */}
-                {(userStatus?.planType === "pro_paid" ||
-                  userStatus?.planType === "pro_trial") && (
-                  <div style={{ marginBottom: "20px" }}>
-                    {renderUsageStatus()}
-                  </div>
-                )}
-
                 {/* Category Selector Header - Only show for Pro users */}
                 {interviewStarted && !userStatus?.isLocked?.category && (
                   <div className={styles.categoryHeader}>
                     <div className={styles.categoryHeaderContent}>
-                      <span className={styles.categoryLabel}>Category:</span>
-                      <select
-                        className={styles.categoryDropdown}
-                        value={category || ""}
-                        onChange={(e) => setCategory(e.target.value || null)}
-                      >
-                        <option value="">Random Mix (All Categories)</option>
-                        {availableCategories.map((cat) => (
-                          <option key={cat.value} value={cat.value}>
-                            {cat.label}
-                          </option>
-                        ))}
-                      </select>
+                      {/* Left Section: Status Badge */}
+                      <div className={styles.headerLeftSection}>
+                        {(userStatus?.planType === "pro_paid" ||
+                          userStatus?.planType === "pro_trial") && (
+                          <div className={styles.statusBadgeWrapper}>
+                            {renderUsageStatus()}
+                          </div>
+                        )}
+                      </div>
 
-                      {/* Timer Display */}
-                      {showTimer && <Timer formatTime={formatTime} />}
+                      {/* Center Section: Category & Timer */}
+                      <div className={styles.headerCenterSection}>
+                        <div className={styles.categorySelectWrapper}>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={styles.categoryIcon}
+                          >
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                          </svg>
+                          <select
+                            className={styles.categoryDropdown}
+                            value={category || ""}
+                            onChange={(e) =>
+                              setCategory(e.target.value || null)
+                            }
+                          >
+                            <option value="">Random Mix</option>
+                            {availableCategories.map((cat) => (
+                              <option key={cat.value} value={cat.value}>
+                                {cat.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
 
-                      <button
-                        className={styles.nextQuestionHeaderBtn}
-                        onClick={handleNextQuestion}
-                        disabled={loading || submitting || scoring}
-                        title="Skip to next question"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                        {/* Timer Display */}
+                        {showTimer && <Timer formatTime={formatTime} />}
+                      </div>
+
+                      {/* Right Section: Action Buttons */}
+                      <div className={styles.headerRightSection}>
+                        <button
+                          className={styles.nextQuestionHeaderBtn}
+                          onClick={handleNextQuestion}
+                          disabled={loading || submitting || scoring}
+                          title="Skip to next question"
                         >
-                          <polyline points="13 17 18 12 13 7"></polyline>
-                          <polyline points="6 17 11 12 6 7"></polyline>
-                        </svg>
-                        Next Question
-                      </button>
-
-                      <button
-                        className={styles.endSessionBtn}
-                        onClick={handleEndSession}
-                        disabled={loading || submitting || scoring}
-                        title="End practice session"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="13 17 18 12 13 7"></polyline>
+                            <polyline points="6 17 11 12 6 7"></polyline>
+                          </svg>
+                          <span className={styles.buttonText}>
+                            Next Question
+                          </span>
+                        </button>
+                        <button
+                          className={styles.endSessionBtn}
+                          onClick={handleEndSession}
+                          disabled={loading || submitting || scoring}
+                          title="End practice session"
                         >
-                          <rect
-                            x="3"
-                            y="3"
-                            width="18"
-                            height="18"
-                            rx="2"
-                            ry="2"
-                          ></rect>
-                        </svg>
-                        End Session
-                      </button>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <rect
+                              x="3"
+                              y="3"
+                              width="18"
+                              height="18"
+                              rx="2"
+                              ry="2"
+                            ></rect>
+                          </svg>
+                          <span className={styles.buttonText}>End Session</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
