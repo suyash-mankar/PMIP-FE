@@ -36,7 +36,7 @@ function Header() {
     localStorage.removeItem("user_email");
     setIsLoggedIn(false);
     setMobileMenuOpen(false);
-    navigate("/auth/login");
+    navigate("/");
   };
 
   const closeMobileMenu = () => {
