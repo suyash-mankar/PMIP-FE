@@ -2141,7 +2141,7 @@ button[class*="sendBtn"] {
 
   .inputAreaWithButton {
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $spacing-md; // Increased gap for mobile too
     padding: 0 $spacing-sm;
     align-items: stretch;
   }
@@ -2157,6 +2157,11 @@ button[class*="sendBtn"] {
   .writeAnswerContainer {
     width: 100%;
     justify-content: center;
+
+    // Hide separator line on mobile
+    &::before {
+      display: none;
+    }
   }
 
   .writeAnswerBtn {
@@ -2165,6 +2170,11 @@ button[class*="sendBtn"] {
     font-size: $font-size-base;
     justify-content: center;
     min-height: 52px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   .answerModeHeader {
@@ -2523,7 +2533,7 @@ button[class*="sendBtn"] {
 .inputAreaWithButton {
   display: flex;
   align-items: stretch; // Make both elements same height
-  gap: $spacing-md;
+  gap: $spacing-xl; // Increased gap for better visual separation
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 $spacing-xl;
@@ -2559,27 +2569,53 @@ button[class*="sendBtn"] {
   flex-shrink: 0;
   display: flex;
   align-items: stretch; // Match input height
+  position: relative;
+
+  // Add visual separator indicator
+  &::before {
+    content: "";
+    position: absolute;
+    left: -#{$spacing-lg};
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+  }
 }
 
 .writeAnswerBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-md $spacing-lg;
+  gap: 8px;
+  padding: $spacing-md $spacing-xl;
   min-height: 52px; // Match input height
   width: 100%;
-  background: $primary-color;
+  background: linear-gradient(135deg, $primary-color 0%, #7c3aed 100%);
   border: none;
   border-radius: $radius-lg;
   color: white;
   font-size: $font-size-base;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  white-space: nowrap;
+
+  svg {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
 
   &:hover:not(:disabled) {
-    background: $primary-hover;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, $primary-hover 0%, #8b5cf6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+
+    svg {
+      transform: scale(1.1) rotate(-5deg);
+    }
   }
 
   &:active:not(:disabled) {
