@@ -145,9 +145,26 @@ const MessageWithSpeaker = memo(
                 </div>
               </div>
             ) : msg.sender === "ai" ? (
-              <div className={styles.clarificationDisplay}>
-                {renderModelAnswerMarkdown(msg.message)}
-              </div>
+              <>
+                <div className={styles.clarificationDisplay}>
+                  {renderModelAnswerMarkdown(msg.message)}
+                </div>
+                {msg.isQuestion &&
+                  (msg.category || (msg.company && msg.company.length > 0)) && (
+                    <div className={styles.chatQuestionMeta}>
+                      {msg.category && (
+                        <span className={styles.chatQuestionCategory}>
+                          {msg.category}
+                        </span>
+                      )}
+                      {msg.company && msg.company.length > 0 && (
+                        <span className={styles.chatQuestionCompany}>
+                          {msg.company.join(", ")}
+                        </span>
+                      )}
+                    </div>
+                  )}
+              </>
             ) : (
               msg.message
             )}
@@ -606,6 +623,9 @@ function Interview() {
             sender: "ai",
             message: interviewQuestion,
             timestamp: new Date().toISOString(),
+            category: response.data.category || null,
+            company: response.data.company || [],
+            isQuestion: true,
           },
         ]);
         setLoadingFirstQuestion(false);
@@ -1258,13 +1278,7 @@ function Interview() {
     setLoadingModelAnswer(false);
 
     // Clear messages for new question - start fresh conversation
-    setMessages([
-      {
-        sender: "ai",
-        message: "Great! Let's move on to your next question...",
-        timestamp: new Date().toISOString(),
-      },
-    ]);
+    setMessages([]);
 
     try {
       // Refresh usage status before loading next question
@@ -1325,10 +1339,14 @@ function Interview() {
             sender: "ai",
             message: interviewQuestion,
             timestamp: new Date().toISOString(),
+            category: response.data.category || null,
+            company: response.data.company || [],
+            isQuestion: true,
           },
         ]);
         setConversationMode(true);
         setQuestionAppeared(true); // Start timer now that question is visible
+        setLoading(false); // Stop loading indicator when question appears
 
         // Add to question history
         setQuestionHistory((prev) => [
@@ -1350,7 +1368,6 @@ function Interview() {
           err.message ||
           "Failed to load next question. Please try again."
       );
-    } finally {
       setLoading(false);
     }
   };
@@ -2076,7 +2093,8 @@ Take your time and be thorough!`}
                     {(submitting ||
                       scoring ||
                       askingClarification ||
-                      loadingFirstQuestion) && (
+                      loadingFirstQuestion ||
+                      loading) && (
                       <div className={`${styles.message} ${styles.messageAI}`}>
                         <div className={styles.messageContent}>
                           <div className={styles.messageAvatar}>AI</div>
