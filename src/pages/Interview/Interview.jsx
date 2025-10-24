@@ -1625,7 +1625,7 @@ Take your time and be thorough!`}
                   className={styles.backToDiscussionBtnBottom}
                   onClick={handleExitAnswerMode}
                 >
-                  ← Back to Discussion
+                  ← Back to clarifying questions
                 </button>
                 <button
                   className={styles.submitFinalAnswerBtnLarge}
