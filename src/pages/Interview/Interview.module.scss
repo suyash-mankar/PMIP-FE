@@ -2485,6 +2485,21 @@ button[class*="sendBtn"] {
   }
 }
 
+.validationMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px $spacing-md;
+  margin-bottom: $spacing-md;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  color: #fbbf24;
+  font-size: 13px;
+  font-weight: 500;
+  animation: slideUp 0.3s ease-out;
+}
+
 .submitFinalAnswerBtnLarge {
   padding: 10px $spacing-xl;
   min-height: 42px;

@@ -17,6 +17,7 @@ import VoiceInput from "../../components/VoiceInput/VoiceInput";
 import Timer from "../../components/Timer/Timer";
 import { useTimer } from "../../hooks/useTimer";
 import usageTracker from "../../services/usageTracker";
+import { getErrorMessage } from "../../services/errorHandler";
 import UpgradeModal from "../../components/UpgradeModal/UpgradeModal";
 import styles from "./Interview.module.scss";
 
@@ -648,11 +649,7 @@ function Interview() {
     } catch (err) {
       console.error("Start interview error:", err);
       console.error("Error response:", err.response?.data);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to start interview. Please try again."
-      );
+      setError(getErrorMessage(err));
       setInterviewStarted(false);
       setLoadingFirstQuestion(false);
     } finally {
@@ -722,11 +719,7 @@ function Interview() {
       ]);
     } catch (err) {
       console.error("Clarification error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to get clarification. Please try again."
-      );
+      setError(getErrorMessage(err));
     } finally {
       setAskingClarification(false);
     }
@@ -892,20 +885,12 @@ function Interview() {
         }
       } catch (scoreError) {
         console.error("Scoring error:", scoreError);
-        setError(
-          scoreError.response?.data?.message ||
-            scoreError.message ||
-            "Failed to score answer. Please try again."
-        );
+        setError(getErrorMessage(scoreError));
         setScoring(false);
       }
     } catch (err) {
       console.error("Submit answer error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to submit answer. Please try again."
-      );
+      setError(getErrorMessage(err));
     } finally {
       setSubmitting(false);
       setScoring(false);
@@ -1035,11 +1020,7 @@ function Interview() {
       })
       .catch((err) => {
         console.error("Summary scoring error:", err);
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "Failed to score answer. Please try again."
-        );
+        setError(getErrorMessage(err));
         setScoring(false);
       });
 
@@ -1081,6 +1062,12 @@ function Interview() {
   const handleSubmitFinalAnswer = async () => {
     if (!finalAnswerDraft.trim()) {
       setError("Please write your answer before submitting");
+      return;
+    }
+
+    // Validate minimum length
+    if (finalAnswerDraft.trim().length < 10) {
+      setError("Answer length should be at least 10 characters long");
       return;
     }
 
@@ -1175,11 +1162,7 @@ function Interview() {
       }
     } catch (err) {
       console.error("Submit error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to submit answer. Please try again."
-      );
+      setError(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
@@ -1226,11 +1209,7 @@ function Interview() {
       ]);
     } catch (err) {
       console.error("Get model answer error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to load model answer. Please try again."
-      );
+      setError(getErrorMessage(err));
     } finally {
       setLoadingModelAnswer(false);
     }
@@ -1363,11 +1342,7 @@ function Interview() {
       }, 600);
     } catch (err) {
       console.error("Next question error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Failed to load next question. Please try again."
-      );
+      setError(getErrorMessage(err));
       setLoading(false);
     }
   };
@@ -1424,12 +1399,7 @@ function Interview() {
       setQuestionHistory([]);
     } catch (err) {
       console.error("End session error:", err);
-      setError(
-        err.response?.data?.error ||
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to end session. Please try again."
-      );
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -1619,6 +1589,14 @@ Take your time and be thorough!`}
                 </span>
               </div>
 
+              {/* Validation Message */}
+              {finalAnswerDraft.trim() &&
+                finalAnswerDraft.trim().length < 10 && (
+                  <div className={styles.validationMessage}>
+                    ⚠ Answer length should be at least 10 characters long
+                  </div>
+                )}
+
               {/* Action Buttons */}
               <div className={styles.actionButtonsContainer}>
                 <button
@@ -1630,7 +1608,12 @@ Take your time and be thorough!`}
                 <button
                   className={styles.submitFinalAnswerBtnLarge}
                   onClick={handleSubmitFinalAnswer}
-                  disabled={submitting || scoring || !finalAnswerDraft.trim()}
+                  disabled={
+                    submitting ||
+                    scoring ||
+                    !finalAnswerDraft.trim() ||
+                    finalAnswerDraft.trim().length < 10
+                  }
                 >
                   {submitting || scoring
                     ? "Submitting..."
