@@ -58,8 +58,8 @@ function Landing() {
       return;
     }
 
-    // If already logged in, redirect to interview page to start practicing
-    navigate("/interview");
+    // If already logged in, redirect to pricing page to upgrade
+    navigate("/pricing");
   };
 
   const handleFreeClick = (e) => {
@@ -75,10 +75,13 @@ function Landing() {
     setNewsletterLoading(true);
 
     try {
-      const response = await subscribeToNewsletter(newsletterEmail, "landing_page");
+      const response = await subscribeToNewsletter(
+        newsletterEmail,
+        "landing_page"
+      );
       setNewsletterStatus("success");
       setNewsletterEmail("");
-      
+
       // Clear success message after 5 seconds
       setTimeout(() => {
         setNewsletterStatus("");
@@ -86,7 +89,7 @@ function Landing() {
     } catch (error) {
       console.error("Newsletter subscription error:", error);
       setNewsletterStatus("error");
-      
+
       // Clear error message after 5 seconds
       setTimeout(() => {
         setNewsletterStatus("");
@@ -127,8 +130,7 @@ function Landing() {
               <div className={styles.badge}>
                 <span className={styles.badgeIcon}>✨</span>
                 <span className={styles.badgeText}>
-                  Trusted by 1,000+ PM aspirants preparing for FAANG & top
-                  startups
+                  AI trained to help PMs crack real interview challenges.
                 </span>
               </div>
               <h1 className={styles.heroTitle}>
@@ -153,7 +155,9 @@ function Landing() {
                   onClick={handleGoProClick}
                   className={`btn btn-primary btn-xl ${styles.ctaButton}`}
                 >
-                  Start Your Free 2-Day Pro Trial
+                  {isLoggedIn
+                    ? "Get Interview Practice Pro"
+                    : "Start Your Free 2-Day Pro Trial"}
                   <span className={styles.ctaArrow}>→</span>
                 </button>
                 <p className={styles.ctaNoCreditCard}>
@@ -168,11 +172,15 @@ function Landing() {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  No credit card required • Instant access to all features
+                  {isLoggedIn
+                    ? "Instant access to all features"
+                    : "No credit card required • Instant access to all features"}
                 </p>
-                <Link to="/interview" className={styles.ctaSecondary}>
-                  Try sample interview without signup
-                </Link>
+                {!isLoggedIn && (
+                  <Link to="/interview" className={styles.ctaSecondary}>
+                    Try sample interview without signup
+                  </Link>
+                )}
               </div>
 
               <div className={styles.heroStats}>
@@ -648,10 +656,14 @@ function Landing() {
               onClick={handleGoProClick}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
             >
-              Start Your Free 2-Day Pro Trial
+              {isLoggedIn
+                ? "Get Interview Practice Pro"
+                : "Start Your Free 2-Day Pro Trial"}
             </button>
             <p className={styles.ctaSubtext}>
-              No credit card required • Instant access to all features
+              {isLoggedIn
+                ? "Instant access to all features"
+                : "No credit card required • Instant access to all features"}
             </p>
           </div>
         </div>
@@ -794,7 +806,9 @@ function Landing() {
                 className="btn btn-primary btn-lg"
                 style={{ width: "100%" }}
               >
-                Start Free 2-Day Pro Trial
+                {isLoggedIn
+                  ? "Get Interview Practice Pro"
+                  : "Start Free 2-Day Pro Trial"}
               </button>
               <p className={styles.trialDisclaimer}>
                 Start your 2-day free trial — no credit card required. After
@@ -1015,11 +1029,13 @@ function Landing() {
               onClick={handleGoProClick}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
             >
-              Start Your Free 2-Day Pro Trial →
+              {isLoggedIn
+                ? "Get Interview Practice Pro →"
+                : "Start Your Free 2-Day Pro Trial →"}
             </button>
             <div className={styles.trustBadges}>
               <span className={styles.trustBadge}>
-                ⭐ Trusted by 1,000+ PM aspirants
+                ⭐ Designed for real PM interviews.
               </span>
               <span className={styles.trustBadge}>🔒 Private & Secure</span>
               <span className={styles.trustBadge}>
@@ -1084,17 +1100,20 @@ function Landing() {
                 Join our monthly newsletter for AI tips, new interview
                 questions, and product updates.
               </p>
-              <form className={styles.newsletterForm} onSubmit={handleNewsletterSubmit}>
-                <input 
-                  type="email" 
-                  placeholder="Enter your email" 
+              <form
+                className={styles.newsletterForm}
+                onSubmit={handleNewsletterSubmit}
+              >
+                <input
+                  type="email"
+                  placeholder="Enter your email"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   required
                   disabled={newsletterLoading}
                 />
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn btn-primary"
                   disabled={newsletterLoading}
                 >

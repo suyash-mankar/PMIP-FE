@@ -2531,10 +2531,18 @@ Take your time and be thorough!`}
 
 // Get dimension labels based on question category (moved outside component for renderScoreMarkdown)
 function getDimensionLabels(questionCategory) {
+  const categoryLower = questionCategory?.toLowerCase() || "";
+  
   const isRCA =
-    questionCategory === "RCA" ||
-    questionCategory?.toLowerCase().includes("root cause") ||
-    questionCategory?.toLowerCase().includes("rca");
+    categoryLower === "rca" ||
+    categoryLower.includes("root cause") ||
+    categoryLower.includes("rca");
+
+  const isGuesstiMate =
+    categoryLower.includes("guesstimate") ||
+    categoryLower.includes("market sizing") ||
+    categoryLower.includes("estimation") ||
+    categoryLower === "quantitative";
 
   if (isRCA) {
     return {
@@ -2546,7 +2554,17 @@ function getDimensionLabels(questionCategory) {
     };
   }
 
-  // Default labels for non-RCA questions
+  if (isGuesstiMate) {
+    return {
+      structure: "Clarification & Scoping",
+      metrics: "Assumptions & Calculations",
+      prioritization: "Structured Breakdown",
+      userEmpathy: "Mathematical Logic",
+      communication: "Sanity Check",
+    };
+  }
+
+  // Default labels for other question types
   return {
     structure: "Structure",
     metrics: "Metrics",
