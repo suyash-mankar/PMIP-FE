@@ -3,10 +3,6 @@ import axios from "axios";
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 
-// Debug: Log the API URL being used
-console.log("🔍 API_BASE_URL:", API_BASE_URL);
-console.log("🔍 VITE_API_BASE_URL env var:", import.meta.env.VITE_API_BASE_URL);
-
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -51,9 +47,7 @@ export const register = (email, password) => {
 };
 
 export const getGoogleAuthUrl = () => {
-  const url = `${API_BASE_URL}/api/auth/google`;
-  console.log("🔍 Google Auth URL:", url);
-  return url;
+  return `${API_BASE_URL}/api/auth/google`;
 };
 
 // Interview APIs
