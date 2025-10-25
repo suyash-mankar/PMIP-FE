@@ -1468,9 +1468,47 @@ function Interview() {
     console.log("🔄 Still loading user status...");
     return (
       <div className={styles.interviewPage}>
-        <div className={styles.loadingScreen}>
-          <div className={styles.loadingScreenSpinner}></div>
-          <p className={styles.loadingText}>Initializing interview...</p>
+        <div className={styles.loaderContainer}>
+          <div className={styles.loaderContent}>
+            <div className={styles.loaderRings}>
+              <div className={styles.ring}></div>
+              <div className={styles.ring}></div>
+              <div className={styles.ring}></div>
+            </div>
+            <div className={styles.loaderIcon}>
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3 className={styles.loaderTitle}>Initializing Interview</h3>
+          <p className={styles.loaderSubtitle}>
+            Preparing your interview experience...
+          </p>
+          <div className={styles.loaderDots}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
       </div>
     );
