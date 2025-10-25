@@ -1,6 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { getGoogleAuthUrl, subscribeToNewsletter } from "../../api/client";
+import {
+  getGoogleAuthUrl,
+  subscribeToNewsletter,
+  createCheckoutSession,
+} from "../../api/client";
 import styles from "./Landing.module.scss";
 
 function Landing() {
@@ -10,6 +14,7 @@ function Landing() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState("");
   const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const sectionRefs = useRef({});
   const navigate = useNavigate();
 
@@ -49,6 +54,57 @@ function Landing() {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
+  const handleRazorpayCheckout = async () => {
+    setIsProcessing(true);
+    try {
+      // Create checkout session
+      const response = await createCheckoutSession("inr");
+      const {
+        subscriptionId,
+        amount,
+        currency,
+        razorpayKeyId,
+        userEmail,
+        userName,
+      } = response.data;
+
+      // Initialize Razorpay Checkout
+      const options = {
+        key: razorpayKeyId,
+        subscription_id: subscriptionId,
+        name: "PM Interview Practice",
+        description: "Pro Plan - Monthly Subscription",
+        amount: amount,
+        currency: currency,
+        prefill: {
+          email: userEmail,
+          name: userName,
+        },
+        theme: {
+          color: "#8b5cf6", // Purple theme matching your app
+        },
+        handler: function (response) {
+          // Payment successful
+          console.log("Payment successful:", response);
+          alert("Payment successful! You now have Pro access.");
+          window.location.href = "/dashboard";
+        },
+        modal: {
+          ondismiss: function () {
+            setIsProcessing(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("Failed to initiate checkout. Please try again.");
+      setIsProcessing(false);
+    }
+  };
+
   const handleGoProClick = (e) => {
     e.preventDefault();
 
@@ -58,8 +114,8 @@ function Landing() {
       return;
     }
 
-    // If already logged in, redirect to pricing page to upgrade
-    navigate("/pricing");
+    // If already logged in, directly initiate Razorpay checkout
+    handleRazorpayCheckout();
   };
 
   const handleFreeClick = (e) => {
@@ -160,26 +216,26 @@ function Landing() {
                     : "Start Your Free 2-Day Pro Trial"}
                   <span className={styles.ctaArrow}>→</span>
                 </button>
-                <p className={styles.ctaNoCreditCard}>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                  {isLoggedIn
-                    ? "Instant access to all features"
-                    : "No credit card required • Instant access to all features"}
-                </p>
                 {!isLoggedIn && (
-                  <Link to="/interview" className={styles.ctaSecondary}>
-                    Try sample interview without signup
-                  </Link>
+                  <>
+                    <p className={styles.ctaNoCreditCard}>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                      </svg>
+                      No credit card required • Instant access to all features
+                    </p>
+                    <Link to="/interview" className={styles.ctaSecondary}>
+                      Try sample interview without signup
+                    </Link>
+                  </>
                 )}
               </div>
 
@@ -660,11 +716,11 @@ function Landing() {
                 ? "Get Interview Practice Pro"
                 : "Start Your Free 2-Day Pro Trial"}
             </button>
-            <p className={styles.ctaSubtext}>
-              {isLoggedIn
-                ? "Instant access to all features"
-                : "No credit card required • Instant access to all features"}
-            </p>
+            {!isLoggedIn && (
+              <p className={styles.ctaSubtext}>
+                No credit card required • Instant access to all features
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -755,12 +811,15 @@ function Landing() {
                   onClick={handleFreeClick}
                   className="btn btn-secondary btn-lg"
                   style={{ width: "100%" }}
+                  disabled={isLoggedIn}
                 >
                   Start Basic Free Plan
                 </button>
-                <p className={styles.noSignupNote}>
-                  Perfect for getting started. No signup needed
-                </p>
+                {!isLoggedIn && (
+                  <p className={styles.noSignupNote}>
+                    Perfect for getting started. No signup needed
+                  </p>
+                )}
               </div>
             </div>
 
@@ -768,25 +827,42 @@ function Landing() {
               <div className={styles.popularBadge}>Most Popular</div>
               <h3 className={styles.pricingTitle}>Pro Plan</h3>
               <div className={styles.pricingPrice}>
-                <span className={styles.freeTrialPrice}>
-                  Free 2-Day Pro Trial
-                </span>
-                <span className={styles.thenPrice}>then ₹499/month</span>
+                {isLoggedIn ? (
+                  <div className={styles.priceDisplay}>
+                    <div className={styles.priceWrapper}>
+                      <span className={styles.currency}>₹</span>
+                      <span className={styles.priceAmount}>499</span>
+                      <span className={styles.priceInterval}>/month</span>
+                    </div>
+                    <p className={styles.priceSubtext}>
+                      Unlimited access to all Pro features
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <span className={styles.freeTrialPrice}>
+                      Free 2-Day Pro Trial
+                    </span>
+                    <span className={styles.thenPrice}>then ₹499/month</span>
+                  </>
+                )}
               </div>
-              <div className={styles.noCreditCard}>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                  <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
-                No credit card required for free trial
-              </div>
+              {!isLoggedIn && (
+                <div className={styles.noCreditCard}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  No credit card required for free trial
+                </div>
+              )}
               <ul className={styles.pricingFeatures}>
                 <li>Unlimited mock interviews</li>
                 <li>
@@ -805,16 +881,25 @@ function Landing() {
                 onClick={handleGoProClick}
                 className="btn btn-primary btn-lg"
                 style={{ width: "100%" }}
+                disabled={isProcessing}
               >
-                {isLoggedIn
-                  ? "Get Interview Practice Pro"
+                {isProcessing
+                  ? "Processing..."
+                  : isLoggedIn
+                  ? "Upgrade to Pro"
                   : "Start Free 2-Day Pro Trial"}
               </button>
-              <p className={styles.trialDisclaimer}>
-                Start your 2-day free trial — no credit card required. After
-                trial, you’ll automatically move to the Free Plan (3
-                mocks/month). No hidden charges.
-              </p>
+              {isLoggedIn ? (
+                <p className={styles.cancelNote}>
+                  Cancel anytime. No lock-ins.
+                </p>
+              ) : (
+                <p className={styles.trialDisclaimer}>
+                  Start your 2-day free trial — no credit card required. After
+                  trial, you'll automatically move to the Free Plan (3
+                  mocks/month). No hidden charges.
+                </p>
+              )}
             </div>
           </div>
 

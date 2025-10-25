@@ -368,7 +368,8 @@
 
 .ctaNoCreditCard {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   gap: $spacing-xs;
   color: $success-color;
   font-size: $font-size-sm;
@@ -377,14 +378,12 @@
 
   @media (max-width: $breakpoint-sm) {
     font-size: $font-size-xs;
-    justify-content: center;
     text-align: center;
     margin: $spacing-md 0 $spacing-sm 0;
   }
 
   svg {
     flex-shrink: 0;
-    margin-top: 2px;
   }
 }
 
@@ -1221,7 +1220,7 @@
   font-size: $font-size-sm;
   color: $dark-text-secondary;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   gap: $spacing-xs;
 
@@ -1230,7 +1229,6 @@
     color: $primary-color;
     font-weight: bold;
     font-size: $font-size-base;
-    margin-top: 1px;
   }
 }
 
@@ -1782,6 +1780,82 @@
   margin-top: $spacing-xs;
 }
 
+.priceDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: 0;
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(99, 102, 241, 0.1)
+  );
+  padding: $spacing-sm $spacing-xl;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.currency {
+  font-size: $font-size-3xl;
+  font-weight: 700;
+  color: $primary-color;
+  line-height: 1;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-2xl;
+  }
+}
+
+.priceAmount {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, $primary-color, $accent-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-4xl;
+  }
+}
+
+.priceInterval {
+  font-size: $font-size-lg;
+  color: $dark-text-secondary;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.priceSubtext {
+  font-size: $font-size-sm;
+  color: $dark-text-secondary;
+  margin: 0;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.cancelNote {
+  margin-top: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
+  line-height: 1.4;
+  text-align: center;
+  font-weight: 400;
+  opacity: 0.7;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 0.7rem;
+  }
+}
+
 .noCreditCard {
   display: flex;
   align-items: center;
@@ -1923,6 +1997,136 @@
   line-height: 1.4;
   margin: 0;
   padding-left: calc(#{$spacing-sm} + #{$spacing-xs});
+}
+
+// ===== COMPARISON CARD (for logged-in users) =====
+.comparisonCard {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(168, 85, 247, 0.05)
+  );
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  padding: $spacing-lg;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+    border-radius: 12px;
+  }
+}
+
+.comparisonTitle {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  color: $primary-color;
+  margin-bottom: $spacing-xs;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.comparisonSubtitle {
+  font-size: $font-size-sm;
+  color: $dark-text-secondary;
+  margin-bottom: $spacing-lg;
+}
+
+.comparisonTable {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.comparisonRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-xs;
+    padding: $spacing-sm;
+  }
+}
+
+.comparisonLabel {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: $dark-text-primary;
+  text-align: left;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
+}
+
+.comparisonValues {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-shrink: 0;
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.comparisonFree {
+  font-size: $font-size-xs;
+  color: $dark-text-muted;
+  opacity: 0.7;
+}
+
+.comparisonArrow {
+  color: $primary-color;
+  font-weight: 700;
+}
+
+.comparisonPro {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: $primary-color;
+}
+
+.comparisonCTA {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparisonPrice {
+  font-size: $font-size-lg;
+  color: $dark-text-primary;
+  margin-bottom: 0;
+
+  strong {
+    color: $primary-color;
+    font-weight: 700;
+  }
+}
+
+.comparisonValue {
+  font-size: $font-size-xs;
+  color: $dark-text-secondary;
+  opacity: 0.8;
+  font-style: italic;
 }
 
 // ===== TESTIMONIALS SECTION =====
