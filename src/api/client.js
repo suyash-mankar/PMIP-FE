@@ -200,4 +200,13 @@ export const getCurrentPracticeSession = () => {
   return apiClient.get("/api/session/current");
 };
 
+// Newsletter APIs
+export const subscribeToNewsletter = (email, source = "landing_page") => {
+  return apiClient.post("/api/newsletter/subscribe", { email, source });
+};
+
+export const unsubscribeFromNewsletter = (email) => {
+  return apiClient.post("/api/newsletter/unsubscribe", { email });
+};
+
 export default apiClient;

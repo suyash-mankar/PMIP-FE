@@ -2357,6 +2357,11 @@
       outline: none;
       border-color: $primary-color;
     }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   button {
@@ -2367,7 +2372,36 @@
     @media (max-width: $breakpoint-sm) {
       width: 100%;
     }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
+}
+
+.newsletterSuccess {
+  margin-top: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  color: #10b981;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  animation: slideUp 0.3s ease-out;
+}
+
+.newsletterError {
+  margin-top: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  animation: slideUp 0.3s ease-out;
 }
 
 .footerBottom {

@@ -1,12 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { getGoogleAuthUrl } from "../../api/client";
+import { getGoogleAuthUrl, subscribeToNewsletter } from "../../api/client";
 import styles from "./Landing.module.scss";
 
 function Landing() {
   const [isVisible, setIsVisible] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
   const sectionRefs = useRef({});
   const navigate = useNavigate();
 
@@ -64,6 +67,33 @@ function Landing() {
 
     // Allow anyone to try the basic free plan - no signup needed
     navigate("/interview");
+  };
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    setNewsletterStatus("");
+    setNewsletterLoading(true);
+
+    try {
+      const response = await subscribeToNewsletter(newsletterEmail, "landing_page");
+      setNewsletterStatus("success");
+      setNewsletterEmail("");
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setNewsletterStatus("");
+      }, 5000);
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      setNewsletterStatus("error");
+      
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        setNewsletterStatus("");
+      }, 5000);
+    } finally {
+      setNewsletterLoading(false);
+    }
   };
 
   // Star Rating Component
@@ -1054,10 +1084,33 @@ function Landing() {
                 Join our monthly newsletter for AI tips, new interview
                 questions, and product updates.
               </p>
-              <div className={styles.newsletterForm}>
-                <input type="email" placeholder="Enter your email" />
-                <button className="btn btn-primary">Subscribe</button>
-              </div>
+              <form className={styles.newsletterForm} onSubmit={handleNewsletterSubmit}>
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  required
+                  disabled={newsletterLoading}
+                />
+                <button 
+                  type="submit" 
+                  className="btn btn-primary"
+                  disabled={newsletterLoading}
+                >
+                  {newsletterLoading ? "Subscribing..." : "Subscribe"}
+                </button>
+              </form>
+              {newsletterStatus === "success" && (
+                <p className={styles.newsletterSuccess}>
+                  ✓ Successfully subscribed! Check your inbox.
+                </p>
+              )}
+              {newsletterStatus === "error" && (
+                <p className={styles.newsletterError}>
+                  ✗ Something went wrong. Please try again.
+                </p>
+              )}
             </div>
           </div>
           <div className={styles.footerBottom}>
