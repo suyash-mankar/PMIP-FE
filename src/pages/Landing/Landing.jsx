@@ -90,6 +90,40 @@ function Landing() {
           color: "#8b5cf6", // Your brand color (purple)
           backdrop_color: "rgba(0, 0, 0, 0.8)", // Dark backdrop
         },
+        // Enhanced payment method display configuration
+        config: {
+          display: {
+            blocks: {
+              recommended: {
+                name: "Recommended Payment Methods",
+                instruments: [
+                  {
+                    method: "upi",
+                  },
+                  {
+                    method: "card",
+                    types: ["credit", "debit"],
+                  },
+                ],
+              },
+              other: {
+                name: "Other Payment Methods",
+                instruments: [
+                  {
+                    method: "netbanking",
+                  },
+                  {
+                    method: "wallet",
+                  },
+                ],
+              },
+            },
+            sequence: ["block.recommended", "block.other"],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         modal: {
           backdropclose: true, // Allow closing by clicking outside
           escape: true, // Allow closing with ESC key
@@ -231,11 +265,21 @@ function Landing() {
                 <button
                   onClick={handleGoProClick}
                   className={`btn btn-primary btn-xl ${styles.ctaButton}`}
+                  disabled={isProcessing}
                 >
-                  {isLoggedIn
-                    ? "Get Interview Practice Pro"
-                    : "Start Your Free 2-Day Pro Trial"}
-                  <span className={styles.ctaArrow}>→</span>
+                  {isProcessing ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      {isLoggedIn
+                        ? "Get Interview Practice Pro"
+                        : "Start Your Free 2-Day Pro Trial"}
+                      <span className={styles.ctaArrow}>→</span>
+                    </>
+                  )}
                 </button>
                 {!isLoggedIn && (
                   <>
@@ -732,10 +776,20 @@ function Landing() {
             <button
               onClick={handleGoProClick}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
+              disabled={isProcessing}
             >
-              {isLoggedIn
-                ? "Get Interview Practice Pro"
-                : "Start Your Free 2-Day Pro Trial"}
+              {isProcessing ? (
+                <>
+                  <span className={styles.spinner}></span>
+                  Loading...
+                </>
+              ) : (
+                <>
+                  {isLoggedIn
+                    ? "Get Interview Practice Pro"
+                    : "Start Your Free 2-Day Pro Trial"}
+                </>
+              )}
             </button>
             {!isLoggedIn && (
               <p className={styles.ctaSubtext}>
@@ -904,11 +958,16 @@ function Landing() {
                 style={{ width: "100%" }}
                 disabled={isProcessing}
               >
-                {isProcessing
-                  ? "Processing..."
-                  : isLoggedIn
-                  ? "Upgrade to Pro"
-                  : "Start Free 2-Day Pro Trial"}
+                {isProcessing ? (
+                  <>
+                    <span className={styles.spinner}></span>
+                    Loading...
+                  </>
+                ) : isLoggedIn ? (
+                  "Upgrade to Pro"
+                ) : (
+                  "Start Free 2-Day Pro Trial"
+                )}
               </button>
               {isLoggedIn ? (
                 <p className={styles.cancelNote}>
@@ -1134,10 +1193,20 @@ function Landing() {
             <button
               onClick={handleGoProClick}
               className={`btn btn-primary btn-xl ${styles.ctaButton}`}
+              disabled={isProcessing}
             >
-              {isLoggedIn
-                ? "Get Interview Practice Pro →"
-                : "Start Your Free 2-Day Pro Trial →"}
+              {isProcessing ? (
+                <>
+                  <span className={styles.spinner}></span>
+                  Loading...
+                </>
+              ) : (
+                <>
+                  {isLoggedIn
+                    ? "Get Interview Practice Pro →"
+                    : "Start Your Free 2-Day Pro Trial →"}
+                </>
+              )}
             </button>
             <div className={styles.trustBadges}>
               <span className={styles.trustBadge}>

@@ -88,6 +88,40 @@ function Pricing() {
           color: "#8b5cf6", // Your brand color (purple)
           backdrop_color: "rgba(0, 0, 0, 0.8)", // Dark backdrop
         },
+        // Enhanced payment method display configuration
+        config: {
+          display: {
+            blocks: {
+              recommended: {
+                name: "Recommended Payment Methods",
+                instruments: [
+                  {
+                    method: "upi",
+                  },
+                  {
+                    method: "card",
+                    types: ["credit", "debit"],
+                  },
+                ],
+              },
+              other: {
+                name: "Other Payment Methods",
+                instruments: [
+                  {
+                    method: "netbanking",
+                  },
+                  {
+                    method: "wallet",
+                  },
+                ],
+              },
+            },
+            sequence: ["block.recommended", "block.other"],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         modal: {
           backdropclose: true, // Allow closing by clicking outside
           escape: true, // Allow closing with ESC key
