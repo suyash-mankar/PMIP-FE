@@ -133,7 +133,8 @@ const MessageWithSpeaker = memo(
                   loadingDetailedScore,
                   detailedScore,
                   userStatus,
-                  handleFeatureLockClick
+                  handleFeatureLockClick,
+                  msg.questionCategory
                 )}
               </div>
             ) : msg.isModelAnswer ? (
@@ -817,10 +818,26 @@ function Interview() {
       // Start scoring - first get summarised score
       setScoring(true);
 
+      // Extract conversation history for RCA questions (exclude final answer and score messages)
+      const conversationHistory = messages
+        .filter(
+          (msg) => !msg.isScore && !msg.isModelAnswer && msg.sender !== "system"
+        )
+        .map((msg) => ({
+          role: msg.sender === "user" ? "user" : "assistant",
+          content: msg.message,
+        }));
+
+      console.log(
+        "Passing conversation history to scoring:",
+        conversationHistory
+      );
+
       try {
         // Step 1: Get summarised score (fast)
         const summaryScoreResponse = await scoreAnswerSummarised(
-          sessionIdFromSubmit || sessionId
+          sessionIdFromSubmit || sessionId,
+          conversationHistory
         );
         console.log("Summary score response:", summaryScoreResponse.data);
         const summaryScoreData = summaryScoreResponse.data;
@@ -842,6 +859,7 @@ function Interview() {
             timestamp: new Date().toISOString(),
             isScore: true,
             scoreData: summaryScoresPayload,
+            questionCategory: category, // Store category for RCA-specific labels
           },
         ]);
 
@@ -865,7 +883,8 @@ function Interview() {
 
         try {
           const detailedScoreResponse = await scoreAnswer(
-            sessionIdFromSubmit || sessionId
+            sessionIdFromSubmit || sessionId,
+            conversationHistory
           );
           console.log("Detailed score response:", detailedScoreResponse.data);
           const detailedScoreData = detailedScoreResponse.data;
@@ -918,14 +937,17 @@ function Interview() {
       return scores.feedback;
     }
 
+    // Get appropriate dimension labels
+    const labels = getDimensionLabels(category);
+
     // Fallback to old format
     let feedback = `## Your Score: ${totalScore}/10\n\n`;
     feedback += `### Dimension Scores:\n`;
-    feedback += `- **Structure:** ${scores.structure}/10\n`;
-    feedback += `- **Metrics:** ${scores.metrics}/10`;
-    feedback += `- **Prioritization:** ${scores.prioritization}/10\n`;
-    feedback += `- **User Empathy:** ${scores.userEmpathy}/10\n`;
-    feedback += `- **Communication:** ${scores.communication}/10\n\n`;
+    feedback += `- **${labels.structure}:** ${scores.structure}/10\n`;
+    feedback += `- **${labels.metrics}:** ${scores.metrics}/10\n`;
+    feedback += `- **${labels.prioritization}:** ${scores.prioritization}/10\n`;
+    feedback += `- **${labels.userEmpathy}:** ${scores.userEmpathy}/10\n`;
+    feedback += `- **${labels.communication}:** ${scores.communication}/10\n\n`;
 
     feedback += `### Feedback:\n${scores.feedback}\n\n`;
 
@@ -977,8 +999,23 @@ function Interview() {
     setLoadingDetailedScore(true);
     setLoadingModelAnswer(true);
 
+    // Extract conversation history for RCA questions (exclude final answer and score messages)
+    const conversationHistory = messages
+      .filter(
+        (msg) => !msg.isScore && !msg.isModelAnswer && msg.sender !== "system"
+      )
+      .map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.message,
+      }));
+
+    console.log(
+      "Passing conversation history to scoring:",
+      conversationHistory
+    );
+
     // Call summary score API first and show immediately
-    scoreAnswerSummarised(currentSessionId)
+    scoreAnswerSummarised(currentSessionId, conversationHistory)
       .then((summaryScoreResponse) => {
         console.log("Summary score response:", summaryScoreResponse.data);
         const summaryScoreData = summaryScoreResponse.data;
@@ -1000,6 +1037,7 @@ function Interview() {
             timestamp: new Date().toISOString(),
             isScore: true,
             scoreData: summaryScoresPayload,
+            questionCategory: category, // Store category for RCA-specific labels
           },
         ]);
 
@@ -1025,7 +1063,7 @@ function Interview() {
       });
 
     // Load detailed score in background
-    scoreAnswer(currentSessionId)
+    scoreAnswer(currentSessionId, conversationHistory)
       .then((detailedScoreResponse) => {
         console.log("Detailed score response:", detailedScoreResponse.data);
         const detailedScoreData = detailedScoreResponse.data;
@@ -2491,6 +2529,33 @@ Take your time and be thorough!`}
   );
 }
 
+// Get dimension labels based on question category (moved outside component for renderScoreMarkdown)
+function getDimensionLabels(questionCategory) {
+  const isRCA =
+    questionCategory === "RCA" ||
+    questionCategory?.toLowerCase().includes("root cause") ||
+    questionCategory?.toLowerCase().includes("rca");
+
+  if (isRCA) {
+    return {
+      structure: "Problem Definition",
+      metrics: "Data-Driven Analysis",
+      prioritization: "Investigation Method",
+      userEmpathy: "Root Cause ID",
+      communication: "Solution Quality",
+    };
+  }
+
+  // Default labels for non-RCA questions
+  return {
+    structure: "Structure",
+    metrics: "Metrics",
+    prioritization: "Prioritization",
+    userEmpathy: "User Empathy",
+    communication: "Communication",
+  };
+}
+
 function renderScoreMarkdown(
   text,
   scoreData,
@@ -2499,7 +2564,8 @@ function renderScoreMarkdown(
   loadingDetailedScore,
   detailedScore,
   userStatus,
-  handleFeatureLockClick
+  handleFeatureLockClick,
+  questionCategory
 ) {
   // Extract overall score from scoreData or text
   // Try multiple possible field names
@@ -2538,80 +2604,99 @@ function renderScoreMarkdown(
 
       {/* Dimension Score Bars */}
       <div className={styles.dimensionScores}>
-        <div className={styles.dimensionRow}>
-          <div className={styles.dimensionLabel}>Structure</div>
-          <div className={styles.dimensionBar}>
-            <div
-              className={`${styles.dimensionBarFill} ${getScoreClass(
-                dimensionScores.structure
-              )}`}
-              style={{ width: `${(dimensionScores.structure / 10) * 100}%` }}
-            />
-          </div>
-          <div className={styles.dimensionScore}>
-            {dimensionScores.structure}/10
-          </div>
-        </div>
-        <div className={styles.dimensionRow}>
-          <div className={styles.dimensionLabel}>Metrics</div>
-          <div className={styles.dimensionBar}>
-            <div
-              className={`${styles.dimensionBarFill} ${getScoreClass(
-                dimensionScores.metrics
-              )}`}
-              style={{ width: `${(dimensionScores.metrics / 10) * 100}%` }}
-            />
-          </div>
-          <div className={styles.dimensionScore}>
-            {dimensionScores.metrics}/10
-          </div>
-        </div>
-        <div className={styles.dimensionRow}>
-          <div className={styles.dimensionLabel}>Prioritization</div>
-          <div className={styles.dimensionBar}>
-            <div
-              className={`${styles.dimensionBarFill} ${getScoreClass(
-                dimensionScores.prioritization
-              )}`}
-              style={{
-                width: `${(dimensionScores.prioritization / 10) * 100}%`,
-              }}
-            />
-          </div>
-          <div className={styles.dimensionScore}>
-            {dimensionScores.prioritization}/10
-          </div>
-        </div>
-        <div className={styles.dimensionRow}>
-          <div className={styles.dimensionLabel}>User Empathy</div>
-          <div className={styles.dimensionBar}>
-            <div
-              className={`${styles.dimensionBarFill} ${getScoreClass(
-                dimensionScores.userEmpathy
-              )}`}
-              style={{ width: `${(dimensionScores.userEmpathy / 10) * 100}%` }}
-            />
-          </div>
-          <div className={styles.dimensionScore}>
-            {dimensionScores.userEmpathy}/10
-          </div>
-        </div>
-        <div className={styles.dimensionRow}>
-          <div className={styles.dimensionLabel}>Communication</div>
-          <div className={styles.dimensionBar}>
-            <div
-              className={`${styles.dimensionBarFill} ${getScoreClass(
-                dimensionScores.communication
-              )}`}
-              style={{
-                width: `${(dimensionScores.communication / 10) * 100}%`,
-              }}
-            />
-          </div>
-          <div className={styles.dimensionScore}>
-            {dimensionScores.communication}/10
-          </div>
-        </div>
+        {(() => {
+          const labels = getDimensionLabels(questionCategory);
+          return (
+            <>
+              <div className={styles.dimensionRow}>
+                <div className={styles.dimensionLabel}>{labels.structure}</div>
+                <div className={styles.dimensionBar}>
+                  <div
+                    className={`${styles.dimensionBarFill} ${getScoreClass(
+                      dimensionScores.structure
+                    )}`}
+                    style={{
+                      width: `${(dimensionScores.structure / 10) * 100}%`,
+                    }}
+                  />
+                </div>
+                <div className={styles.dimensionScore}>
+                  {dimensionScores.structure}/10
+                </div>
+              </div>
+              <div className={styles.dimensionRow}>
+                <div className={styles.dimensionLabel}>{labels.metrics}</div>
+                <div className={styles.dimensionBar}>
+                  <div
+                    className={`${styles.dimensionBarFill} ${getScoreClass(
+                      dimensionScores.metrics
+                    )}`}
+                    style={{
+                      width: `${(dimensionScores.metrics / 10) * 100}%`,
+                    }}
+                  />
+                </div>
+                <div className={styles.dimensionScore}>
+                  {dimensionScores.metrics}/10
+                </div>
+              </div>
+              <div className={styles.dimensionRow}>
+                <div className={styles.dimensionLabel}>
+                  {labels.prioritization}
+                </div>
+                <div className={styles.dimensionBar}>
+                  <div
+                    className={`${styles.dimensionBarFill} ${getScoreClass(
+                      dimensionScores.prioritization
+                    )}`}
+                    style={{
+                      width: `${(dimensionScores.prioritization / 10) * 100}%`,
+                    }}
+                  />
+                </div>
+                <div className={styles.dimensionScore}>
+                  {dimensionScores.prioritization}/10
+                </div>
+              </div>
+              <div className={styles.dimensionRow}>
+                <div className={styles.dimensionLabel}>
+                  {labels.userEmpathy}
+                </div>
+                <div className={styles.dimensionBar}>
+                  <div
+                    className={`${styles.dimensionBarFill} ${getScoreClass(
+                      dimensionScores.userEmpathy
+                    )}`}
+                    style={{
+                      width: `${(dimensionScores.userEmpathy / 10) * 100}%`,
+                    }}
+                  />
+                </div>
+                <div className={styles.dimensionScore}>
+                  {dimensionScores.userEmpathy}/10
+                </div>
+              </div>
+              <div className={styles.dimensionRow}>
+                <div className={styles.dimensionLabel}>
+                  {labels.communication}
+                </div>
+                <div className={styles.dimensionBar}>
+                  <div
+                    className={`${styles.dimensionBarFill} ${getScoreClass(
+                      dimensionScores.communication
+                    )}`}
+                    style={{
+                      width: `${(dimensionScores.communication / 10) * 100}%`,
+                    }}
+                  />
+                </div>
+                <div className={styles.dimensionScore}>
+                  {dimensionScores.communication}/10
+                </div>
+              </div>
+            </>
+          );
+        })()}
       </div>
 
       {/* Summary Feedback or Loading Indicator */}

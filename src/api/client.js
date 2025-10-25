@@ -75,15 +75,17 @@ export const submitAnswer = (
   });
 };
 
-export const scoreAnswer = (answerId) => {
+export const scoreAnswer = (answerId, conversationHistory = []) => {
   return apiClient.post("/api/score", {
     answerId: answerId,
+    conversationHistory: conversationHistory,
   });
 };
 
-export const scoreAnswerSummarised = (answerId) => {
+export const scoreAnswerSummarised = (answerId, conversationHistory = []) => {
   return apiClient.post("/api/score-summarised", {
     answerId: answerId,
+    conversationHistory: conversationHistory,
   });
 };
 
