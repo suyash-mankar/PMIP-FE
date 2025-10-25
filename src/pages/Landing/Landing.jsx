@@ -87,7 +87,7 @@ function Landing() {
           billing: "Monthly",
         },
         theme: {
-          color: "#8b5cf6", // Your brand color (purple)
+          color: "#6366f1", // Your brand color (indigo) - matches primary button color
           backdrop_color: "rgba(0, 0, 0, 0.8)", // Dark backdrop
         },
         // Enhanced payment method display configuration
