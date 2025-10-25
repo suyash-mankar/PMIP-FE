@@ -74,7 +74,7 @@ function Landing() {
         subscription_id: subscriptionId,
         name: "PM Interview Practice",
         description: "Pro Plan - Monthly Subscription",
-        image: "https://pminterviewpractice.com/logo.png", // Your logo
+        image: "https://pminterviewpractice.com/logo_text.svg", // Your full logo with text
         amount: amount,
         currency: currency,
         prefill: {
