@@ -66,20 +66,37 @@ function Pricing() {
         userName,
       } = response.data;
 
-      // Initialize Razorpay Checkout
+      // Initialize Razorpay Checkout with customization
       const options = {
         key: razorpayKeyId,
         subscription_id: subscriptionId,
         name: "PM Interview Practice",
         description: "Pro Plan - Monthly Subscription",
+        image: "https://pminterviewpractice.com/logo.png", // Your logo
         amount: amount,
         currency: currency,
         prefill: {
           email: userEmail,
           name: userName,
+          contact: "", // Phone number if you have it
+        },
+        notes: {
+          plan: "Pro Plan",
+          billing: "Monthly",
         },
         theme: {
-          color: "#8b5cf6", // Purple theme matching your app
+          color: "#8b5cf6", // Your brand color (purple)
+          backdrop_color: "rgba(0, 0, 0, 0.8)", // Dark backdrop
+        },
+        modal: {
+          backdropclose: true, // Allow closing by clicking outside
+          escape: true, // Allow closing with ESC key
+          handleback: true, // Handle browser back button
+          confirm_close: true, // Confirm before closing
+          ondismiss: function () {
+            setIsProcessing(false);
+          },
+          animation: true, // Smooth animations
         },
         handler: function (response) {
           // Payment successful
@@ -87,10 +104,14 @@ function Pricing() {
           alert("Payment successful! You now have Pro access.");
           window.location.href = "/dashboard";
         },
-        modal: {
-          ondismiss: function () {
-            setIsProcessing(false);
-          },
+        notify: {
+          sms: true, // Send SMS notification
+          email: true, // Send email notification
+        },
+        remember_customer: false, // Don't remember customer details
+        readonly: {
+          email: false, // Allow editing email
+          contact: false, // Allow editing phone
         },
       };
 
