@@ -829,8 +829,8 @@ function Landing() {
                       Master Every PM Skill
                     </h4>
                     <p className={styles.upgradeItemDesc}>
-                      Practice Product Design, Metrics, RCAs, and Strategy with
-                      unlimited AI mocks.
+                      Practice Product Design, Product Improvement, Metrics,
+                      RCAs, Guesstimates, and Strategy with unlimited AI mocks.
                     </p>
                   </div>
                   <div className={styles.upgradeItem}>
@@ -945,8 +945,8 @@ function Landing() {
                 </li>
                 <li>Expert-level model answers for every question</li>
                 <li>
-                  Choose question category (Design, Metrics, RCAs, Strategy,
-                  etc.)
+                  Choose question category (Design, Product Improvement,
+                  Metrics, RCAs, Guesstimates, Strategy, etc.)
                 </li>
                 <li>Voice Input & Output</li>
                 <li>Progress Dashboard & Analytics</li>
@@ -1125,7 +1125,7 @@ function Landing() {
               {
                 question: "Can I practice one specific type of PM question?",
                 answer:
-                  "Yes! You can choose from focused categories like Product Design, Metrics, RCAs, and Strategy — or let the AI pick random questions across all types. It's a great way to target your weak areas or simulate a full interview experience.",
+                  "Yes! You can choose from focused categories like Product Design, Product Improvement, Metrics, RCAs, Guesstimates, and Strategy — or let the AI pick random questions across all types. It's a great way to target your weak areas or simulate a full interview experience.",
               },
               {
                 question: "What companies are the questions from?",

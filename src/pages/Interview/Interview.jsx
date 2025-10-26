@@ -1801,85 +1801,124 @@ Take your time and be thorough!`}
 
                   {/* Category Selector */}
                   <div className={styles.categorySelector}>
-                    <p className={styles.selectorLabel}>
-                      Select Category (Optional):
-                    </p>
-                    <div className={styles.categoryGrid}>
-                      <button
-                        className={`${styles.categoryCard} ${
-                          !category && !showCategoryOptions
-                            ? styles.selected
-                            : ""
-                        }`}
-                        onClick={handleRandomMixClick}
-                        disabled={userStatus?.isLocked?.category}
-                      >
-                        <div className={styles.categoryIcon}>
-                          <svg
-                            width="28"
-                            height="28"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22" />
-                            <path d="m18 2 4 4-4 4" />
-                            <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2" />
-                            <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8c-.7-1.1-2-1.8-3.3-1.8H2" />
-                            <path d="m18 14 4 4-4 4" />
-                          </svg>
-                        </div>
-                        <h4>Random Mix</h4>
-                        <p>All categories</p>
-                      </button>
-
-                      {!showCategoryOptions ? (
-                        <button
-                          className={`${styles.categoryCard} ${
-                            showCategoryOptions ? styles.selected : ""
-                          } ${
-                            userStatus?.isLocked?.category ? styles.locked : ""
-                          }`}
-                          onClick={
-                            userStatus?.isLocked?.category
-                              ? handleFeatureLockClick
-                              : handleSelectCategoryClick
-                          }
-                          disabled={userStatus?.isLocked?.category}
+                    {!showCategoryOptions ? (
+                      <>
+                        <p className={styles.selectorLabel}>
+                          Select Category (Optional):
+                        </p>
+                        <div
+                          className={`${styles.categoryGrid} ${styles.twoCardLayout}`}
                         >
-                          {userStatus?.isLocked?.category && (
-                            <div className={styles.lockBadge}>
+                          {/* Random Mix Card */}
+                          <button
+                            className={`${styles.categoryCard} ${
+                              !category && !showCategoryOptions
+                                ? styles.selected
+                                : ""
+                            }`}
+                            onClick={handleRandomMixClick}
+                            disabled={userStatus?.isLocked?.category}
+                          >
+                            <div className={styles.categoryIcon}>
                               <svg
-                                width="12"
-                                height="12"
+                                width="28"
+                                height="28"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="2.5"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               >
-                                <rect
-                                  x="3"
-                                  y="11"
-                                  width="18"
-                                  height="11"
-                                  rx="2"
-                                  ry="2"
-                                />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22" />
+                                <path d="m18 2 4 4-4 4" />
+                                <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2" />
+                                <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8c-.7-1.1-2-1.8-3.3-1.8H2" />
+                                <path d="m18 14 4 4-4 4" />
                               </svg>
-                              <span className={styles.proBadgeText}>PRO</span>
-                              <div className={styles.lockTooltip}>
-                                Signup and unlock PRO features
-                              </div>
                             </div>
-                          )}
-                          <div className={styles.categoryIcon}>
+                            <h4>Random Mix</h4>
+                            <p>All categories</p>
+                          </button>
+
+                          {/* Select Category Card */}
+                          <button
+                            className={`${styles.categoryCard} ${
+                              userStatus?.isLocked?.category
+                                ? styles.locked
+                                : ""
+                            }`}
+                            onClick={
+                              userStatus?.isLocked?.category
+                                ? handleFeatureLockClick
+                                : handleSelectCategoryClick
+                            }
+                            disabled={userStatus?.isLocked?.category}
+                          >
+                            {userStatus?.isLocked?.category && (
+                              <div className={styles.lockBadge}>
+                                <svg
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.5"
+                                >
+                                  <rect
+                                    x="3"
+                                    y="11"
+                                    width="18"
+                                    height="11"
+                                    rx="2"
+                                    ry="2"
+                                  />
+                                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                                <span className={styles.proBadgeText}>PRO</span>
+                                <div className={styles.lockTooltip}>
+                                  Signup and unlock PRO features
+                                </div>
+                              </div>
+                            )}
+                            <div className={styles.categoryIcon}>
+                              <svg
+                                width="28"
+                                height="28"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                              </svg>
+                            </div>
+                            <h4>Select Category</h4>
+                            <p>Choose specific category</p>
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.categorySelectorHeader}>
+                          <p className={styles.selectorLabel}>
+                            Select Category (Optional):
+                          </p>
+                          <button
+                            className={`${styles.randomMixButton} ${
+                              !category ? styles.active : ""
+                            }`}
+                            onClick={handleRandomMixClick}
+                            disabled={userStatus?.isLocked?.category}
+                          >
                             <svg
-                              width="28"
-                              height="28"
+                              width="18"
+                              height="18"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
@@ -1887,17 +1926,17 @@ Take your time and be thorough!`}
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             >
-                              <rect x="3" y="3" width="7" height="7" />
-                              <rect x="14" y="3" width="7" height="7" />
-                              <rect x="14" y="14" width="7" height="7" />
-                              <rect x="3" y="14" width="7" height="7" />
+                              <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22" />
+                              <path d="m18 2 4 4-4 4" />
+                              <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2" />
+                              <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8c-.7-1.1-2-1.8-3.3-1.8H2" />
+                              <path d="m18 14 4 4-4 4" />
                             </svg>
-                          </div>
-                          <h4>Select Category</h4>
-                          <p>Choose specific category</p>
-                        </button>
-                      ) : (
-                        <>
+                            <span>Random Mix</span>
+                          </button>
+                        </div>
+
+                        <div className={styles.categoryGrid}>
                           {loadingCategories ? (
                             <div className={styles.loadingCard}>
                               <div className={styles.loadingSpinner}></div>
@@ -1909,10 +1948,48 @@ Take your time and be thorough!`}
                                 key={cat.value}
                                 className={`${styles.categoryCard} ${
                                   category === cat.value ? styles.selected : ""
+                                } ${
+                                  userStatus?.isLocked?.category
+                                    ? styles.locked
+                                    : ""
                                 }`}
-                                onClick={() => setCategory(cat.value)}
-                                disabled={userStatus?.isLocked?.category}
+                                onClick={
+                                  userStatus?.isLocked?.category
+                                    ? handleFeatureLockClick
+                                    : () => setCategory(cat.value)
+                                }
+                                disabled={
+                                  userStatus?.isLocked?.category && !category
+                                }
                               >
+                                {userStatus?.isLocked?.category && (
+                                  <div className={styles.lockBadge}>
+                                    <svg
+                                      width="12"
+                                      height="12"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2.5"
+                                    >
+                                      <rect
+                                        x="3"
+                                        y="11"
+                                        width="18"
+                                        height="11"
+                                        rx="2"
+                                        ry="2"
+                                      />
+                                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                    </svg>
+                                    <span className={styles.proBadgeText}>
+                                      PRO
+                                    </span>
+                                    <div className={styles.lockTooltip}>
+                                      Signup and unlock PRO features
+                                    </div>
+                                  </div>
+                                )}
                                 <div className={styles.categoryIcon}>
                                   {renderCategoryIcon(cat.value)}
                                 </div>
@@ -1920,9 +1997,9 @@ Take your time and be thorough!`}
                               </button>
                             ))
                           )}
-                        </>
-                      )}
-                    </div>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Timer Toggle */}
@@ -2532,7 +2609,7 @@ Take your time and be thorough!`}
 // Get dimension labels based on question category (moved outside component for renderScoreMarkdown)
 function getDimensionLabels(questionCategory) {
   const categoryLower = questionCategory?.toLowerCase() || "";
-  
+
   const isRCA =
     categoryLower === "rca" ||
     categoryLower.includes("root cause") ||

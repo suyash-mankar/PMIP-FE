@@ -41,7 +41,7 @@ function Pricing() {
         "Unlimited mock interviews",
         "Detailed, rubric-based feedback (6 key PM skills + tips)",
         "Expert-level model answers for every question",
-        "Choose question category (Design, Metrics, RCAs, Strategy, etc.)",
+        "Choose question category (Design, Product Improvement, Metrics, RCAs, Guesstimates, Strategy, etc.)",
         "Voice Input & Output",
         "Progress Dashboard & Analytics",
         "Priority Support & Updates",
@@ -201,8 +201,8 @@ function Pricing() {
                     Master Every PM Skill
                   </h4>
                   <p className={styles.upgradeItemDesc}>
-                    Practice Product Design, Metrics, RCAs, and Strategy with
-                    unlimited AI mocks.
+                    Practice Product Design, Product Improvement, Metrics, RCAs,
+                    Guesstimates, and Strategy with unlimited AI mocks.
                   </p>
                 </div>
                 <div className={styles.upgradeItem}>
@@ -447,7 +447,8 @@ function Pricing() {
                 The Pro Plan unlocks everything — unlimited interviews, detailed
                 rubric-based feedback (6 PM skills), expert-level model answers,
                 voice input/output, progress tracking, and category selection
-                (Design, Metrics, RCAs, Strategy, etc.).
+                (Design, Product Improvement, Metrics, RCAs, Guesstimates,
+                Strategy, etc.).
               </p>
             </div>
             <div className={styles.faqItem}>
