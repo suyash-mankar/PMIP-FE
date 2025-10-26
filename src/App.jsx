@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Landing from "./pages/Landing/Landing";
@@ -14,10 +15,35 @@ import Refund from "./pages/Refund/Refund";
 import Contact from "./pages/Contact/Contact";
 import Shipping from "./pages/Shipping/Shipping";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { initGA, trackPageView, setupClickTracking } from "./services/analytics";
+
+// Component to track page views on route changes
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Track page view whenever the route changes
+    trackPageView(location.pathname + location.search, document.title);
+  }, [location]);
+
+  return null;
+}
 
 function App() {
+  useEffect(() => {
+    // Initialize Google Analytics on app mount
+    initGA();
+    
+    // Setup automatic click tracking
+    setupClickTracking();
+    
+    // Track initial page view
+    trackPageView(window.location.pathname + window.location.search, document.title);
+  }, []);
+
   return (
     <Router>
+      <AnalyticsTracker />
       <div className="app">
         <Header />
         <main className="main-content">
