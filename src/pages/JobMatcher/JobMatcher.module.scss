@@ -4,9 +4,12 @@
   min-height: calc(100vh - 70px);
   padding: $spacing-xl $spacing-md;
   background: $dark-bg-primary;
-  
+
   @media (max-width: $breakpoint-sm) {
-    padding: $spacing-lg $spacing-md;
+    padding: $spacing-lg $spacing-sm; // tighter side padding on mobile
+    padding-bottom: calc(
+      $spacing-2xl + env(safe-area-inset-bottom)
+    ); // respect safe area
   }
 }
 
@@ -16,6 +19,10 @@
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: $breakpoint-sm) {
+    margin-bottom: $spacing-lg;
+  }
 }
 
 .pageTitle {
@@ -27,7 +34,7 @@
   -webkit-text-fill-color: transparent;
   margin: 0 0 $spacing-md 0;
   letter-spacing: -0.02em;
-  
+
   @media (max-width: $breakpoint-sm) {
     font-size: $font-size-3xl;
   }
@@ -39,7 +46,7 @@
   line-height: 1.6;
   margin: 0 0 $spacing-2xl 0;
   font-weight: 600;
-  
+
   @media (max-width: $breakpoint-sm) {
     font-size: $font-size-lg;
     margin-bottom: $spacing-xl;
@@ -58,6 +65,11 @@
   @media (max-width: $breakpoint-md) {
     grid-template-columns: 1fr;
     gap: $spacing-xl;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
   }
 }
 
@@ -90,6 +102,11 @@
     box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
     border-color: rgba(139, 92, 246, 0.35);
   }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+    gap: $spacing-sm;
+  }
 }
 
 .featureIconCircle {
@@ -99,9 +116,18 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.18) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.2) 0%,
+    rgba(99, 102, 241, 0.18) 100%
+  );
   border: 1px solid rgba(139, 92, 246, 0.3);
   color: #a78bfa;
+
+  @media (max-width: $breakpoint-sm) {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 .featureTextBlock {
@@ -129,6 +155,10 @@
   background: rgba(139, 92, 246, 0.05);
   border: 1px solid rgba(139, 92, 246, 0.18);
   border-radius: $radius-lg;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-lg;
+  }
 }
 
 .hiwTitle {
@@ -190,6 +220,10 @@
   @media (min-width: $breakpoint-sm) {
     grid-template-columns: 1fr 1fr 1fr;
   }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-top: $spacing-lg;
+  }
 }
 
 .trustCard {
@@ -197,15 +231,19 @@
   flex-direction: column;
   gap: $spacing-md;
   padding: $spacing-lg;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.06) 0%, rgba(99, 102, 241, 0.04) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.06) 0%,
+    rgba(99, 102, 241, 0.04) 100%
+  );
   border: 1.5px solid rgba(139, 92, 246, 0.18);
   border-radius: $radius-lg;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -216,19 +254,23 @@
     transform-origin: left;
     transition: transform 0.3s ease;
   }
-  
+
   &:hover {
     transform: translateY(-2px);
     border-color: rgba(139, 92, 246, 0.35);
     box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
-    
+
     &::before {
       transform: scaleX(1);
     }
-    
+
     .trustIconWrapper {
       transform: scale(1.1);
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(99, 102, 241, 0.2) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(139, 92, 246, 0.25) 0%,
+        rgba(99, 102, 241, 0.2) 100%
+      );
     }
   }
 }
@@ -239,12 +281,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.12) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.15) 0%,
+    rgba(99, 102, 241, 0.12) 100%
+  );
   border-radius: $radius-md;
   color: #a78bfa;
   transition: all 0.3s ease;
   border: 1px solid rgba(139, 92, 246, 0.25);
-  
+
   svg {
     filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.4));
   }
@@ -284,9 +330,9 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -297,16 +343,16 @@
     transform-origin: left;
     transition: transform 0.3s ease;
   }
-  
+
   &:hover {
     transform: translateY(-4px);
     border-color: rgba(139, 92, 246, 0.4);
     box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
-    
+
     &::before {
       transform: scaleX(1);
     }
-    
+
     .featureIcon {
       transform: scale(1.1) rotate(5deg);
       background: linear-gradient(
@@ -334,7 +380,7 @@
   color: #a78bfa;
   transition: all 0.3s ease;
   border: 1px solid rgba(139, 92, 246, 0.2);
-  
+
   svg {
     filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.3));
   }
@@ -372,7 +418,7 @@
   color: $success-color;
   font-size: $font-size-sm;
   font-weight: 500;
-  
+
   svg {
     flex-shrink: 0;
     color: $success-color;
@@ -590,33 +636,42 @@
   border: 1.5px solid rgba(139, 92, 246, 0.3);
   border-radius: $radius-xl;
   padding: $spacing-2xl;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(139, 92, 246, 0.2),
-    0 0 60px rgba(139, 92, 246, 0.25),
-    0 0 100px rgba(139, 92, 246, 0.15),
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(139, 92, 246, 0.2),
+    0 0 60px rgba(139, 92, 246, 0.25), 0 0 100px rgba(139, 92, 246, 0.15),
     0 0 140px rgba(139, 92, 246, 0.1);
   position: relative;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: -3px;
     border-radius: $radius-xl;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(99, 102, 241, 0.3) 50%, rgba(167, 139, 250, 0.25) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.4) 0%,
+      rgba(99, 102, 241, 0.3) 50%,
+      rgba(167, 139, 250, 0.25) 100%
+    );
     opacity: 0.8;
     z-index: -1;
     filter: blur(25px);
     animation: subtleGlow 3s ease-in-out infinite;
   }
-  
+
   @media (max-width: $breakpoint-sm) {
     padding: $spacing-lg;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(139, 92, 246, 0.15), 0 0 40px rgba(139, 92, 246, 0.18);
+    &::before {
+      filter: blur(18px);
+      opacity: 0.6;
+    }
   }
 }
 
 @keyframes subtleGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
   }
   50% {
@@ -628,6 +683,10 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xl;
+
+  @media (max-width: $breakpoint-sm) {
+    gap: $spacing-lg;
+  }
 }
 
 .formGroup {
@@ -640,7 +699,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $spacing-md;
-  
+
   @media (max-width: $breakpoint-sm) {
     grid-template-columns: 1fr;
   }
@@ -678,13 +737,13 @@
   font-size: $font-size-base;
   font-family: $font-family;
   transition: all 0.2s ease;
-  
+
   &:focus {
     outline: none;
     border-color: $primary-color;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
   }
-  
+
   &::placeholder {
     color: $dark-text-muted;
   }
@@ -719,15 +778,20 @@
   transition: all 0.2s ease;
   color: $dark-text-secondary;
   font-size: $font-size-base;
-  
+
   svg {
     color: $primary-color;
     flex-shrink: 0;
   }
-  
+
   &:hover {
     border-color: $primary-color;
     background: rgba(99, 102, 241, 0.05);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+    font-size: $font-size-sm;
   }
 }
 
@@ -748,17 +812,17 @@
   margin-bottom: $spacing-sm;
   font-size: $font-size-sm;
   color: $dark-text-secondary;
-  
+
   svg {
     flex-shrink: 0;
     color: $success-color;
   }
-  
+
   strong {
     color: $dark-text-primary;
     font-weight: 600;
   }
-  
+
   .replaceHint {
     margin-left: auto;
     color: $dark-text-muted;
@@ -770,9 +834,17 @@
 .examples {
   margin-top: $spacing-md;
   padding: $spacing-lg;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(99, 102, 241, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.08) 0%,
+    rgba(99, 102, 241, 0.05) 100%
+  );
   border: 1.5px solid rgba(139, 92, 246, 0.2);
   border-radius: $radius-lg;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+  }
 }
 
 .examplesHeader {
@@ -780,7 +852,7 @@
   align-items: center;
   gap: $spacing-sm;
   margin-bottom: $spacing-md;
-  
+
   svg {
     color: #a78bfa;
     flex-shrink: 0;
@@ -811,14 +883,14 @@
   cursor: pointer;
   transition: all 0.2s ease;
   line-height: 1.5;
-  
+
   &:hover {
     background: rgba(139, 92, 246, 0.15);
     border-color: rgba(139, 92, 246, 0.4);
     transform: translateX(4px);
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
   }
-  
+
   &:active {
     transform: translateX(2px);
   }
@@ -838,11 +910,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   svg {
     transition: transform 0.2s ease;
   }
-  
+
   &:hover {
     border-color: $primary-color;
     color: $primary-color;
@@ -889,23 +961,29 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-  
+
   svg {
     flex-shrink: 0;
   }
-  
+
   &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-base;
   }
 }
 
@@ -957,7 +1035,7 @@
   padding: 0;
   line-height: 1;
   transition: opacity 0.2s ease;
-  
+
   &:hover {
     opacity: 0.7;
   }
@@ -978,6 +1056,10 @@
   border-radius: $radius-xl;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   animation: fadeInScale 0.5s ease;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-xl $spacing-lg;
+  }
 }
 
 @keyframes fadeInScale {
@@ -999,17 +1081,22 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.2) 0%,
+    rgba(99, 102, 241, 0.1) 100%
+  );
   color: $success-color;
   animation: iconPulse 2s ease-in-out infinite;
-  
+
   svg {
     filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
   }
 }
 
 @keyframes iconPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -1022,7 +1109,7 @@
   font-weight: 700;
   color: $dark-text-primary;
   margin: 0 0 $spacing-lg 0;
-  
+
   @media (max-width: $breakpoint-sm) {
     font-size: $font-size-2xl;
   }
@@ -1033,12 +1120,12 @@
   color: $dark-text-secondary;
   line-height: 1.6;
   margin: 0 0 $spacing-xl 0;
-  
+
   strong {
     color: $primary-color;
     font-weight: 600;
   }
-  
+
   @media (max-width: $breakpoint-sm) {
     font-size: $font-size-base;
   }
@@ -1056,7 +1143,7 @@
   font-size: $font-size-sm;
   color: $dark-text-secondary;
   margin: 0 0 $spacing-sm 0;
-  
+
   code {
     padding: 2px 8px;
     background: rgba(99, 102, 241, 0.1);
@@ -1084,12 +1171,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
@@ -1151,4 +1238,3 @@
     }
   }
 }
-
