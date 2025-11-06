@@ -90,6 +90,15 @@ function Header() {
                 Dashboard
               </Link>
               <Link
+                to="/job-matcher"
+                className={`${styles.navLink} ${
+                  location.pathname === "/job-matcher" ? styles.active : ""
+                }`}
+                onClick={closeMobileMenu}
+              >
+                Job Matcher
+              </Link>
+              <Link
                 to="/pricing"
                 className={`${styles.navLink} ${
                   location.pathname === "/pricing" ? styles.active : ""

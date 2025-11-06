@@ -14,6 +14,7 @@ import Terms from "./pages/Terms/Terms";
 import Refund from "./pages/Refund/Refund";
 import Contact from "./pages/Contact/Contact";
 import Shipping from "./pages/Shipping/Shipping";
+import JobMatcher from "./pages/JobMatcher/JobMatcher";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { initGA, trackPageView, setupClickTracking } from "./services/analytics";
 
@@ -74,6 +75,14 @@ function App() {
             <Route path="/refund" element={<Refund />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/shipping" element={<Shipping />} />
+            <Route
+              path="/job-matcher"
+              element={
+                <ProtectedRoute>
+                  <JobMatcher />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <Footer />

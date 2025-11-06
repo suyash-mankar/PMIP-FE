@@ -211,4 +211,25 @@ export const unsubscribeFromNewsletter = (email) => {
   return apiClient.post("/api/newsletter/unsubscribe", { email });
 };
 
+// Job Matcher APIs
+export const getJobMatcherPreferences = () => {
+  return apiClient.get("/api/job-matcher/preferences");
+};
+
+export const saveJobMatcherPreferences = (formData) => {
+  return apiClient.post("/api/job-matcher/preferences", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const submitJobMatch = (formData) => {
+  return apiClient.post("/api/job-matcher/submit", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export default apiClient;
