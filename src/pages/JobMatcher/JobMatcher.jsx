@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./JobMatcher.module.scss";
 import { trackEvent } from "../../services/analytics";
-import { getJobMatcherPreferences, submitJobMatch as apiSubmitJobMatch } from "../../api/client";
+import { getJobMatcherPreferences, submitJobMatch as apiSubmitJobMatch, getGoogleAuthUrl } from "../../api/client";
 
 function JobMatcher() {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ function JobMatcher() {
     enableLinkedInSearch: false
   });
   const [userEmail, setUserEmail] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [status, setStatus] = useState("idle"); // idle, submitting, submitted, error
@@ -24,11 +25,185 @@ function JobMatcher() {
   const [loading, setLoading] = useState(true);
   const [hasSavedPreferences, setHasSavedPreferences] = useState(false);
   const [savedResumeFileName, setSavedResumeFileName] = useState(null);
+  const [shouldAutoSubmit, setShouldAutoSubmit] = useState(false);
 
-  // Load saved preferences on mount
+  // Check login status and load saved preferences on mount
   useEffect(() => {
-    loadPreferences();
+    const token = localStorage.getItem("jwt_token");
+    setIsLoggedIn(!!token);
+    
+    // Check if there's pending form data from before login
+    const pendingFormData = localStorage.getItem('jobMatcher_pendingFormData');
+    const pendingResume = localStorage.getItem('jobMatcher_pendingResume');
+    const pendingResumeName = localStorage.getItem('jobMatcher_pendingResumeName');
+    
+    if (token) {
+      // User is logged in
+      if (pendingFormData) {
+        // Restore form data from before login
+        try {
+          const savedData = JSON.parse(pendingFormData);
+          
+          // Restore text fields
+          setFormData({
+            resumeFile: null, // Will be restored from base64 if exists
+            jobIntentText: savedData.jobIntentText || "",
+            desiredRole: savedData.desiredRole || "",
+            companyPrefs: savedData.companyPrefs || "",
+            locationPref: savedData.locationPref || "",
+            remotePref: savedData.remotePref || "",
+            enableLinkedInSearch: savedData.enableLinkedInSearch || false,
+          });
+          
+          // Restore resume file from base64 if exists
+          if (pendingResume && pendingResumeName && pendingResume.startsWith('data:')) {
+            // Convert base64 back to File object
+            try {
+              fetch(pendingResume)
+                .then(res => res.blob())
+                .then(blob => {
+                  if (blob && blob.size > 0) {
+                    const file = new File([blob], pendingResumeName, { type: blob.type });
+                    setFormData(prev => ({ ...prev, resumeFile: file }));
+                  }
+                })
+                .catch(err => console.error("Error restoring resume:", err));
+            } catch (err) {
+              console.error("Error parsing resume data:", err);
+            }
+          } else if (savedData.savedResumeFileName) {
+            setSavedResumeFileName(savedData.savedResumeFileName);
+          }
+          
+          // Clear pending data
+          localStorage.removeItem('jobMatcher_pendingFormData');
+          localStorage.removeItem('jobMatcher_pendingResume');
+          localStorage.removeItem('jobMatcher_pendingResumeName');
+          
+          // Set flag to auto-submit after preferences are loaded
+          setHasSavedPreferences(true); // Prevent loading from overriding our restored data
+          setShouldAutoSubmit(true); // Flag to trigger auto-submit
+        } catch (err) {
+          console.error("Error restoring form data:", err);
+          // Clear invalid data
+          localStorage.removeItem('jobMatcher_pendingFormData');
+          localStorage.removeItem('jobMatcher_pendingResume');
+          localStorage.removeItem('jobMatcher_pendingResumeName');
+        }
+      }
+      
+      loadPreferences();
+    } else {
+      // If not logged in, skip loading preferences
+      setLoading(false);
+      setUserEmail("");
+    }
   }, []);
+
+  const handleGoogleLogin = useCallback(() => {
+    // Save form data to localStorage before redirecting
+    const formDataToSave = {
+      resumeFile: formData.resumeFile ? {
+        name: formData.resumeFile.name,
+        size: formData.resumeFile.size,
+        type: formData.resumeFile.type,
+      } : null,
+      jobIntentText: formData.jobIntentText,
+      desiredRole: formData.desiredRole,
+      companyPrefs: formData.companyPrefs,
+      locationPref: formData.locationPref,
+      remotePref: formData.remotePref,
+      enableLinkedInSearch: formData.enableLinkedInSearch,
+      savedResumeFileName: savedResumeFileName,
+      timestamp: Date.now(),
+    };
+    
+    // Store form data
+    localStorage.setItem('jobMatcher_pendingFormData', JSON.stringify(formDataToSave));
+    
+    // Store resume file if exists (convert to base64 for storage)
+    if (formData.resumeFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Data = reader.result;
+        localStorage.setItem('jobMatcher_pendingResume', base64Data);
+        localStorage.setItem('jobMatcher_pendingResumeName', formData.resumeFile.name);
+        // Redirect after file is saved
+        window.location.href = `${getGoogleAuthUrl()}?redirect=/job-matcher`;
+      };
+      reader.readAsDataURL(formData.resumeFile);
+    } else {
+      // No file to save, redirect immediately
+      window.location.href = `${getGoogleAuthUrl()}?redirect=/job-matcher`;
+    }
+  }, [formData, savedResumeFileName]);
+
+  const handleSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    
+    // If not logged in, redirect to login
+    if (!isLoggedIn) {
+      handleGoogleLogin();
+      return;
+    }
+    
+    // Validation
+    // Resume is optional if saved resume exists
+    if (!formData.resumeFile && !savedResumeFileName) {
+      setError("Please upload your resume");
+      return;
+    }
+    if (!formData.jobIntentText) {
+      setError("Please describe what kind of job you're looking for");
+      return;
+    }
+    
+    setStatus("submitting");
+    setError(null);
+    
+    try {
+      const formDataToSend = new FormData();
+      // Only append resume file if a new one was uploaded
+      if (formData.resumeFile) {
+        formDataToSend.append("resumeFile", formData.resumeFile);
+      }
+      formDataToSend.append("jobIntentText", formData.jobIntentText);
+      if (formData.desiredRole) formDataToSend.append("desiredRole", formData.desiredRole);
+      if (formData.companyPrefs) formDataToSend.append("companyPrefs", formData.companyPrefs);
+      if (formData.locationPref) formDataToSend.append("locationPref", formData.locationPref);
+      if (formData.remotePref) formDataToSend.append("remotePref", formData.remotePref);
+      formDataToSend.append("enableLinkedInSearch", formData.enableLinkedInSearch);
+      
+      const response = await apiSubmitJobMatch(formDataToSend);
+      setRunId(response.data.runId);
+      setStatus("submitted");
+      
+      // Track analytics
+      trackEvent("Job Match", "Submit", "Success");
+    } catch (err) {
+      setError(err.message);
+      setStatus("error");
+      trackEvent("Job Match", "Submit", "Error");
+    }
+  }, [isLoggedIn, formData, savedResumeFileName, handleGoogleLogin]);
+
+  // Auto-submit effect - triggers after form data is restored and user is logged in
+  useEffect(() => {
+    if (shouldAutoSubmit && isLoggedIn && !loading) {
+      // Wait a bit for all state to be set
+      const timer = setTimeout(() => {
+        // Create a synthetic submit event
+        const syntheticEvent = {
+          preventDefault: () => {},
+          target: { checkValidity: () => true },
+        };
+        handleSubmit(syntheticEvent);
+        setShouldAutoSubmit(false); // Reset flag
+      }, 1500); // Wait for preferences to load
+      
+      return () => clearTimeout(timer);
+    }
+  }, [shouldAutoSubmit, isLoggedIn, loading, handleSubmit]);
 
   const loadPreferences = async () => {
     try {
@@ -101,49 +276,6 @@ function JobMatcher() {
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData({ ...formData, [name]: checked });
-  };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validation
-    // Resume is optional if saved resume exists
-    if (!formData.resumeFile && !savedResumeFileName) {
-      setError("Please upload your resume");
-      return;
-    }
-    if (!formData.jobIntentText) {
-      setError("Please describe what kind of job you're looking for");
-      return;
-    }
-    
-    setStatus("submitting");
-    setError(null);
-    
-    try {
-      const formDataToSend = new FormData();
-      // Only append resume file if a new one was uploaded
-      if (formData.resumeFile) {
-        formDataToSend.append("resumeFile", formData.resumeFile);
-      }
-      formDataToSend.append("jobIntentText", formData.jobIntentText);
-      if (formData.desiredRole) formDataToSend.append("desiredRole", formData.desiredRole);
-      if (formData.companyPrefs) formDataToSend.append("companyPrefs", formData.companyPrefs);
-      if (formData.locationPref) formDataToSend.append("locationPref", formData.locationPref);
-      if (formData.remotePref) formDataToSend.append("remotePref", formData.remotePref);
-      formDataToSend.append("enableLinkedInSearch", formData.enableLinkedInSearch);
-      
-      const response = await apiSubmitJobMatch(formDataToSend);
-      setRunId(response.data.runId);
-      setStatus("submitted");
-      
-      // Track analytics
-      trackEvent("Job Match", "Submit", "Success");
-    } catch (err) {
-      setError(err.message);
-      setStatus("error");
-      trackEvent("Job Match", "Submit", "Error");
-    }
   };
   
   const resetForm = () => {
@@ -239,8 +371,8 @@ function JobMatcher() {
             <p className={styles.runId}>Request ID: <code>{runId}</code></p>
             <p className={styles.estimate}>Estimated time: 2-5 minutes</p>
           </div>
-          <button onClick={resetForm} className={styles.newSearchBtn}>
-            Start New Search
+          <button onClick={() => navigate('/interview')} className={styles.newSearchBtn}>
+            Start Practicing
           </button>
         </div>
       </div>
@@ -626,13 +758,20 @@ function JobMatcher() {
                 <span className={styles.spinner}></span>
                 Analyzing & Searching...
               </>
-            ) : (
+            ) : isLoggedIn ? (
               <>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 Find My Dream Jobs
+              </>
+            ) : (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Sign up and Find My Dream Jobs
               </>
             )}
           </button>

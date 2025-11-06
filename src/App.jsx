@@ -76,14 +76,7 @@ function App() {
             <Route path="/refund" element={<Refund />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/shipping" element={<Shipping />} />
-            <Route
-              path="/job-matcher"
-              element={
-                <ProtectedRoute>
-                  <JobMatcher />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/job-matcher" element={<JobMatcher />} />
             <Route
               path="/integrations/linkedin"
               element={

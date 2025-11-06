@@ -16,11 +16,15 @@ function Login() {
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
     const errorParam = params.get("error");
+    const redirectUrl = params.get("redirect");
 
     if (token) {
       localStorage.setItem("jwt_token", token);
       // Note: Email will be fetched from token or set by backend
-      window.location.href = "/interview";
+      
+      // Redirect to the specified URL or default to /interview
+      const finalRedirect = redirectUrl ? decodeURIComponent(redirectUrl) : "/interview";
+      window.location.href = finalRedirect;
     } else if (errorParam) {
       setError(decodeURIComponent(errorParam));
     }

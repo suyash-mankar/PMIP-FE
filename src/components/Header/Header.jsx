@@ -78,17 +78,19 @@ function Header() {
         <nav
           className={`${styles.nav} ${mobileMenuOpen ? styles.navOpen : ""}`}
         >
+          {/* AI Job Matcher - shown for both logged in and logged out users */}
+          <Link
+            to="/job-matcher"
+            className={`${styles.navLink} ${styles.aiJobFinder} ${
+              location.pathname === "/job-matcher" ? styles.active : ""
+            }`}
+            onClick={closeMobileMenu}
+          >
+            <span className={styles.aiJobFinderText}>AI Job Matcher</span>
+          </Link>
+          
           {isLoggedIn ? (
             <>
-              <Link
-                to="/job-matcher"
-                className={`${styles.navLink} ${styles.aiJobFinder} ${
-                  location.pathname === "/job-matcher" ? styles.active : ""
-                }`}
-                onClick={closeMobileMenu}
-              >
-                <span className={styles.aiJobFinderText}>AI Job Finder</span>
-              </Link>
               <Link
                 to="/dashboard"
                 className={`${styles.navLink} ${
