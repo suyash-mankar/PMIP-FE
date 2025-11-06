@@ -190,7 +190,10 @@ function JobMatcher() {
   // Auto-submit effect - triggers after form data is restored and user is logged in
   useEffect(() => {
     if (shouldAutoSubmit && isLoggedIn && !loading) {
-      // Wait a bit for all state to be set
+      // Set status to submitting immediately to show loader
+      setStatus("submitting");
+      
+      // Wait a bit for all state to be set, then submit
       const timer = setTimeout(() => {
         // Create a synthetic submit event
         const syntheticEvent = {
@@ -340,6 +343,44 @@ function JobMatcher() {
           <h3 className={styles.loaderTitle}>Loading Your Preferences</h3>
           <p className={styles.loaderSubtitle}>
             Preparing your job matching experience...
+          </p>
+          <div className={styles.loaderDots}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loader when submitting OR when we're about to auto-submit (to prevent form flash)
+  if (status === "submitting" || (shouldAutoSubmit && isLoggedIn && !loading)) {
+    return (
+      <div className={styles.jobMatcherPage}>
+        <div className={styles.loaderContainer}>
+          <div className={styles.loaderContent}>
+            <div className={styles.loaderRings}>
+              <div className={styles.ring}></div>
+              <div className={styles.ring}></div>
+              <div className={styles.ring}></div>
+            </div>
+            <div className={styles.loaderIcon}>
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <h3 className={styles.loaderTitle}>Analyzing & Searching</h3>
+          <p className={styles.loaderSubtitle}>
+            We're finding your perfect job matches...
           </p>
           <div className={styles.loaderDots}>
             <span></span>
@@ -753,12 +794,7 @@ function JobMatcher() {
             className={styles.submitBtn}
             disabled={status === "submitting"}
           >
-            {status === "submitting" ? (
-              <>
-                <span className={styles.spinner}></span>
-                Analyzing & Searching...
-              </>
-            ) : isLoggedIn ? (
+            {isLoggedIn ? (
               <>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
