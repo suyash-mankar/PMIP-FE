@@ -15,6 +15,7 @@ import Refund from "./pages/Refund/Refund";
 import Contact from "./pages/Contact/Contact";
 import Shipping from "./pages/Shipping/Shipping";
 import JobMatcher from "./pages/JobMatcher/JobMatcher";
+import LinkedInSettings from "./pages/Integrations/LinkedInSettings";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { initGA, trackPageView, setupClickTracking } from "./services/analytics";
 
@@ -80,6 +81,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <JobMatcher />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/integrations/linkedin"
+              element={
+                <ProtectedRoute>
+                  <LinkedInSettings />
                 </ProtectedRoute>
               }
             />

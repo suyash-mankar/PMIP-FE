@@ -81,6 +81,15 @@ function Header() {
           {isLoggedIn ? (
             <>
               <Link
+                to="/job-matcher"
+                className={`${styles.navLink} ${styles.aiJobFinder} ${
+                  location.pathname === "/job-matcher" ? styles.active : ""
+                }`}
+                onClick={closeMobileMenu}
+              >
+                <span className={styles.aiJobFinderText}>AI Job Finder</span>
+              </Link>
+              <Link
                 to="/dashboard"
                 className={`${styles.navLink} ${
                   location.pathname === "/dashboard" ? styles.active : ""
@@ -88,15 +97,6 @@ function Header() {
                 onClick={closeMobileMenu}
               >
                 Dashboard
-              </Link>
-              <Link
-                to="/job-matcher"
-                className={`${styles.navLink} ${
-                  location.pathname === "/job-matcher" ? styles.active : ""
-                }`}
-                onClick={closeMobileMenu}
-              >
-                Job Matcher
               </Link>
               <Link
                 to="/pricing"

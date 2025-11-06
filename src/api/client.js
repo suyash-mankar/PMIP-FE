@@ -232,4 +232,14 @@ export const submitJobMatch = (formData) => {
   });
 };
 
+// Integrations APIs
+const integrations = {
+  getLinkedInStatus: () => apiClient.get("/api/integrations/linkedin"),
+  saveLinkedInCookie: (data) => apiClient.post("/api/integrations/linkedin", data),
+  testLinkedInCookie: () => apiClient.post("/api/integrations/linkedin/test"),
+  removeLinkedInCookie: () => apiClient.delete("/api/integrations/linkedin"),
+};
+
+apiClient.integrations = integrations;
+
 export default apiClient;
